@@ -1,39 +1,41 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navigation from "@/components/navigation";
+import Navigation from "@/components/Navigation";
 const inter = Inter({ subsets: ["latin"] });
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
+import Header from "@/components/Header";
 
-export const metadata: Metadata = {
-  title: "BN-TRADER PAGE",
-  description: "bn-trader page",
-};
-
-interface LayoutProps {
+export default async function RootLayout({
+  children
+}: {
   children: React.ReactNode;
-}
+}) {
+  const locale = await getLocale();
+  const messages = await getMessages();
 
-const PageLayout = async ({ children }: LayoutProps) => {
+  console.log(locale, messages);
 
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={`${inter.className} flex flex-col min-h-screen`}>
-        <header className="bg-violet-950 p-3 text-white">
-          <h1>BN TRADING APP</h1>
-        </header>
-        <div className="flex flex-1">
-          <Navigation />
-          <main className="flex-1 p-4 bg-white">
+        <NextIntlClientProvider messages={messages}>
+          <header className="bg-indigo-900 p-1 px-5 text-white">
+            <Header />
+          </header>
+
+          <div className="flex flex-1">
+            <Navigation />
+            <main className="flex-1 p-4 bg-white">
               {children}
-          </main>
-        </div>
-        <footer className="bg-violet-950 text-white p-2 text-xs">
-          &copy; {new Date().getFullYear()} BN TRADING APP
-        </footer>
+            </main>
+          </div>
+          <footer className="bg-violet-950 text-white p-2 text-xs">
+            &copy; {new Date().getFullYear()} BN TRADING APP
+          </footer>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
 }
-
-export default PageLayout;
-

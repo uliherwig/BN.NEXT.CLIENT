@@ -1,0 +1,15 @@
+{
+    "Home": {
+      "title": "BN Trading App",
+      "description": "Welcome to BN Trading App"
+    },
+    "Header": {
+      "title": "BN Trading App",
+      "language": "Language"
+    },
+    "Navigation": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "alpaca": "Alpaca"
+    }
+  }

@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { HomeIcon, InformationCircleIcon, RectangleGroupIcon, ChartBarIcon, ChevronDoubleRightIcon, ChevronDoubleLeftIcon } from '@heroicons/react/20/solid';  
+import { useTranslations } from 'next-intl';
 
 const Navigation = () => {
   const [expanded, setExpanded] = useState(true);
+  const t = useTranslations('Navigation');
 
   const toggleView = () => {
     setExpanded(!expanded);
@@ -17,21 +19,21 @@ const Navigation = () => {
         <li>
           <Link href="/" className="flex items-center space-x-2" title="Home">
               <HomeIcon className="h-6 w-6 text-blue-500" />
-              {expanded && <span>{('welcome')}</span>}
+              {expanded && <span>{t('home')}</span>}
       
           </Link>
         </li>
         <li>
           <Link href="/dashboard"className="flex items-center space-x-2" title="Dashboard">
               <RectangleGroupIcon className="h-6 w-6 text-blue-500" />
-              {expanded && <span>{('dashboard')}</span>}
+              {expanded && <span>{t('dashboard')}</span>}
           
           </Link>
         </li>
         <li>
           <Link href="/alpaca" className="flex items-center space-x-2" title="Alpaca">
               <ChartBarIcon className="h-6 w-6 text-blue-500" />
-              {expanded && <span>Alpaca</span>}
+              {expanded && <span>{t('alpaca')}</span>}
         
           </Link>
         </li>
