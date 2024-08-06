@@ -11,5 +11,9 @@
       "home": "Home",
       "dashboard": "Dashboard",
       "alpaca": "Alpaca"
+    },
+    "Alpaca": {
+      "dashboard": "Alpaca Dashboard",
+      "assets": "Alpaca Assets"
     }
   }

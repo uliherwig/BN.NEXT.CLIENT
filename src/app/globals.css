@@ -16,14 +16,16 @@
   }
 }
 
+html {
+  font-size: 16px;
+  /* Default browser setting */
+}
+
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
@@ -31,3 +33,13 @@ body {
     text-wrap: balance;
   }
 }
+
+.grid-middle {
+  height: calc(100vh - 70px);
+  overflow: hidden;
+}
+
+
+
+
+

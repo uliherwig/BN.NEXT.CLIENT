@@ -15,27 +15,34 @@ export default async function RootLayout({
   const locale = await getLocale();
   const messages = await getMessages();
 
-  console.log(locale, messages);
-
   return (
     <html lang={locale}>
-      <body className={`${inter.className} flex flex-col min-h-screen`}>
-        <NextIntlClientProvider messages={messages}>
-          <header className="bg-indigo-900 p-1 px-5 text-white">
-            <Header />
-          </header>
+      <NextIntlClientProvider messages={messages}>
+        <body className="bg-gray-100">
+          <div className="flex flex-col h-screen">
 
-          <div className="flex flex-1">
-            <Navigation />
-            <main className="flex-1 p-4 bg-white">
-              {children}
-            </main>
+            <header className="h-[40px] bg-violet-950 p-1 px-5 text-white">
+              <Header />
+            </header>
+
+            <div className="flex flex-1">
+
+              <nav className="grid-middle bg-violet-950">
+                <Navigation />
+              </nav>
+
+              <main  className="grid-middle w-full bg-violet-950">
+                {children}
+              </main>
+            </div>
+
+            <footer className="h-[30px] bg-violet-950 text-white p-2 text-xs">
+              &copy; {new Date().getFullYear()} BN TRADING APP
+            </footer>
+
           </div>
-          <footer className="bg-violet-950 text-white p-2 text-xs">
-            &copy; {new Date().getFullYear()} BN TRADING APP
-          </footer>
-        </NextIntlClientProvider>
-      </body>
+        </body>
+      </NextIntlClientProvider>
     </html>
   );
 }

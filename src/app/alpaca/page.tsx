@@ -1,10 +1,22 @@
-import Image from "next/image";
+import { useTranslations } from 'next-intl';
+import AlpacaAssets from "@/components/alpaca/AlpacaAssets";
+import AlpacaHistoryChart from '@/components/alpaca/AlpacaHistoryChart';
+import * as React from 'react';
+import "../../app/globals.css";
 
-export default function Alpaca() {
+
+export default function AlpacaDashboard() {
+
+  const t = useTranslations('Alpaca');
   return (
-   <main>
 
-    <div className="text-blue-500">Alpaca</div>
-   </main>
+    <div className="flex h-full items-stretch">
+      <div className='overflow-hidden w-1/3 p-2 pr-1'>
+        <AlpacaAssets />
+      </div>
+      <div className='overflow-hidden w-2/3 p-2 pl-1'>
+        <AlpacaHistoryChart />
+      </div>
+    </div>
   );
 }
