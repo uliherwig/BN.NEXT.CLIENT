@@ -1,8 +1,11 @@
 export interface BnOhlc {
-    time: Date;
-    open: number;
-    high: number;
-    low: number;
-    close: number;
-    volume: number;
+
+    c: number;
+    h: number;
+    l: number;
+    n: number;
+    o: number;
+    t: Date;
+    v: number;
+    vw: number;
 }

@@ -4,8 +4,6 @@ import { Asset } from '@/model/Asset';
 import AssetList from '@/components/alpaca/AssetList';
 import { alpacaTradingService } from '@/service/alpacaTradingService';
 
-
-
 const AlpacaAssets = async () => {
     const assets : Asset[] = await alpacaTradingService.getAssets();
     const props = { assets };
@@ -15,7 +13,5 @@ const AlpacaAssets = async () => {
           </div>
       );
 };
-
-
 
 export default AlpacaAssets;

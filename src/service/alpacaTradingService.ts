@@ -1,7 +1,5 @@
-
-import { Asset } from '@/model/Asset';
-import path from 'path';
-import fs from 'fs';
+import { Asset } from "@/model/Asset";
+import fetchWithCache, { basicFetch } from "../app/api/fetchFunctions";
 
 export const alpacaTradingService = {
 
@@ -25,31 +23,8 @@ export const alpacaTradingService = {
     }
   },
 
-  async getAssets() {
-    try {
-
-    
-      // const res = await fetch(`${this.baseURL}/AlpacaTrading/assets`)
-
-      // if (!res.ok) {
-      //   throw new Error('Failed to fetch data')
-      // }
-
-      // return await res.json()
-
-      const filePath = path.join(process.cwd(), '/public/assets/alpaca-assets.json');
-      const jsonData = await fs.readFileSync(filePath, 'utf-8');
-
-      const data = JSON.parse(jsonData);
-
-
-      const assets: Asset[] = data
-
-      return assets;
-    } catch (error) {
-      console.error('Error fetching assets:', error);
-      throw error;
-    }
+  async getAssets() : Promise<Asset[]>  {
+    return await fetchWithCache(`${this.baseURL}/api/AlpacaTest/assets`, 360);
   },
 
   async getAsset(symbol: string) {

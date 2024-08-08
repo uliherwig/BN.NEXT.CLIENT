@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/navigation";
 const inter = Inter({ subsets: ["latin"] });
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import Header from "@/components/Header";
+import Menu from "@/components/Menu";
 
 export default async function RootLayout({
   children
@@ -18,17 +19,17 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <NextIntlClientProvider messages={messages}>
-        <body className="bg-gray-100">
-          <div className="flex flex-col h-screen">
+        <body>
+          <div className="flex flex-col h-screen bg-violet-950">
 
             <header className="h-[40px] bg-violet-950 p-1 px-5 text-white">
               <Header />
             </header>
 
-            <div className="flex flex-1">
+            <div className="flex">
 
-              <nav className="grid-middle bg-violet-950">
-                <Navigation />
+              <nav>
+                <Menu />
               </nav>
 
               <main  className="grid-middle w-full bg-violet-950">

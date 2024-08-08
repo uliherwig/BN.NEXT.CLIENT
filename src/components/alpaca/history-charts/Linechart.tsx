@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from "highcharts/highstock";
 import { BnOhlc } from '@/model/BnOhlc';
-import { alpacaDataService } from '@/service/alpacaDataService';
 
 type LineChartProps = {
     data: any[];
@@ -11,28 +10,25 @@ type LineChartProps = {
 
 const LineChart: React.FC<LineChartProps> = ({ data }) => {
 
-    const [hoverData, setHoverData] = useState(null);
     const [chartOptions, setChartOptions] = useState({});
-    const [searchTerm, setSearchTerm] = useState('');
-
-
-
-
 
     // split the data set into ohlc and volume
     const ohlc: any = [];
     const volume: any = [];
     const dataLength = data.length
+     console.log('data:', data);
     // set the allowed units for data grouping
     const groupingUnits = [[
         'minute',                         // unit name
         [1]                             // allowed multiples
     ], [
-        'week',
+        'day',
         [1, 2, 3, 4, 6]
     ]];
 
     for (let i = 0; i < dataLength; i += 1) {
+
+     
 
         const date = new Date(data[i].t);
         const ticks = date.getTime();
@@ -46,21 +42,26 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
 
         volume.push([
             ticks, // the date
-            data[i].vw // the volume
+            data[i].v // the volume
         ]);
     }
 
-    console.log('ohlc:', ohlc);
+  
 
     const updateSeries = () => {
         setChartOptions({
 
             chart: {
-                height: '60%'
+                height: '600',
+                width: '900'
             },
 
             title: {
                 text: 'SPY Historical'
+            },
+            xAxis: {
+                ordinal: true,
+
             },
             yAxis: [{
                 labels: {
@@ -70,7 +71,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
                 title: {
                     text: 'OHLC'
                 },
-                height: '60%',
+                height: '90%',
                 lineWidth: 2,
                 resize: {
                     enabled: true
@@ -83,8 +84,8 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
                 title: {
                     text: 'Volume'
                 },
-                top: '70%',
-                height: '30%',
+                top: '90%',
+                height: '10%',
                 offset: 0,
                 lineWidth: 2
             }],
@@ -114,18 +115,17 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
 
     useEffect(() => {
         updateSeries();
-    }, []);
+    }, [data]);
 
     return (
-        <>
-            <HighchartsReact
-                highcharts={Highcharts}
-                options={chartOptions}
-                constructorType={"stockChart"}
-            />
-            <h3>Hovering over {hoverData}</h3>
-
-        </>
+<div className='w-full h-full flex items-center justify-center'>
+    <HighchartsReact
+            highcharts={Highcharts}
+            options={chartOptions}
+            constructorType={"stockChart"}
+        />
+</div>
+        
     )
 }
 
