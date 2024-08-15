@@ -1,5 +1,10 @@
 # BN TRADING APP
 
+## Version 2024.8.2
+
+Implementation Header Navigation
+Implementation Blog with mdx
+
 ## Version 2024.8.1
 
 Loader integration

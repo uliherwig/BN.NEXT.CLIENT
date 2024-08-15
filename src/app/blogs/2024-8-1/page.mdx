@@ -1,0 +1,38 @@
+
+# **2024-8-1**
+
+&nbsp;
+
+## **Projekt Start und TechStack**
+
+- Als .NET Entwickler habe ich mich natürlich beim Backend für .NET und eine Microservice Struktur im Domain Driven Design entschieden. 
+- Für die ersten Schritte habe ich mir den Broker Alpaca ausgesucht. Alpaca bietet eine ganz gute API und Testkonten (Papertrading).
+- Insofern habe ich mit einem Alpaca Service angefangen, um die Alpaca API zu nutzen.
+- Beim UI habe ich mich für Nextjs entschieden. Ich bin React Experte, hatte aber mit Nextjs noch nicht gearbeitet. Nextjs hat den Vorteil, dass serverseitiger code implementiert werden kann. 
+- DB Postgres wird als Docker image via docker-compose geladen (lokal).
+
+- Der Quellcode ist auf github einsehbar.
+
+
+&nbsp;
+
+## **AlpacaService**
+- Der AlpacaService ist eine normale REST API. 
+- Anbindung der Alpaca API + Mapping auf Domain Models erfolgt im Adapter. 
+- Data Repository
+- Domain - Funktionen zur Datenspeicherung
+
+
+&nbsp;
+
+## **bn-next-trader**
+- UI zum BN.TRADER Projekt
+
+&nbsp;
+
+15.08.2024
+
+
+
+
+
