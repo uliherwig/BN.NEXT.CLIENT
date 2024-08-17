@@ -1,5 +1,5 @@
-import { Asset } from "@/model/Asset";
-import fetchWithCache, { basicFetch } from "../app/api/fetchFunctions";
+import { AlpacaAsset } from "@/model/AlpacaAsset";
+import fetchWithCache, { basicFetch , basicPost} from "../app/api/fetchFunctions";
 
 export const alpacaTradingService = {
 
@@ -23,8 +23,13 @@ export const alpacaTradingService = {
     }
   },
 
-  async getAssets() : Promise<Asset[]>  {
-    return await fetchWithCache(`${this.baseURL}/api/AlpacaTest/assets`, 360);
+  async getAssets(): Promise<AlpacaAsset[]> {
+    return await basicFetch(`${this.baseURL}/AlpacaTrading/assets`);
+  },
+
+  async toggleAssetSelection(symbol: string) {
+    console.log('alpacaClientService toggleAssetSelection + symbol:', symbol);
+    return await basicPost<AlpacaAsset>(`${this.baseURL}/AlpacaTrading/asset/${symbol}`);
   },
 
   async getAsset(symbol: string) {

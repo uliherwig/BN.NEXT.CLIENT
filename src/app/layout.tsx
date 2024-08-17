@@ -18,20 +18,16 @@ export default async function RootLayout({
     <html lang={locale}>
       <NextIntlClientProvider messages={messages}>
         <body>
-          <div className="flex flex-col  bg-violet-950">
-
+          <div className="flex flex-col bg-slate-100">
             <header className="h-[40px] bg-slate-800 p-1 px-5 text-white">
               <Header />
             </header>
-
-            <main>
+            <main className="content-container">
                {children}
-            </main>        
-
+            </main> 
             <footer className="h-[30px] bg-slate-800 text-white p-2 text-xs">
               &copy; {new Date().getFullYear()} BN TRADING APP
             </footer>
-
           </div>
         </body>
       </NextIntlClientProvider>

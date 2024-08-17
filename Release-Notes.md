@@ -1,5 +1,16 @@
 # BN TRADING APP
 
+## Version 2024.8.4
+
+- Languageswitch - use world icon
+- Alpaca settings page - broker login and asset selection
+- storage in cookie - intermediate solution
+
+## Version 2024.8.3
+
+Home redesign
+Brokers redesign and refactoring
+
 ## Version 2024.8.2
 
 Implementation Header Navigation

@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -34,10 +34,12 @@ body {
   }
 }
 
-.grid-middle {
+.content-container {
   height: calc(100vh - 70px);
-  overflow: hidden;
+  overflow:auto;
 }
+
+
 
 
 .submenu {

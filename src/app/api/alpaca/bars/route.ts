@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { alpacaDataService } from '../../../../service/alpacaDataService';
-import { Asset } from '@/model/Asset';
+import { AlpacaAsset } from '@/model/AlpacaAsset';
 import { alpacaTradingService } from '../../../../service/alpacaTradingService';
 
 

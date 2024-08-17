@@ -21,6 +21,7 @@
     "@next/mdx": "^14.2.5",
     "@types/mdx": "^2.0.13",
     "@types/tailwindcss": "^3.1.0",
+    "autoprefixer": "^10.4.20",
     "axios": "^1.7.2",
     "highcharts": "^11.4.6",
     "highcharts-react-official": "^3.2.1",

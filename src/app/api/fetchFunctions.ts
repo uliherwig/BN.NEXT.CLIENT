@@ -1,12 +1,44 @@
 export const basicFetch = async<returnType>(endpoint: string): Promise<returnType> => {
 
+    console.log('endpoint:', endpoint);
     const res = await fetch(endpoint);
+
     if (!res.ok) {
         throw new Error('Failed to fetch data');
     }
     return await res.json();
 
 }
+
+export const basicPost = async<returnType>(
+    endpoint: string,
+    body?: any
+): Promise<returnType> => {
+    
+    console.log('endpoint:', endpoint);
+
+    const method: string = 'POST';
+
+    const options: RequestInit = {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    if (body) {
+        options.body = JSON.stringify(body);
+    }
+
+    console.log('options:', options);
+
+    const res = await fetch(endpoint, options);
+
+    if (!res.ok) {
+        throw new Error('Failed to fetch data');
+    }
+    return await res.json();
+};
 
 const cache: { [key: string]: { data: any; timestamp: number } } = {};
 
@@ -16,10 +48,10 @@ export const fetchWithCache = async<returnType>(endpoint: string, minutes: numbe
     const CACHE_DURATION = minutes * 60 * 1000; // Cache duration in milliseconds 
 
     console.log('CACHE_DURATION', CACHE_DURATION);
-      console.log('cache1:', cache[endpoint] !== undefined);
+    console.log('cache1:', cache[endpoint] !== undefined);
 
     const now = Date.now();
-    
+
     // Check if the response is in the cache and not expired
     if (cache[endpoint] && (now - cache[endpoint].timestamp < CACHE_DURATION)) {
         return cache[endpoint].data;

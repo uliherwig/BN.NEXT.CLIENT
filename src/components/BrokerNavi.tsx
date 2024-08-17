@@ -7,48 +7,48 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useState } from "react";
 
-const Menu = () => {
-    const [expanded, setExpanded] = useState(false);
+const BrokerNavi = () => {
+    const [expanded, setExpanded] = useState(true);
 
     const toggleMenu = () => {
         setExpanded(!expanded);
     }
 
     return (
-        <div className="flex flex-col w-[200px] px-5 py-10">
+        <div className="flex flex-col w-[200px]">
 
             <ul>
-                <li className="py-2">
-                    <Link href="/" className="grid grid-cols-[18px_auto] items-center gap-2" title="Home">
-                        <HomeIcon className="h-5 w-5 text-blue-500" />
+                <li>
+                    <Link href="/brokers" className="grid grid-cols-[18px_auto_20px] items-center gap-2" title="Home">
+                        <HomeIcon className="h-5 w-5 text-slate-600" />
                         Home
                     </Link>
                 </li>
                 <li>
-                    <Link href="/alpaca" className="grid grid-cols-[18px_auto_18px] items-center gap-2" title="Alpaca"  onClick={toggleMenu} >
-                        <BarChartIcon className="h-5 w-5 text-blue-500" />
+                    <Link href="/brokers/alpaca" className="grid grid-cols-[18px_auto_18px] items-center gap-2" title="Alpaca">
+                        <BarChartIcon className="h-5 w-5 text-slate-800" />
                         Alpaca
-                        <button className="flex justify-end items-end my-1">
+                        <button className="flex justify-end items-end my-1" onClick={toggleMenu} >
                             {!expanded ? (
-                                <KeyboardArrowDownIcon className="h-8 w-8 text-blue-500" />
+                                <KeyboardArrowDownIcon className="h-8 w-8 text-slate-800" />
                             ) : (
-                                <KeyboardArrowUpIcon className="h-8 w-8 text-blue-500" />
+                                <KeyboardArrowUpIcon className="h-8 w-8 text-slate-800" />
                             )}
                         </button>
                     </Link>
                     <ul className="pl-7 text-sm" style={{ display: expanded ? 'block' : 'none' }}>
                         <li className="py-1">
-                            <Link href="/alpaca" className="grid grid-cols-[18px_auto] items-center gap-2" title="Dashboard">
+                            <Link href="/brokers/alpaca/dashboard" className="grid grid-cols-[18px_auto] items-center gap-2" title="Dashboard">
                                 Dashboard
                             </Link>
                         </li>
                         <li>
-                            <Link href="/alpaca" className="grid grid-cols-[18px_auto] items-center gap-2" title="charts">
+                            <Link href="/brokers/alpaca/dashboard" className="grid grid-cols-[18px_auto] items-center gap-2" title="charts">
                                 Stockchart
                             </Link>
                         </li>
                         <li>
-                            <Link href="/alpaca" className="grid grid-cols-[18px_auto] items-center gap-2" title="charts">
+                            <Link href="/brokers/alpaca/dashboard" className="grid grid-cols-[18px_auto] items-center gap-2" title="charts">
                                 Trades
                             </Link>
                         </li>
@@ -58,8 +58,8 @@ const Menu = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/alpaca" className="grid grid-cols-[18px_auto] items-center gap-2" title="charts">
-                                Trade Settings
+                            <Link href="/brokers/alpaca/settings" className="grid grid-cols-[18px_auto] items-center gap-2" title="charts">
+                                Settings
                             </Link>
                         </li>
                     </ul>
@@ -71,4 +71,4 @@ const Menu = () => {
     );
 }
 
-export default Menu;
+export default BrokerNavi;
