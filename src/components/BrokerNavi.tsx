@@ -26,7 +26,7 @@ const BrokerNavi = () => {
                 </li>
                 <li>
                     <Link href="/brokers/alpaca" className="grid grid-cols-[18px_auto_18px] items-center gap-2" title="Alpaca">
-                        <BarChartIcon className="h-5 w-5 text-slate-800" />
+                        <BarChartIcon className="h-5 w-5 text-slate-600" />
                         Alpaca
                         <button className="flex justify-end items-end my-1" onClick={toggleMenu} >
                             {!expanded ? (
@@ -36,8 +36,8 @@ const BrokerNavi = () => {
                             )}
                         </button>
                     </Link>
-                    <ul className="pl-7 text-sm" style={{ display: expanded ? 'block' : 'none' }}>
-                        <li className="py-1">
+                    <ul className="pl-8 text-sm" style={{ display: expanded ? 'block' : 'none' }}>
+                        <li>
                             <Link href="/brokers/alpaca/dashboard" className="grid grid-cols-[18px_auto] items-center gap-2" title="Dashboard">
                                 Dashboard
                             </Link>

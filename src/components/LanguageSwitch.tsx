@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Cookies from 'js-cookie';
 import { useTranslations } from 'next-intl';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+import LanguageIcon from '@mui/icons-material/Language';
 
 
 const LanguageSwitch = () => {
@@ -15,14 +16,14 @@ const LanguageSwitch = () => {
         const storedLanguage = Cookies.get('bn-trading-app-language');
         if (storedLanguage) {
             setLanguage(storedLanguage);
-        } else {
+        } else {            
             setLanguage('en');
         }
     }, []);
 
     const handleLanguageChange = (lang: string) => {
         Cookies.set('bn-trading-app-language', lang);
-        window.location.reload();
+       window.location.reload();
     };
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -37,21 +38,12 @@ const LanguageSwitch = () => {
         <>
             {bnLanguage && (
                 <div>
-                    <Button
-                        id="demo-positioned-button"
-                        aria-controls={open ? 'demo-positioned-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                    >
-                        <Image
-                            src={`/assets/${bnLanguage}.png`}
-                            alt={t('language')}
-                            width={20}
-                            height={20}
-                        />
-                    </Button>
+                    <IconButton aria-label="language"  color="primary" onClick={handleClick}>
+                        <LanguageIcon className='text-slate-50' /> <span className='text-sm text-slate-50 ml-1'>{bnLanguage.toUpperCase()}</span> 
+                    </IconButton>
+            
                     <Menu
+                    className='mt-5'
                         id="demo-positioned-menu"
                         aria-labelledby="demo-positioned-button"
                         anchorEl={anchorEl}
@@ -70,23 +62,6 @@ const LanguageSwitch = () => {
                         <MenuItem onClick={() => handleLanguageChange('en')}>English</MenuItem>
                     </Menu>
                 </div>
-
-                // <Menu>
-                //     <MenuHandler>
-                //         <Image
-                //             src={`/assets/${bnLanguage}.png`}
-                //             alt={t('language')}
-                //             width={20}
-                //             height={20}
-                //         />
-
-                //     </MenuHandler>
-                //     <MenuList>
-                //         <MenuItem onClick={() => handleLanguageChange('de')}>Deutsch</MenuItem>
-                //         <MenuItem onClick={() => handleLanguageChange('en')}>English</MenuItem>
-
-                //     </MenuList>
-                // </Menu>
             )}
         </>
     );

@@ -47,7 +47,7 @@ const AssetList: React.FC<AssetListProps> = ({ assets }) => {
   return (
     <div className="flex flex-col w-full h-full">
       <div className="w-full flex justify-between">
-        <div className="text-blue-900 text-lg font-bold">Assets</div>
+        <div className="text-slate-800 text-lg font-bold">Assets</div>
         <div className='flex'>
           <input
             type="text"
@@ -58,7 +58,7 @@ const AssetList: React.FC<AssetListProps> = ({ assets }) => {
           />
         </div>
       </div>
-      <div className="h-[600px] w-full overflow-hidden pt-5">
+      <div className="h-full w-full overflow-hidden pt-5">
         <div className="h-full overflow-auto">
           <table className="min-w-full table-fixed border">
             <thead className="bg-slate-700 sticky top-0">

@@ -1,24 +1,24 @@
 import { useTranslations } from 'next-intl';
-import AlpacaHistoryChart from '@/components/alpaca/history-charts/AlpacaHistoryChart';
 import * as React from 'react';
-import "../../../globals.css";
+import "@/app/globals.css";
 import AlpacaAssets from '@/components/alpaca/assets/AlpacaAssets';
+import AlpacaLogon from '@/components/alpaca/AlpacaLogon';
 
 
 export default function AlpacaSettings() {
 
-  const t = useTranslations('Alpaca');
-  return (
+    const t = useTranslations('Alpaca');
+    return (
 
 
-    <div className="flex">
-      <div className="col-span-1">
-        <AlpacaAssets />
-      </div>
-      <div className="col-span-1">
-   
-      </div>
-    </div>
+        <div className="flex flex-row gap-4 w-full">
+            <div className="flex-1 content-container">
+                <AlpacaLogon />
+            </div>
+            <div className="flex-1 content-container">
+                <AlpacaAssets />
+            </div>
+        </div>
 
-  );
+    );
 }

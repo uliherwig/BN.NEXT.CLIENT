@@ -4,7 +4,7 @@
 
 - Languageswitch - use world icon
 - Alpaca settings page - broker login and asset selection
-- storage in cookie - intermediate solution
+- Form parameters storage in cookie - intermediate solution
 
 ## Version 2024.8.3
 
@@ -21,7 +21,7 @@ Implementation Blog with mdx
 Loader integration
 Input form for chart parameters
 Menu rework
-rework useSWR reload and api implementation via route.ts
+rework useSWR reload and api implementation via route.ts (proxy)
 
 ## Version 2024.7.1
 

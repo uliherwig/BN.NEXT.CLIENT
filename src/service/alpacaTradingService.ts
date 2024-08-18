@@ -1,5 +1,6 @@
 import { AlpacaAsset } from "@/model/AlpacaAsset";
-import fetchWithCache, { basicFetch , basicPost} from "../app/api/fetchFunctions";
+import fetchWithCache, { basicFetch, basicPost } from "../app/api/fetchFunctions";
+import Cookies from 'js-cookie';
 
 export const alpacaTradingService = {
 
@@ -24,12 +25,19 @@ export const alpacaTradingService = {
   },
 
   async getAssets(): Promise<AlpacaAsset[]> {
-    return await basicFetch(`${this.baseURL}/AlpacaTrading/assets`);
+    return await fetchWithCache(`${this.baseURL}/AlpacaTrading/assets`);
   },
 
   async toggleAssetSelection(symbol: string) {
-    console.log('alpacaClientService toggleAssetSelection + symbol:', symbol);
-    return await basicPost<AlpacaAsset>(`${this.baseURL}/AlpacaTrading/asset/${symbol}`);
+
+    var selectedAssets: string[] = Cookies.get('asset-selection')?.split(',') || [];
+
+    if (!selectedAssets.includes(symbol)) {
+      selectedAssets = [...selectedAssets, symbol];
+      Cookies.set('asset-selection', selectedAssets.join(','));
+    } ;
+
+    return selectedAssets;
   },
 
   async getAsset(symbol: string) {

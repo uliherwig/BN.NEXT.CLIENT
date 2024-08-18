@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import * as React from 'react';
-import "../../globals.css";
+import "@/app/globals.css";
 
 
 export default function AlpacaDashboard() {

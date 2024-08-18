@@ -8,7 +8,7 @@ const AlpacaAssets = async () => {
     const assets: AlpacaAsset[] = await alpacaTradingService.getAssets();   
  
     return (
-        <div className="flex h-full items-stretch bg-white p-3 px-5">
+        <div className="flex h-full bg-white p-3 px-5">
             <AssetList assets={assets}  />
         </div>
     );
