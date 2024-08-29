@@ -5,7 +5,7 @@ import { basicFetch } from '../app/api/fetchFunctions';
 
 export const alpacaDataService = {
 
-  baseURL: process.env.BASE_API_URL,
+  baseURL: process.env.ALPACA_API_URL,
 
   async getHistoricalBars(symbol: string, startDate?: string, endDate?: string, timeframe?: string) {
     console.log('baseURL:', this.baseURL);

@@ -27,7 +27,9 @@ const Header = () => {
           BLOGS
         </Link>
       </div>
-
+      <Link href="/login" className="text-xs hover:bg-slate-600 text-white py-1 px-4 rounded" title="Login">
+        LOGIN
+      </Link>
       <LanguageSwitch />
     </div>
   );

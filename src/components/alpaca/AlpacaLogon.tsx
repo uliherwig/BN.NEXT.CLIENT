@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { alpacaTradingService } from '@/service/alpacaTradingService';
 import Cookies from 'js-cookie';
 import { SubmitHandler, useForm } from "react-hook-form"
 import { basicFetch } from '@/app/api/fetchFunctions';
@@ -23,12 +22,12 @@ const AlpacaLogon = () => {
         handleSubmit,
         formState: { errors },
     } = useForm<FormData>()
+
     const onSubmit: SubmitHandler<FormData> = (data) => {
         console.log(data);
         Cookies.set('alpaca-key-id', data.keyId);
         Cookies.set('alpaca-key-secret', data.keySecret);
     }
-
 
     const testAccount = async () => {
         var keyId = Cookies.get('alpaca-key-id');

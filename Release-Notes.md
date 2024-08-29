@@ -1,5 +1,11 @@
 # BN TRADING APP
 
+## Version 2024.8.5
+
+- Handling Keycloak Access/Refresh Token
+- User Login
+- User Registration
+
 ## Version 2024.8.4
 
 - Languageswitch - use world icon

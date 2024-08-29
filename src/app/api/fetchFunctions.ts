@@ -30,14 +30,9 @@ export const basicPost = async<returnType>(
         options.body = JSON.stringify(body);
     }
 
-    console.log('options:', options);
-
     const res = await fetch(endpoint, options);
-
-    if (!res.ok) {
-        throw new Error('Failed to fetch data');
-    }
-    return await res.json();
+    const result = await res.json();
+    return result;
 };
 
 const cache: { [key: string]: { data: any; timestamp: number } } = {};

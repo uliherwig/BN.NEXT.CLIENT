@@ -17,8 +17,8 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <NextIntlClientProvider messages={messages}>
-        <body>
-          <div className="flex flex-col bg-slate-100">
+      <body className="flex justify-center items-center min-h-screen">
+          <div className="flex flex-col bg-slate-100 w-full max-w-[1920px]">
             <header className="h-[40px] bg-slate-800 p-1 px-5 text-white">
               <Header />
             </header>

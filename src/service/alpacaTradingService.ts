@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 export const alpacaTradingService = {
 
-  baseURL: process.env.BASE_API_URL,
+  baseURL: process.env.ALPACA_API_URL,
 
 
 
