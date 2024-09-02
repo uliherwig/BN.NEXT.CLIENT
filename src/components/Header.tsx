@@ -1,10 +1,9 @@
-"use client";
-
 import Link from "next/link";
 import LanguageSwitch from "./LanguageSwitch";
 
-const Header = () => {
+const Header =  ({ dict }: { dict: Record<string, string> }) => {
   const linkClasses = "text-xs hover:bg-slate-600 text-white font-bold py-1 px-4 rounded";
+  
 
   return (
     <div className="flex justify-between items-center p-1 w-full h-full">
@@ -18,13 +17,13 @@ const Header = () => {
           HOME
         </Link>
         <Link href="/brokers" className={linkClasses} title="brokers">
-          BROKERS
+          {dict.HEADER_Brokers}
         </Link>
         <Link href="/strategies" className={linkClasses} title="strategies">
-          STRATEGIES
+        {dict.HEADER_Strategies}
         </Link>
         <Link href="/blogs" className={linkClasses} title="Blog">
-          BLOGS
+        {dict.HEADER_Blogs}
         </Link>
       </div>
       <Link href="/login" className="text-xs hover:bg-slate-600 text-white py-1 px-4 rounded" title="Login">

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from "highcharts/highstock";
-import { BnOhlc } from '@/model/BnOhlc';
+import { BnOhlc } from '@/models/BnOhlc';
 
 type LineChartProps = {
     data: any[];
@@ -16,7 +16,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
     const ohlc: any = [];
     const volume: any = [];
     const dataLength = data.length
-     console.log('data:', data);
+    console.log('data:', data);
     // set the allowed units for data grouping
     const groupingUnits = [[
         'minute',                         // unit name
@@ -28,7 +28,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
 
     for (let i = 0; i < dataLength; i += 1) {
 
-     
+
 
         const date = new Date(data[i].t);
         const ticks = date.getTime();
@@ -46,7 +46,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
         ]);
     }
 
-  
+
 
     const updateSeries = () => {
         setChartOptions({
@@ -112,20 +112,18 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
         });
     }
 
+    updateSeries();
 
-    useEffect(() => {
-        updateSeries();
-    }, [data]);
 
     return (
-<div className='w-full h-full flex items-center justify-center'>
-    <HighchartsReact
-            highcharts={Highcharts}
-            options={chartOptions}
-            constructorType={"stockChart"}
-        />
-</div>
-        
+        <div className='w-full h-full flex items-center justify-center'>
+            <HighchartsReact
+                highcharts={Highcharts}
+                options={chartOptions}
+                constructorType={"stockChart"}
+            />
+        </div>
+
     )
 }
 

@@ -1,8 +1,8 @@
 "use client"
 import React, { Suspense, use, useEffect, useState } from 'react';
-import { BnOhlc } from '@/model/BnOhlc';
+import { BnOhlc } from '@/models/BnOhlc';
 import useSWR, { mutate } from 'swr';
-import { AlpacaAsset } from '@/model/AlpacaAsset';
+import { AlpacaAsset } from '@/models/AlpacaAsset';
 import { alpacaClientService } from '@/service/alpacaClientService';
 
 interface AssetListProps {

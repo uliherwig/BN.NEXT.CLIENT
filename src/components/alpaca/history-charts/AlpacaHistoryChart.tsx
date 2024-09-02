@@ -2,10 +2,10 @@
 "use client"
 import React, { Suspense, use, useEffect, useState } from 'react';
 import LineChart from './Linechart';
-import { BnOhlc } from '@/model/BnOhlc';
+import { BnOhlc } from '@/models/BnOhlc';
 import useSWR, { mutate } from 'swr';
 import CircularIndeterminate from '@/components/common/CircularLoader';
-import { ChartParameters } from '@/model/ChartParameters';
+import { ChartParameters } from '@/models/ChartParameters';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { SubmitHandler, useForm } from "react-hook-form"
 import { basicFetch } from '@/app/api/fetchFunctions';
-import { AccountData } from '@/model/AlpacaAccount';
+import { AccountData } from '@/models/AlpacaAccount';
 
 type FormData = {
     keyId: string

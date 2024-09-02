@@ -1,6 +1,6 @@
 {
-  "name": "bn-trading-app",
-  "version": "2024.7.1",
+  "name": "bn-project",
+  "version": "2024.8.4",
   "private": true,
   "scripts": {
     "dev:debug": "NODE_OPTIONS='--inspect' next dev",
@@ -20,7 +20,6 @@
     "@mui/material": "^5.16.6",
     "@next/mdx": "^14.2.5",
     "@types/mdx": "^2.0.13",
-    "@types/tailwindcss": "^3.1.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.2",
     "highcharts": "^11.4.6",
@@ -31,13 +30,16 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.2",
+    "server-only": "^0.0.1",
     "swr": "^2.2.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
+    "@types/negotiator": "^0.6.3",
     "@types/node": "^20.14.13",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/tailwindcss": "^3.0.11",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",

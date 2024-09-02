@@ -1,5 +1,5 @@
 
-import { BnOhlc } from '@/model/BnOhlc';
+import { BnOhlc } from '@/models/BnOhlc';
 import { basicFetch } from '../app/api/fetchFunctions';
 
 

@@ -1,6 +1,6 @@
 // pages/alpaca-assets.tsx
 
-import { AlpacaAsset } from '@/model/AlpacaAsset';
+import { AlpacaAsset } from '@/models/AlpacaAsset';
 import AssetList from '@/components/alpaca/assets/AssetList';
 import { alpacaTradingService } from '@/service/alpacaTradingService';
 

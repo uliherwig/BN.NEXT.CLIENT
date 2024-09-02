@@ -1,4 +1,4 @@
-import { AlpacaAsset } from "@/model/AlpacaAsset";
+import { AlpacaAsset } from "@/models/AlpacaAsset";
 import fetchWithCache, { basicFetch, basicPost } from "../app/api/fetchFunctions";
 import Cookies from 'js-cookie';
 

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from "highcharts/highstock";
-import { BnOhlc } from '@/model/BnOhlc';
+import { BnOhlc } from '@/models/BnOhlc';
 
 type LineChartProps = {
     data: BnOhlc[];
