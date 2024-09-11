@@ -2,13 +2,12 @@
 
 ## ToDo
 
+## Version 2024.9.1
+
+- Refactoring Internationalization
 - Handling Keycloak Access/Refresh Token
 - User Login
 - User Registration
-
-## Version 2024.8.5
-
-- Refactoring Internationalization
 
 ## Version 2024.8.4
 
