@@ -1,11 +1,9 @@
-import { useTranslations } from 'next-intl';
 import * as React from 'react';
 import "@/app/globals.css";
 
 
 export default function AlpacaDashboard() {
 
-  const t = useTranslations('Alpaca');
   return (
 
 

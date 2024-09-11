@@ -1,10 +1,8 @@
-import { useTranslations } from 'next-intl';
 import * as React from 'react';
 
 
 export default function AlpacaDashboard() {
 
-  const t = useTranslations('Alpaca');
   return (
     <div className="content-container w-full pt-[10%] text-slate-800 pl-10">
         <h1 className='font-bold text-5xl'>Broker</h1>

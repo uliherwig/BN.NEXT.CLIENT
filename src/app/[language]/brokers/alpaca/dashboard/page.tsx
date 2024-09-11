@@ -1,4 +1,3 @@
-import { useTranslations } from 'next-intl';
 import AlpacaHistoryChart from '@/components/alpaca/history-charts/AlpacaHistoryChart';
 import * as React from 'react';
 import "@/app/globals.css";
@@ -7,7 +6,6 @@ import AlpacaAssets from '@/components/alpaca/assets/AlpacaAssets';
 
 export default function AlpacaDashboard() {
 
-  const t = useTranslations('Alpaca');
   return (
 
 

@@ -14,42 +14,24 @@ function getLocale(request: NextRequest) { return match(new Negotiator({ headers
 
 export function middleware(request: NextRequest) {
   const url = new URL(request.url) 
+  console.log(url.pathname)
 
-  // just for fun
-
-  console.log(url.href.toString())
-
-  const requestHeaders = new Headers(request.headers)
-  
-  requestHeaders.set('x-hello-from-middleware1', 'hello')
-
-  // You can also set request headers in NextResponse.next
-  const response = NextResponse.next({
-    request: {
-      // New request headers
-      headers: requestHeaders,
-    },
-  })
-
-  // Set a new response header `x-hello-from-middleware2`
-  response.headers.set('x-hello-from-middleware2', 'hello')
+  // let API and action routes unchanged   
+  if(url.pathname.startsWith('/api') || url.pathname.startsWith('/action')) {
+    return
+  } 
 
   // set language
-
-  const { pathname } = request.nextUrl
   const pathnameHasLocale = locales.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+    (locale) => url.pathname.startsWith(`/${locale}/`) || url.pathname === `/${locale}`
   )
 
   if (pathnameHasLocale) return
 
   // Redirect if there is no locale
   const locale = getLocale(request)
-  request.nextUrl.pathname = `/${locale}${pathname}`
-  // e.g. incoming request is /products
-  // The new URL is now /en/products
+  request.nextUrl.pathname = `/${locale}${url.pathname}`
   return NextResponse.redirect(request.nextUrl)
-
 }
 
 export const config = {

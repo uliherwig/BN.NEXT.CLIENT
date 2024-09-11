@@ -1,7 +1,10 @@
 import { LanguageProps } from "@/models/common/LanguageProps";
-import { getDictionary } from "./dictionaries";
+import { getDictionary } from "../lib/dictionaries/dictionaries";
+
 
 export default async function Page({ params }: LanguageProps) {
+
+  console.log('params:', params)
 
   const dict = await getDictionary(params.language) 
 

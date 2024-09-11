@@ -1,0 +1,45 @@
+{
+  "HOME_title": "BN PROJECT",
+  "HOME_description": "Welcome to the BN Trading App",
+
+  "HEADER_title": "BN PROJECT",
+  "HEADER_Brokers": "BROKERS",
+  "HEADER_Strategies": "STRATEGIES",
+  "HEADER_Blogs": "BLOGS",
+  
+  "NAVIGATION_home": "Home",
+  "NAVIGATION_dashboard": "Dashboard",
+  "NAVIGATION_alpaca": "Alpaca",
+  "ALPACA_dashboard": "Alpaca Dashboard",
+  "ALPACA_assets": "Alpaca Assets",
+
+  "AUTH_welcome": "Welcome",
+  "AUTH_myaccount": "My Account",
+  "AUTH_noaccount": "Don't have an account yet?",
+  "AUTH_login": "Sign in",
+  "AUTH_logout": "Sign out",
+  "AUTH_register": "Sign up",
+  "AUTH_email": "Email",
+  "AUTH_password": "Password",
+  "AUTH_confirmPassword": "Confirm Password",
+  "AUTH_forgotPassword": "Forgot Password",
+  "AUTH_resetPassword": "Reset Password",
+  "AUTH_newPassword": "New Password",
+  "AUTH_confirmNewPassword": "Confirm New Password",
+
+  "AUTH_error": "Error",
+  "AUTH_errorEmail": "Please enter a valid email address",
+  "AUTH_errorPassword": "Please enter a password",
+  "AUTH_errorConfirmPassword": "Please confirm the password",
+  "AUTH_errorPasswordMatch": "Passwords do not match",
+  "AUTH_errorUserExists": "User already exists",
+  "AUTH_errorUserNotExists": "User does not exist",
+  "AUTH_errorInvalidPassword": "Invalid password",
+  
+  "AUTH_success": "Success",
+  "AUTH_successPasswordReset": "Password successfully reset",
+  "AUTH_successPasswordChanged": "Password successfully changed",
+  "AUTH_successUserRegistered": "User successfully registered",
+  "AUTH_successUserLoggedIn": "User successfully logged in",
+  "AUTH_successUserLoggedOut": "User successfully logged out"
+}

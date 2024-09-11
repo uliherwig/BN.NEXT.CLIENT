@@ -1,7 +1,5 @@
-import createNextIntlPlugin from 'next-intl/plugin';
 import createMDX from '@next/mdx'
 
-const withNextIntl = createNextIntlPlugin();
 const withMDX = createMDX({
     extension: /\.(md|mdx)?$/,
     options: {
@@ -15,6 +13,6 @@ const nextConfig = {
 };
 
 // Compose the plugins together
-const composedConfig = withNextIntl(withMDX(nextConfig));
+const composedConfig = withMDX(nextConfig);
 
 export default composedConfig;

@@ -1,4 +1,4 @@
-import BrokerNavi from "@/components/BrokerNavi";
+import BrokerNavi from "@/components/broker-navi";
 import Link from "next/link";
 import "@/app/globals.css";
 

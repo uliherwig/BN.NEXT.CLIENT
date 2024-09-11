@@ -1,5 +1,6 @@
 import Link from "next/link";
-import LanguageSwitch from "./LanguageSwitch";
+import LanguageSwitch from "./language-switch";
+import AuthModal from "./identity/auth-menu";
 
 const Header =  ({ dict }: { dict: Record<string, string> }) => {
   const linkClasses = "text-xs hover:bg-slate-600 text-white font-bold py-1 px-4 rounded";
@@ -9,7 +10,7 @@ const Header =  ({ dict }: { dict: Record<string, string> }) => {
     <div className="flex justify-between items-center p-1 w-full h-full">
 
       <Link href="/" title="home">
-        <h1 className="w-[250px]">BN ALGO TRADER</h1>
+        <h1 className="w-[250px]">{dict.HEADER_title}</h1>
       </Link>
 
       <div className="flex items-center w-full">
@@ -25,10 +26,8 @@ const Header =  ({ dict }: { dict: Record<string, string> }) => {
         <Link href="/blogs" className={linkClasses} title="Blog">
         {dict.HEADER_Blogs}
         </Link>
-      </div>
-      <Link href="/login" className="text-xs hover:bg-slate-600 text-white py-1 px-4 rounded" title="Login">
-        LOGIN
-      </Link>
+      </div>    
+      <AuthModal dict={dict} />
       <LanguageSwitch />
     </div>
   );

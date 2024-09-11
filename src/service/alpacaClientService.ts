@@ -1,4 +1,4 @@
-import fetchWithCache, { basicFetch , basicPost} from "../app/api/fetchFunctions";
+import fetchWithCache, { basicFetch , basicPost} from "../app/lib/fetchFunctions";
 
 export const alpacaClientService = {
 

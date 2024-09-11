@@ -1,6 +1,6 @@
 
 import { BnOhlc } from '@/models/BnOhlc';
-import { basicFetch } from '../app/api/fetchFunctions';
+import { basicFetch } from '../app/lib/fetchFunctions';
 
 
 export const alpacaDataService = {

@@ -1,5 +1,5 @@
 import { AlpacaAsset } from "@/models/AlpacaAsset";
-import fetchWithCache, { basicFetch, basicPost } from "../app/api/fetchFunctions";
+import fetchWithCache, { basicFetch, basicPost } from "@/app/lib/fetchFunctions";
 import Cookies from 'js-cookie';
 
 export const alpacaTradingService = {
