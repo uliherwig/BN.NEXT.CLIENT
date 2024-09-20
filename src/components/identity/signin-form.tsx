@@ -9,6 +9,10 @@ import { getToken } from "next-auth/jwt"
 
 
 const SignInForm = () => {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const { data: session, status } = useSession()
   const [loading, setLoading] = useState(false);
@@ -59,8 +63,12 @@ const SignInForm = () => {
   return (
 
     <>
+
       <div className="h-full bg-white p-5">
         <div className="text-slate-800 text-lg font-bold mb-4">Sign in</div>
+        {isClient  && (
+          
+        
         <div className="flex flex-row gap-4 w-full">
           <div className="w-[50%]  border-r border-slate-400">
 
@@ -105,6 +113,7 @@ const SignInForm = () => {
             </div>
           </div>
         </div>
+        )}
       </div>
 
     </>)

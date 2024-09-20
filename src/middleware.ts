@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { match } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
+import { getSession } from 'next-auth/react';
 
 let headers = { 'accept-language': 'en,en;q=0.5' }
 let languages = new Negotiator({ headers }).languages()
@@ -12,7 +13,8 @@ match(languages, locales, defaultLocale) // -> 'en'
 
 function getLocale(request: NextRequest) { return match(new Negotiator({ headers }).languages(), locales, defaultLocale) }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+
   const url = new URL(request.url) 
   console.log(url.pathname)
 

@@ -15,8 +15,6 @@ export const basicPost = async<returnType>(
     body?: any
 ): Promise<returnType> => {
     
-    console.log('endpoint:', endpoint);
-
     const method: string = 'POST';
 
     const options: RequestInit = {

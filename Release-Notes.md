@@ -2,6 +2,14 @@
 
 ## ToDo
 
+- alpaca store key to db
+- chart with real time data
+
+## Version 2024.9.2
+
+- auth status check
+- alpaca key/secret storage in usersettings
+
 ## Version 2024.9.1
 
 - Refactoring Internationalization

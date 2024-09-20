@@ -1,7 +1,7 @@
 import * as React from 'react';
 import "@/app/globals.css";
 import AlpacaAssets from '@/components/alpaca/assets/AlpacaAssets';
-import AlpacaLogon from '@/components/alpaca/AlpacaLogon';
+import AlpacaSecretsForm from '@/components/alpaca/alpaca-secrets-form';
 
 
 export default function AlpacaSettings() {
@@ -10,7 +10,7 @@ export default function AlpacaSettings() {
 
         <div className="flex flex-row gap-4 w-full">
             <div className="flex-1 content-container">
-                <AlpacaLogon />
+                <AlpacaSecretsForm />
             </div>
             <div className="flex-1 content-container">
                 <AlpacaAssets />

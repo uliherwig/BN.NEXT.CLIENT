@@ -90,7 +90,7 @@ export async function updateSession() {
 export async function getSession() {
 
     console.log('getSession:');
-    const session = cookies().get("session")?.value; // Retrieve the session cookie value
+    const session = cookies().get("next-auth.session-token")?.value; // Retrieve the session cookie value
     if (!session) return null; // If session is not found, return null
     return await decrypt(session); // Decrypt and return the session payload
 }

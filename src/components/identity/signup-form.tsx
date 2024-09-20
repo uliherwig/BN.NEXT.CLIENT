@@ -16,14 +16,14 @@ function firstOrDefault<T>(array: T[], defaultValue: T): T {
 
 const SignUpForm = () => {
 
+  // avoid windows errors because use client nor active yet
   const [isClient, setIsClient] = useState(false);
-
   useEffect(() => {
     setIsClient(true);
   }, []);
 
 
-  const [state, formAction] = useFormState<any, FormData>(register, { message: '' });
+  const [state, formAction] = useFormState<any, FormData>(register, { message: '', success: false, errors: {} });
 
   useEffect(() => {
     console.log('state:', state);
@@ -38,6 +38,12 @@ const SignUpForm = () => {
 
           <div className="w-[50%] pr-5  border-r border-slate-400">
             <div className="text-slate-800 text-lg font-bold mb-4">Sign up</div>
+
+            {isClient && state.success && (
+            
+              <div className="text-green-500">Success! You have signed up successfully. Please check your email for a confirmation link.</div>
+            )}
+
             {isClient && (
               <form action={formAction} className='flex flex-col gap-2'>
                 <div>

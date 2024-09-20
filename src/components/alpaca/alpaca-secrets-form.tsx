@@ -1,33 +1,34 @@
 "use client";
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-import { SubmitHandler, useForm } from "react-hook-form"
+
 import { basicFetch } from '@/app/lib/fetchFunctions';
 import { AccountData } from '@/models/AlpacaAccount';
+import BNButton from '@/components/common/bn-button';
+import { errors } from 'jose';
+import { useFormState, useFormStatus } from "react-dom";
+import { storeAlpacaCredentials } from "@/app/actions/alpaca";
 
-type FormData = {
-    keyId: string
-    keySecret: string
+const errorMessageClass = 'text-red-500 text-sm';
+
+function firstOrDefault<T>(array: T[], defaultValue: T): T {
+    if (!array) {
+        return defaultValue;
+    }
+    return array.length > 0 ? array[0] : defaultValue;
 }
 
-
-
-const AlpacaLogon = () => {
+const AlpacaSecretsForm = () => {
 
     const [accountData, setAccountData] = useState<AccountData | null>(null);
 
-    const {
-        register,
-        setValue,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<FormData>()
+    const [state, formAction] = useFormState<any, FormData>(storeAlpacaCredentials, { message: '', success: false, errors: {} });
 
-    const onSubmit: SubmitHandler<FormData> = (data) => {
-        console.log(data);
-        Cookies.set('alpaca-key-id', data.keyId);
-        Cookies.set('alpaca-key-secret', data.keySecret);
-    }
+    useEffect(() => {
+        console.log('state:', state);
+    }, [state]);
+
+    console.log('state:', state);
 
     const testAccount = async () => {
         var keyId = Cookies.get('alpaca-key-id');
@@ -50,7 +51,7 @@ const AlpacaLogon = () => {
 
     useEffect(() => {
     }, [accountData]);
-       
+
 
     const selectedAssets: string[] = Cookies.get('asset-selection')?.split(',') || [];
 
@@ -58,20 +59,22 @@ const AlpacaLogon = () => {
         <div className="h-full bg-white p-3 px-5">
             <div className="text-slate-800 text-lg font-bold mb-4">Settings</div>
             <div className="flex flex-row gap-4 w-full">
-                <div className="w-[50%]  border-r border-slate-400">
+                <div className="w-[50%] pr-5  border-r border-slate-400">
 
                     <div className="text-slate-800 text-lg mb-4">Eingabe Alpaca Key und Secret Key</div>
+                    {state.success && (
+                        <form action={formAction} className='flex flex-col gap-2'>
+                            <label>Key ID</label>
+                            <input type="text" name="keyId" className='border border-slate-400 w-full p-1' />
+                            <div className={errorMessageClass}>{firstOrDefault(state?.errors?.keyId, '')}</div>
+                            <label>Key Secret</label>
+                            <input type="password" name="keySecret" className='border border-slate-400 w-full p-1' />
+                            <div className={errorMessageClass}>{firstOrDefault(state?.errors?.keySecret, '')}</div>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
-                        <label>Key ID</label>
-                        <input defaultValue="" {...register("keyId", { required: true })} className='border border-slate-400 w-[250px] p-1' />
-                        {errors.keyId && <span className='text-red-700'>This field is required</span>}
-                        <label>Key Secret</label>
-                        <input type="password" defaultValue="" {...register("keySecret", { required: true })} className='border border-slate-400 w-[250px] p-1' />
-                        {errors.keySecret && <span className='text-red-700'>This field is required</span>}
+                            <BNButton type='submit' label='Store Data' />
+                        </form>
+                    )}
 
-                        <input type="submit" value="Store Data" className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer' />
-                    </form>
                 </div>
                 <div className="w-[50%]  border-r border-slate-400">
 
@@ -86,7 +89,6 @@ const AlpacaLogon = () => {
                             <div>Created At: {accountData.createdAtUtc.toString()}</div>
                         </div>
                     )}
-
 
                     <input type="button" value="Test Account" className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer' onClick={testAccount} />
                 </div>
@@ -104,4 +106,4 @@ const AlpacaLogon = () => {
     );
 };
 
-export default AlpacaLogon;
+export default AlpacaSecretsForm;
