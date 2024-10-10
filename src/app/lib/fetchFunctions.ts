@@ -1,11 +1,6 @@
 export const basicFetch = async<returnType>(endpoint: string): Promise<returnType> => {
 
-    console.log('endpoint:', endpoint);
-    const res = await fetch(endpoint);
-
-    if (!res.ok) {
-        throw new Error('Failed to fetch data');
-    }
+    const res = await fetch(endpoint);  
     return await res.json();
 
 }

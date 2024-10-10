@@ -53,7 +53,7 @@ const BrokerNavi = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/alpaca" className="grid grid-cols-[18px_auto] items-center gap-2" title="charts">
+                            <Link href="/brokers/alpaca/backtest" className="grid grid-cols-[18px_auto] items-center gap-2" title="charts">
                                 Backtest
                             </Link>
                         </li>

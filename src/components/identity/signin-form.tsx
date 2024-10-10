@@ -5,10 +5,8 @@ import { useSession, signIn, signOut } from "next-auth/react"
 import { useState , useEffect } from 'react';
 import { getToken } from "next-auth/jwt"
 
-
-
-
 const SignInForm = () => {
+
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);
@@ -20,7 +18,7 @@ const SignInForm = () => {
 
   useEffect(() => {
     if (session?.expires === "RefreshAccessTokenError") {
-      signIn(); // Force sign in to hopefully resolve error
+      signIn(); 
     }
   }, [session]);
 
@@ -54,9 +52,7 @@ const SignInForm = () => {
     setTestauth('');
     console.log('testing auth route');
     console.log('session:', session);
-    const res = await basicFetch<any>(`/api/identity`);
-
-    console.log('res:', res);
+    const res = await basicFetch<any>(`/api/identity`);  
     setTestauth(res.message);
   }
 

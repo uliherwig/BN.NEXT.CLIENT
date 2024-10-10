@@ -2,8 +2,16 @@
 
 ## ToDo
 
-- alpaca store key to db
 - chart with real time data
+
+## Version 2024.10.1
+
+- input test settings and start test
+
+## Version 2024.9.3
+
+- refactoring settings page
+- alpaca key/secret load and update function
 
 ## Version 2024.9.2
 

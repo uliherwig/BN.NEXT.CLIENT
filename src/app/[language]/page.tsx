@@ -1,4 +1,4 @@
-import { LanguageProps } from "@/models/common/LanguageProps";
+import { LanguageProps } from "@/models/common/language-props";
 import { getDictionary } from "../lib/dictionaries/dictionaries";
 
 

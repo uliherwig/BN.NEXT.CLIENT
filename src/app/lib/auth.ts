@@ -1,5 +1,6 @@
 
 
+import { jwtDecode } from "jwt-decode";
 import NextAuth, { User } from "next-auth";
 import { NextAuthOptions } from 'next-auth';
 import { JWT } from "next-auth/jwt";
@@ -96,39 +97,30 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
+
     async signIn({ user, account, profile, email, credentials }) {
-
-      //console.log('CALLBACK  signIn:', user);
       if (user) {
-
         return true
       }
       return false
     },
+
     async redirect({ url, baseUrl }) {
-      //console.log('CALLBACK  redirect:', url, baseUrl);
       return baseUrl
     },
 
-
     async jwt({ token, user }) {
-      //console.log('CALLBACK  jwt:', user);
-      //console.log('token:', token);
       if (user) {
 
-        //console.log('user:', user);
         token.name = user.name;
         token.accessToken = user.accessToken
         token.refreshToken = user.refreshToken
         token.expiresAt = Date.now() + (user.expiresIn ?? 0) * 1000;
-        token.role = "Unknown" // the user role
+        // token.role = "Unknown" // the user role is in token 
 
-        // handle expiry of token
         const expiresAt: number = token.expiresAt as number;
 
         if (Date.now() < expiresAt) {
-          //console.log('CALLBACK  jwt:');
-          //console.log(token);
           return token
         }
 
@@ -136,44 +128,33 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (token) {
-
-        //console.log('token:', token);
-
-
-   
-
-
-
-        // handle expiry of token
         const expiresAt: number = token.expiresAt as number;
 
         if (Date.now() < expiresAt) {
-          //console.log('CALLBACK  jwt:');
-          //console.log(token);
           return token
         }
 
         return refreshAccessToken(token)
       }
-
-
-
     },
 
     async session({ session, token, user }) {
-      //console.log('CALLBACK  session:', session);
-      //console.log('CALLBACK  session:', token);
-      //console.log('CALLBACK  session:', user);
+      // console.log('CALLBACK  session:', session);
+      // console.log('CALLBACK  token:', token);
+      // console.log('CALLBACK  user:', user);
 
+
+      const decoded: any = token.accessToken ? jwtDecode(token.accessToken) : null;
+
+      //console.log('CALLBACK  decoded:', decoded);
 
 
       if (token && session.user) {
-        // session.user.id = token.id;
-        // session.user.name = token.name;
-        // session.user.email = token.email;
-        // Attach user id to the session from the token
-        // session.accessToken = token.accessToken
-        // session.user.id = token.id;
+        // session.user.id = decoded.sid;
+        session.user.username = decoded.preferred_username;
+        session.user.email = decoded.email;
+    
+        session.user.name = decoded.name;
 
         // Fetch additional user data from your .NET service
         // const res = await fetch(`http://localhost:5044/Account/login/${token.id}`);   // does not exist yet

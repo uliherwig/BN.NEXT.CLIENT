@@ -1,6 +1,6 @@
 import Link from "next/link";
-import LanguageSwitch from "./language-switch";
-import AuthenticationMenu from "./identity/auth-menu";
+import LanguageSwitch from "../language-switch";
+import AuthenticationMenu from "../identity/auth-menu";
 
 const Header =  ({ dict }: { dict: Record<string, string> }) => {
   const linkClasses = "text-xs hover:bg-slate-600 text-white font-bold py-1 px-4 rounded";

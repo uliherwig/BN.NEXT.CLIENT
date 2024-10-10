@@ -10,10 +10,7 @@ export default function AlpacaDashboard() {
         <p>Wählen Sie einen Broker</p>
         <p>Rufen Sie die Einstellungen auf</p>
         <p>Tragen Sie Ihre Login daten für die Broker API ein</p>
-        <p>Speichern Sie die Einstellungen</p>
-
-     
+        <p>Speichern Sie die Einstellungen</p>     
     </div>
-
   );
 }

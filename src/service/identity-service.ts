@@ -1,5 +1,5 @@
-import fetchWithCache, { basicFetch, basicPost } from "../app/lib/fetchFunctions";
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { basicPost } from "../app/lib/fetchFunctions";
+import { signOut } from 'next-auth/react';
 import { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
@@ -7,9 +7,9 @@ export const IdentityService = {
 
     baseURL: process.env.IDENTITY_API_URL,
 
-    async signIn(username: string, password: string) {
-        // Implementation for sign-in
-      },
+    // async signIn(username: string, password: string) {
+    //     // Implementation for sign-in
+    //   },
 
     async signOut(req: NextRequest) {
 
@@ -26,7 +26,7 @@ export const IdentityService = {
             }
 
             var result = await basicPost(endpoint, body);
-            console.log('result:', result);
+     
             await signOut();
             
             return result;
@@ -35,8 +35,8 @@ export const IdentityService = {
             return error;
         }
     },
-    async register(username: string, email: string, password: string) {
-        // Implementation for registration
-      },
+    // async register(username: string, email: string, password: string) {
+    //     // Implementation for registration
+    //   },
 
 };

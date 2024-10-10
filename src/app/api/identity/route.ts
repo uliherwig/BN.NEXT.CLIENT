@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json('No token found');
     }
 
-    // console.log('req:', req);
     const endpoint = `${process.env.IDENTITY_API_URL}/Account/test-auth`;
 
     const data = await fetch(endpoint, {
@@ -18,8 +17,6 @@ export async function GET(req: NextRequest) {
         'Authorization': `Bearer ${token.accessToken}`,
       },
     });
-    console.log('data:', token);
-    // console.log('data:', data);
 
     if (token.error === 'RefreshAccessTokenError') {
       IdentityService.signOut(req);

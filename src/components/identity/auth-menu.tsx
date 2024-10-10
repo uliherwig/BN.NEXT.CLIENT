@@ -5,9 +5,9 @@ import { IconButton } from '@mui/material';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import BnButton from '../common/bn-button';
-import { basicFetch } from '@/app/lib/fetchFunctions';
+import { basicFetch, basicPost } from '@/app/lib/fetchFunctions';
 import SignInDialog from './signin-dialog';
-import { fetchService } from '@/service/fetch-service';
+
 
 const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
 
@@ -43,7 +43,7 @@ const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
 
 
     const [dialogOpen, setDialogOpen] = useState(false);
-    const { data: session, status } = useSession()  
+    const { data: session, status } = useSession()
 
     useEffect(() => {
         console.log('session:', session);
@@ -59,8 +59,7 @@ const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
     const handleSignOut = async () => {
         try {
 
-          const result =   await fetchService.nextJsPost('/api/identity/signout', {});     
-          console.log('Sign out result:', result);    
+            const result = await basicPost('/api/identity/signout', {});
             await signOut();
         } catch (error) {
             console.error('Error during sign out:', error);
@@ -82,7 +81,7 @@ const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
             <div className="relative inline-block mr-2">
                 <IconButton aria-label="language" color="primary" onClick={toggleMenu}>
                     <ManageAccountsRoundedIcon className='text-slate-50' />
-                    <span className='text-sm text-slate-50 ml-1 min-w-fit'>{session && session.user?.name}</span>
+                    <span className='text-sm text-slate-50 ml-1 min-w-fit'>{session && session.user?.username}</span>
                 </IconButton>
 
                 {isClient && menuOpen && (
@@ -118,7 +117,7 @@ const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
                 )}
             </div>
 
-            <SignInDialog dict={dict} isOpen={dialogOpen} closeDialog={closeDialog} /> 
+            <SignInDialog dict={dict} isOpen={dialogOpen} closeDialog={closeDialog} />
         </>
     );
 }

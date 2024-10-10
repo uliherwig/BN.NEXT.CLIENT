@@ -14,7 +14,7 @@ export default function AlpacaDashboard() {
         <AlpacaAssets />
       </div>
       <div className="col-span-1">
-        <AlpacaHistoryChart />
+      
       </div>
     </div>
 
