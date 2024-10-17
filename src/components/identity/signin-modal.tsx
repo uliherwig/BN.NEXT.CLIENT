@@ -10,17 +10,6 @@ import test from 'node:test';
 
 const SignInDialog = ({ dict , isOpen, closeDialog }: { dict: Record<string, string> , isOpen: boolean , closeDialog : Function }) => {
 
-    // const [isClient, setIsClient] = useState(false);
-    // useEffect(() => {
-    //     setIsClient(true);
-    // }, []);
-
-    
-    
-    
-
-
-    // const [dialogOpen, setDialogOpen] = useState(false);
     const { data: session, status } = useSession()
     const [loading, setLoading] = useState(false);
     const [loginError, setLoginError] = useState('')

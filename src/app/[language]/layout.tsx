@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
 const inter = Inter({ subsets: ["latin"] });
-import Header from "@/components/common/header";  
+import Header from "@/components/common/header";
 import { LanguageProps } from "@/models/common/language-props";
 import { getDictionary } from "../lib/dictionaries/dictionaries";
-import SessionProviderWrapper from "@/components/session-provider-wrapper";
+import SessionProviderWrapper from "@/provider/session-provider-wrapper";
 import ToastProvider from "@/components/common/toast-container";
 import { getSession } from "next-auth/react";
+import { DictionaryProvider } from "@/provider/dictionary-provider";
 
 // prerender static pages for each language
 export async function generateStaticParams() {
@@ -28,15 +29,17 @@ export default async function RootLayout({
       <body className="flex justify-center items-center min-h-screen overflow-hidden">
         <div className="flex flex-col bg-slate-100 w-full max-w-[1920px]">
           <SessionProviderWrapper>
-            <header className="h-[40px] bg-slate-800 p-1 px-5 text-white">
-              <Header dict={dict} />
-            </header>
-            <main className="content-container">
-              {children}
-            </main>
-            <footer className="h-[30px] bg-slate-800 text-white p-2 text-xs">
-              &copy; {new Date().getFullYear()} BN PROJECT
-            </footer>
+            <DictionaryProvider dictionary={dict}>
+              <header className="h-[40px] bg-slate-800 p-1 px-5 text-white">
+                <Header dict={dict} />
+              </header>
+              <main className="content-container">
+                {children}
+              </main>
+              <footer className="h-[30px] bg-slate-800 text-white p-2 text-xs">
+                &copy; {new Date().getFullYear()} BN PROJECT
+              </footer>
+            </DictionaryProvider>
           </SessionProviderWrapper>
         </div>
       </body>

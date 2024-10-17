@@ -11,8 +11,11 @@ export const alpacaDataService = {
     console.log('baseURL:', this.baseURL);
     console.log('url: ', `${this.baseURL}/api/AlpacaTest/historicalBars/${symbol}?startDate=${startDate}&endDate=${endDate}`)
 
-    const data = await basicFetch<BnOhlc[]>(`${this.baseURL}/api/AlpacaTest/historicalBars/${symbol}?startDate=${startDate}&endDate=${endDate}`);
-     console.log('data:', data[1]);
+    const url = `${this.baseURL}/AlpacaData/historical-bars/${symbol}?startDate=${startDate}&endDate=${endDate}`
+    http://localhost:5130/AlpacaData/historical-bars/SPY?startDate=2024-09-09&endDate=2024-09-20
+
+    const data = await basicFetch<any[]>(url);
+    console.log('data:', data[1]);
     return data;
   },
 

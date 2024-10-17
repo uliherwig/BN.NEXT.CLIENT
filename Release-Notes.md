@@ -4,9 +4,16 @@
 
 - chart with real time data
 
+## Version 2024.10.2
+
+- implement dictionary-provider
+- list tests
+- show test results
+- show positions
+
 ## Version 2024.10.1
 
-- input test settings and start test
+- input-form for test settings and start test
 
 ## Version 2024.9.3
 

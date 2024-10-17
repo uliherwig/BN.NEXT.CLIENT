@@ -4,8 +4,10 @@ import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
 import { getDictionary } from '@/app/lib/dictionaries/dictionaries';
 import { LanguageProps } from '@/models/common/language-props';
-import { AlpacaUserSettingsService } from '@/service/alpaca/user-settings-service';
 import TestSettingsForm from '@/components/alpaca/test-settings-form';
+import TestList from '@/components/alpaca/test-list';
+import TestPositions from '@/components/alpaca/test-results';
+import Backtests from '@/components/alpaca/backtests';
 
 
 export default async function AlpacaSettingsPage({ params }: LanguageProps) {
@@ -14,11 +16,9 @@ export default async function AlpacaSettingsPage({ params }: LanguageProps) {
   const session = await getServerSession(authOptions)
 
 
-
-
   if (session !== null) {
     if (session.user) {
-      console.log("session", session)
+      // console.log("session", session)
 
     }
   }
@@ -43,18 +43,7 @@ export default async function AlpacaSettingsPage({ params }: LanguageProps) {
 
   return (
 
-    <div className="flex flex-row gap-4 w-full">
-      <div className="flex-1 content-container">
-        <TestSettingsForm />
-      </div>
-      <div className="flex-1 content-container">
-        test
-      </div>
-      <div className="flex-1 content-container">
-        test
-      </div>
-
-    </div>
+    <Backtests email={session.user?.email as string} />
 
   );
 }

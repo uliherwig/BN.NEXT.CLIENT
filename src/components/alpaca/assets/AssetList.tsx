@@ -1,41 +1,25 @@
 "use client"
-import React, { Suspense, use, useEffect, useState } from 'react';
-import { BnOhlc } from '@/models/BnOhlc';
-import useSWR, { mutate } from 'swr';
+import React, { useEffect, useState } from 'react';
 import { AlpacaAsset } from '@/models/AlpacaAsset';
 import { alpacaClientService } from '@/service/alpacaClientService';
-
 interface AssetListProps {
   assets: AlpacaAsset[];
 }
 
-
 const AssetList: React.FC<AssetListProps> = ({ assets }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [assetList, setAssetList] = useState(assets);
-
-
-
-  // const url = `/api/alpaca/assets?symbol=${toggleAssetSelectionUrl}`;
-
-
-
-
   const filteredAssets = assetList.filter(asset =>
     asset.name.toLowerCase().includes(searchTerm.toLowerCase()) || asset.symbol.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const toggleSelected = async (assetSymbol: string) => {
-    console.log('toggling asset:', assetSymbol);
-
     setAssetList(prevAssets =>
       prevAssets.map(asset =>
         asset.symbol === assetSymbol ? { ...asset, isSelected: !asset.isSelected } : asset
       )
     );
-
     await alpacaClientService.toggleAssetSelection(assetSymbol);
-
   };
 
   useEffect(() => {

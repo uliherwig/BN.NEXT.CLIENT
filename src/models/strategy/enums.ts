@@ -10,3 +10,8 @@ export enum TimeFrame {
   Hour,
   Day,
 }
+
+export enum Side {
+  Buy,
+  Sell
+}

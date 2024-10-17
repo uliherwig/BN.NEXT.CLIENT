@@ -5,8 +5,8 @@ import KeySecretsForm from '@/components/alpaca/key-secrets-form';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
 import { getDictionary } from '@/app/lib/dictionaries/dictionaries';
-import { LanguageProps } from '@/models/common/LanguageProps';
-import { AlpacaUserSettings } from '@/models/alpaca/user-settings';
+import { LanguageProps } from '@/models/common/language-props';
+import { AlpacaUserSettings } from '@/models/alpaca/alpaca-user-settings';
 import { AlpacaUserSettingsService } from '@/service/alpaca/user-settings-service';
 import MyAccount from '@/components/alpaca/my-account';
 
@@ -21,7 +21,6 @@ export default async function AlpacaSettingsPage({ params }: LanguageProps) {
     };
 
     const dict = await getDictionary(params.language)
-
     const session = await getServerSession(authOptions) 
 
     if (session !== null) {
@@ -39,9 +38,7 @@ export default async function AlpacaSettingsPage({ params }: LanguageProps) {
                     alpacaSecret: result.alpacaSecret,
                     symbols: result.symbols
                 };
-            }
-
-          
+            }          
         }
     }
 

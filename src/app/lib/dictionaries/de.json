@@ -1,23 +1,18 @@
 {
   "HOME_title": "BN PROJEKT",
   "HOME_description": "Willkommen zur BN Trading App",
-  
   "HEADER_title": "BN PROJEKT",
   "HEADER_Brokers": "BROKER",
   "HEADER_Strategies": "STRATEGIE",
   "HEADER_Blogs": "BLOG",
-
   "NAVIGATION_home": "Home",
   "NAVIGATION_dashboard": "Dashboard",
   "NAVIGATION_alpaca": "Alpaca",
   "ALPACA_dashboard": "Alpaca Dashboard",
   "ALPACA_assets": "Alpaca Assets",
-
-
   "AUTH_welcome": "Willkommen",
   "AUTH_myaccount": "Mein Konto",
   "AUTH_noaccount": "Sie haben noch keinen Konto?",
-
   "AUTH_login": "Anmelden",
   "AUTH_logout": "Abmelden",
   "AUTH_register": "Registrieren",
@@ -28,7 +23,6 @@
   "AUTH_resetPassword": "Passwort zurücksetzen",
   "AUTH_newPassword": "Neues Passwort",
   "AUTH_confirmNewPassword": "Neues Passwort bestätigen",
-
   "AUTH_error": "Fehler",
   "AUTH_errorEmail": "Bitte geben Sie eine gültige Email-Adresse ein",
   "AUTH_errorPassword": "Bitte geben Sie ein Passwort ein",
@@ -37,12 +31,14 @@
   "AUTH_errorUserExists": "Benutzer existiert bereits",
   "AUTH_errorUserNotExists": "Benutzer existiert nicht",
   "AUTH_errorInvalidPassword": "Ungültiges Passwort",
-  
   "AUTH_success": "Erfolg",
   "AUTH_successPasswordReset": "Passwort erfolgreich zurückgesetzt",
   "AUTH_successPasswordChanged": "Passwort erfolgreich geändert",
   "AUTH_successUserRegistered": "Benutzer erfolgreich registriert",
   "AUTH_successUserLoggedIn": "Benutzer erfolgreich angemeldet",
-  "AUTH_successUserLoggedOut": "Benutzer erfolgreich abgemeldet"
-
+  "AUTH_successUserLoggedOut": "Benutzer erfolgreich abgemeldet",
+  
+  "BROKERS_title": "Broker",
+  "BROKERS_description": "Wählen Sie einen Broker zum Verbinden aus",
+  "BROKERS_backtest": "Backtest"
 }

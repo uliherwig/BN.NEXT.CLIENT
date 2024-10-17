@@ -4,9 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { IconButton } from '@mui/material';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import BnButton from '../common/bn-button';
 import { basicFetch, basicPost } from '@/app/lib/fetchFunctions';
-import SignInDialog from './signin-dialog';
+import SignInDialog from './signin-modal';
 
 
 const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
@@ -46,9 +45,9 @@ const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
     const { data: session, status } = useSession()
 
     useEffect(() => {
-        console.log('session:', session);
+       // console.log('session:', session);
         if (session && session.user) {
-            console.log('session.user:', session.user?.name);
+           // console.log('session.user:', session.user?.name);
         }
     }, [session]);
 

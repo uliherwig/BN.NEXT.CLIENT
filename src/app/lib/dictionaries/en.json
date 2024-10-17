@@ -41,5 +41,9 @@
   "AUTH_successPasswordChanged": "Password successfully changed",
   "AUTH_successUserRegistered": "User successfully registered",
   "AUTH_successUserLoggedIn": "User successfully logged in",
-  "AUTH_successUserLoggedOut": "User successfully logged out"
+  "AUTH_successUserLoggedOut": "User successfully logged out",
+
+  "BROKERS_title": "Brokers",
+  "BROKERS_description": "Choose a broker to connect to",
+  "BROKERS_backtest": "Backtest"
 }

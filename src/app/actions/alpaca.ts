@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
-import { BacktestSettings } from '@/models/alpaca/test-settings';
+import { BacktestSettings } from '@/models/strategy/test-settings';
 import { start } from 'repl';
 
 const schemaRegister = z.object({
@@ -65,8 +65,8 @@ const backtestSchemaRegister = z.object({
     symbol: z.string(),
     takeProfitFactor: z.number().min(0.001).max(0.5),
     stopLossFactor: z.number().min(0.001).max(0.5),
-    startDate: z.date().min(new Date(2024,0,0), 'Start date may not be before 2024').max(new Date(), 'Start date may not be after today'),
-    endDate: z.date().min(new Date(2024,0,0), 'End date may not be before 2024').max(new Date(), 'End date may not be after today'),
+    startDate: z.date().min(new Date(2024, 0, 0), 'Start date may not be before 2024').max(new Date(), 'Start date may not be after today'),
+    endDate: z.date().min(new Date(2024, 0, 0), 'End date may not be before 2024').max(new Date(), 'End date may not be after today'),
     strategy: z.string(),
     timeFrame: z.string(),
 });
@@ -87,7 +87,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         endDate: endDate,
         strategy: formData.get('strategy'),
         timeFrame: formData.get('timeFrame'),
-        allowOvernight: formData.get('allowOvernight') === 'true',  
+        allowOvernight: formData.get('allowOvernight') === 'true',
 
     });
 
@@ -113,7 +113,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             testStamp: new Date().toISOString()
         }
 
-    
+
         // console.log('json:', json);
 
         // //   00000000-0000-0000-0000000000000000000000
@@ -134,9 +134,10 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         //     testStamp: "2024-10-10T06:37:27.722Z"
         //   }
 
- console.log('json:', json);
+        console.log('json:', json);
 
-        const response = await fetch(`http://localhost:5130/Backtest`, {
+
+        const response = await fetch(`${process.env.ALPACA_API_URL}/Backtest`, {
             method: 'POST',
             body: JSON.stringify(json),
             headers: {

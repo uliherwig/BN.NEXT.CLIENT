@@ -1,21 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { alpacaDataService } from '../../../../service/alpacaDataService';
-import { AlpacaAsset } from '@/models/AlpacaAsset';
-import { alpacaTradingService } from '../../../../service/alpacaTradingService';
+import { basicFetch } from '@/app/lib/fetchFunctions';
+import { BacktestSettings } from '@/models/strategy/test-settings';
 
 
 // API route handler
 export async function GET(req: NextRequest) {
   try {
+    const symbol = req.nextUrl.searchParams.get('symbol') as string;
+    const startDate = req.nextUrl.searchParams.get('startDate') as string;
+    const endDate = req.nextUrl.searchParams.get('endDate') as string;
+    const timeFrame = req.nextUrl.searchParams.get('timeFrame') as string;
 
-    console.log('fetching data');
+    console.log('params:', symbol, startDate, endDate, timeFrame);
 
-    // console.log('req:', req);
-    const data = await alpacaDataService.getHistoricalBars('SPY', '2024-02-01', '2024-02-02', '1Min'); 
-  
-
+    const url = `${process.env.ALPACA_API_URL}/AlpacaTest/historical-bars/${symbol}?startDate=${startDate}&endDate=${endDate}`
+    const data = await basicFetch<any[]>(url);
     return NextResponse.json(data);
   } catch (error) {
+    console.log('error:', error);
     return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
   }
 }
