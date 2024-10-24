@@ -30,13 +30,13 @@ export default async function RootLayout({
         <div className="flex flex-col bg-slate-100 w-full max-w-[1920px]">
           <SessionProviderWrapper>
             <DictionaryProvider dictionary={dict}>
-              <header className="h-[40px] bg-slate-800 p-1 px-5 text-white">
+              <header className="bg-bn-dark">
                 <Header dict={dict} />
               </header>
               <main className="content-container">
                 {children}
               </main>
-              <footer className="h-[30px] bg-slate-800 text-white p-2 text-xs">
+              <footer className="bg-bn-dark text-xs">
                 &copy; {new Date().getFullYear()} BN PROJECT
               </footer>
             </DictionaryProvider>

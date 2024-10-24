@@ -12,25 +12,66 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      errorMessage : 'text-red-500 text-sm',
-      // Add custom styles for the error class
       colors: {
-        error: '#FF00FF', // Define a custom error color
+        primary: '#334155', // Custom primary color
+        secondary: '#f1f5f9', // Custom secondary color
+        error: '#FF0000', // Custom error color
+        success: '#10B981', // Custom success color
+        warning: '#F59E0B', // Custom warning color
       },
       textColor: {
-        error: 'text-red-500 text-sm', // Define a custom error text color
+        primary: '#334155', // Custom primary text color
+        secondary: '#f1f5f9', // Custom secondary text color
+        error: '#FF0000', // Custom error text color
+        success: '#10B981', // Custom success text color
+        warning: '#F59E0B', // Custom warning text color
       },
       backgroundColor: {
-        error: '#FF0000', // Define a custom error background color
+        primary: '#f1f5f9', // Custom primary background color
+        secondary: '#9333EA', // Custom secondary background color
+        error: '#FF0000', // Custom error background color
+        success: '#10B981', // Custom success background color
+        warning: '#F59E0B', // Custom warning background color
       },
       borderColor: {
-        error: '#FF0000', // Define a custom error border color
+        primary: '#1D4ED8', // Custom primary border color
+        secondary: '#9333EA', // Custom secondary border color
+        error: '#FF0000', // Custom error border color
+        success: '#10B981', // Custom success border color
+        warning: '#F59E0B', // Custom warning border color
+      },
+      spacing: {
+        '1': '0.25rem', // 4px
+        '2': '0.5rem', // 8px
+        '3': '0.75rem', // 12px
+        '4': '1rem', // 16px
+        '5': '1.25rem', // 20px
+        '6': '1.5rem', // 24px
+        '8': '2rem', // 32px
+        '10': '2.5rem', // 40px
+        '12': '3rem', // 48px
+        '16': '4rem', // 64px
+        '20': '5rem', // 80px
+        '24': '6rem', // 96px
+        '32': '8rem', // 128px
+      },
+      fontSize: {
+        'headline': ['1.25rem', { lineHeight: '1.5rem', fontWeight: 'bold' }], 
+        'component-head': ['1.1rem', { lineHeight: '2rem', fontWeight: 'bold' }], 
+        'subhead': ['1.2rem', { lineHeight: '1.3rem' }], // 24px
+        'normal': ['0.9rem', { lineHeight: '0.9rem' }], // 16px
       },
     },
   },
   plugins: [
     plugin(function({ addUtilities }: { addUtilities: (utilities: Record<string, any>) => void }) {
       addUtilities({
+        '.component-container': {
+          '@apply h-full bg-slate-50 p-3 px-4': {},
+        },
+        '.bg-bn-dark': {
+          '@apply bg-slate-700 h-[40px] text-white p-2 px-4': {},
+        },
         '.error-message': {
           '@apply text-red-500 text-sm': {},
         },

@@ -4,6 +4,13 @@
 
 - chart with real time data
 
+## Version 2024.10.3
+
+- implement charting modal with flags for open/close event and breakout limits
+- extend backend settings
+- tailwind extensions
+- design changes
+
 ## Version 2024.10.2
 
 - implement dictionary-provider

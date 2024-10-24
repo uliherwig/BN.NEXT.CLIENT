@@ -4,7 +4,7 @@ export enum Strategy {
   // Add other strategies here
 }
 
-export enum TimeFrame {
+export enum BreakoutPeriod {
   Minute,
   TenMinutes,
   Hour,
@@ -15,3 +15,10 @@ export enum Side {
   Buy,
   Sell
 }
+
+
+export enum StopLossStrategy {
+  Breakout,
+  CustomLimit
+}
+

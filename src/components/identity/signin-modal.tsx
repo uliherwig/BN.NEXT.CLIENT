@@ -18,8 +18,9 @@ const SignInDialog = ({ dict , isOpen, closeDialog }: { dict: Record<string, str
         console.log('session:', session);
         if (session && session.user) {
             console.log('session.user:', session.user?.name);
+           
         }
-    }, [session]);
+    }, [session, session?.user]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -40,6 +41,7 @@ const SignInDialog = ({ dict , isOpen, closeDialog }: { dict: Record<string, str
             setLoginError('Login failed. Invalid credentials');
         } else {
             console.log('Sign in successful:', result);
+            location.reload();
             closeDialog(false);
         }
     };

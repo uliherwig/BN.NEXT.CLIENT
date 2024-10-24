@@ -64,10 +64,12 @@ const TestResults: React.FC<TestResultProps> = (params) => {
     return (
         <>
           <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} position={selectedPosition} />
-            <div className="flex flex-col w-full h-full">
-                <div className="text-slate-800 text-lg font-bold mb-2">Test Result {params.test.name}</div>
+            <div className="component-container">
+                <div className="text-component-head mb-2">Test Result {params.test.name}</div>
                 {/* <input type="button" value="REfresh" className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer' onClick={updateTests} />      */}
-                <div className="h-[30%] w-full overflow-hidden pt-5">
+                <div className="h-[25%] w-full">
+
+                    {result.id == undefined && <div className="mt-6 text-slate-800">Es ist kein Test verfügbar. </div>}
 
                     {result !== undefined && result !== null && result.id !== undefined && result.id !== '' &&
                         <table>
@@ -111,19 +113,19 @@ const TestResults: React.FC<TestResultProps> = (params) => {
                     <div className="h-[70%] w-full overflow-hidden pt-5">
                         <div className="h-full overflow-auto">
                             <table className="min-w-full table-fixed border">
-                                <thead className="bg-slate-700 sticky top-0">
+                                <thead className="bg-slate-700 sticky top-0 z-50" >
                                     <tr>
                                         {TABLE_HEAD.map((column) => (
-                                            <th key={column} className="px-2 py-1 text-center text-slate-100 text-xs">
+                                            <th key={column} className="px-2 py-1 text-center text-white text-xs">
                                                 {column}
                                             </th>
                                         ))}
 
                                     </tr>
                                 </thead>
-                                <tbody className='text-neutral-800 text-sm overflow-y' >
+                                <tbody className='text-slate-800 text-sm overflow-y' >
                                     {positions.map((item, index) => (
-                                        <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-neutral-300' : 'bg-white'}`} >
+                                        <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-slate-300' : 'bg-white'}`} >
                                             <td className="px-2 py-1 text-center">{item.side === 0 ? 'BUY' : 'SELL'}</td>
                                             <td className=" py-1 text-center">{format(new Date(item.stampOpened), 'dd.MM.yy HH:mm')}</td>
                                             <td className="ppy-1 text-center">

@@ -1,18 +1,20 @@
-import { Strategy, TimeFrame } from "./enums";
+import { Strategy, BreakoutPeriod, StopLossStrategy } from "./enums";
 
 export interface BacktestSettings {
   id: string; // Guid in C# corresponds to string in TypeScript
-  name: string;
+  userEmail: string;
   broker: string;
+  name: string;
   symbol: string;
-  takeProfitFactor: number;
-  stopLossFactor: number;
+  takeProfitPercent: number;
+  stopLossPercent: number;
   startDate: string; // DateTime in C# corresponds to string in TypeScript (ISO 8601 format)
   endDate: string; // DateTime in C# corresponds to string in TypeScript (ISO 8601 format)
   strategy: Strategy;
-  timeFrame: TimeFrame;
-  allowOvernight: boolean;
-  userEmail: string;
+  breakoutPeriod: BreakoutPeriod;
   trailingStop: number;
+  allowOvernight: boolean;
+  bookmarked: boolean;
+  stopLossStrategy: StopLossStrategy;
   testStamp: string; // DateTime in C# corresponds to string in TypeScript (ISO 8601 format)
 }

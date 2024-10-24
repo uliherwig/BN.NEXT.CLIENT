@@ -4,21 +4,26 @@ import HighchartsReact from 'highcharts-react-official';
 import Highcharts, { color } from "highcharts/highstock";
 import { BnOhlc } from '@/models/BnOhlc';
 import { Position } from '@/models/strategy/position';
+import { Side } from '@/models/strategy/enums';
 
-type BarChartProps = {
+type PositionChartProps = {
     data: any[];
     position: Position;
 };
 
-const BarChart: React.FC<BarChartProps> = (params) => {
+const PositionChart: React.FC<PositionChartProps> = (params) => {
 
     const [chartOptions, setChartOptions] = useState({}); 
 
 
     const t1 = new Date(params.position.stampOpened).getTime();
     const t2 = new Date(params.position.stampClosed).getTime();
+
+    const preLowStamp = new Date(params.position.prevLowStamp).getTime();
+    const preHighStamp = new Date(params.position.prevHighStamp).getTime();
+
     //
-    console.log('t:', t1 , t2);
+    console.log('pos', params.position);
 
     const initialize = () => {
         // split the data set into ohlc and volume
@@ -64,7 +69,7 @@ const BarChart: React.FC<BarChartProps> = (params) => {
             },
 
             title: {
-                text: 'SPY Historical'
+                text: `Position Side: ${Side[params.position.side] } TakeProfit: ${params.position.takeProfit} StopLoss: ${params.position.stopLoss}  Profit/Loss: ${params.position.profitLoss}` 
             },
             xAxis: {
                 ordinal: true,
@@ -135,6 +140,25 @@ const BarChart: React.FC<BarChartProps> = (params) => {
                 shape: 'squarepin',
                 borderRadius: 3,
                 width: 16
+              },{
+                type: 'flags',
+                data: [{
+                    x: preLowStamp,
+                    y: params.position.prevLow,
+                    title: 'L',
+                    text: 'Previous Low' + params.position.prevLow,
+                    color: '#0000ff'
+                }, {
+                    x: preHighStamp,
+                    y: params.position.prevHigh,
+                    title: 'H',
+                    text: 'Previous High ' + params.position.prevHigh,
+                    color: '#ff0000'
+                }],
+                // onSeries: 'dataseries',
+                shape: 'squarepin',
+                borderRadius: 3,
+                width: 16
               }]
         });
     }
@@ -161,4 +185,4 @@ const BarChart: React.FC<BarChartProps> = (params) => {
     )
 }
 
-export default BarChart;
+export default PositionChart;

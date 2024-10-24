@@ -1,18 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import { Dialog, DialogContent, DialogContentText, DialogTitle, IconButton } from '@mui/material';
-import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
-import { signIn, signOut, useSession } from 'next-auth/react';
-import BnButton from '../common/bn-button';
-import fetchService, { basicFetch } from '@/app/lib/fetchFunctions';
-import test from 'node:test';
+import React, { useEffect, useState } from 'react';
+import { Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { basicFetch } from '@/app/lib/fetchFunctions';
 import { Position } from '@/models/strategy/position';
 import CircularIndeterminate from '../common/CircularLoader';
-import LineChart from './history-charts/Linechart';
-import { ChartParameters } from '@/models/ChartParameters';
-import useSWR, { mutate } from 'swr';
-import BarChart from './history-charts/BarChart';
+import PositionChart from './history-charts/position-chart';
 import { format } from 'date-fns';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -38,11 +31,13 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
     const getChartData = async () => {
         setLoading(true);
 
-        const dateOpened = new Date(params.position.stampOpened);
-        dateOpened.setDate(dateOpened.getDate() - 3);
+        const prevLowStamp = new Date(params.position.prevLowStamp);
+        const prevHighStamp = new Date(params.position.prevHighStamp);
+       const dateOpened = (prevLowStamp > prevHighStamp) ?  new Date(prevHighStamp) : new Date(prevLowStamp);
+        dateOpened.setDate(dateOpened.getDate() - 1);
         const formattedDateOpened = format(new Date(dateOpened), 'yyyy-MM-dd');
         const dateClosed = new Date(params.position.stampClosed);
-         dateClosed.setDate(dateClosed.getDate() + 3);
+         dateClosed.setDate(dateClosed.getDate() + 1);
         const formattedDateClosed = format(new Date(dateClosed), 'yyyy-MM-dd');
 
         console.log('dateOpened:', formattedDateOpened, 'dateClosed:', formattedDateClosed);
@@ -68,7 +63,7 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
                     </div>
                 </DialogTitle>
                 <DialogContent>
-                    <div className='w-[900px] h-[600px]'> {loading ? <CircularIndeterminate /> : <BarChart data={chartData} position={params.position} />}</div>
+                    <div className='w-[900px] h-[600px]'> {loading ? <CircularIndeterminate /> : <PositionChart data={chartData} position={params.position} />}</div>
                 </DialogContent>
             </Dialog>
         </>

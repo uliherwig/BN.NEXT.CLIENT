@@ -44,8 +44,7 @@ const SignInForm = () => {
       console.error('Error during sign in:', result.error);
       // Handle error
     } else {
-      console.log('Sign in successful:', result);
-      // Handle successful sign in
+      console.log('Sign in successful:', result); 
     }
   };
   const testAuth = async () => {

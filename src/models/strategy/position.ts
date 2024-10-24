@@ -16,4 +16,6 @@ export interface Position {
   closeSignal: string;
   prevLow: number;
   prevHigh: number;
+  prevLowStamp: Date;
+  prevHighStamp: Date;
 }
