@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import TestPositions from "./test-results";
-import TestSettingsForm from "./test-settings-form";
+import StrategySettingsForm from "./strategy-settings-form";
 import TestList from "./test-list";
 import { BacktestSettings } from "@/models/strategy/test-settings";
 
@@ -20,10 +20,10 @@ const Backtests: React.FC<BackTestProps> = ({ email }) => {
         <>
             <div className="flex flex-row gap-4 w-full content-container">
                 <div className="flex-1">
-                    <TestSettingsForm />
+                    <StrategySettingsForm />
                 </div>
                 <div className="flex-1">
-                    <TestList email={email as string} showResult={showResult} />
+                    <TestList  showResult={showResult} />
                 </div>
                 <div className="flex-1">
                     <TestPositions test={backtest} />

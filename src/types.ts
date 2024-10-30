@@ -16,6 +16,7 @@ declare module 'next-auth' {
     interface User  {
       id?: string;
       role?: string;
+      username: string;
       name: string;
       email: string;
       accessToken?: string;
@@ -24,12 +25,13 @@ declare module 'next-auth' {
     }
   }
 
-  // declare module 'next-auth' {
-  //   interface Session {
-  //     id?: string;
-  //     role?: string;
-  //     accessToken?: string;
-  //     refreshToken?: string;
-  //     expiresIn?: number;
-  //   }
-  // }
+  declare module 'next-auth' {
+    interface Session {
+      user: User;
+      id?: string;
+      role?: string;
+      accessToken?: string;
+      refreshToken?: string;
+      expiresIn?: number;
+    }
+  }

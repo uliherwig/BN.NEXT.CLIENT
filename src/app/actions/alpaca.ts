@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
 import { BacktestSettings } from '@/models/strategy/test-settings';
 import { start } from 'repl';
+import { basicFetch } from '../lib/fetchFunctions';
 
 const schemaRegister = z.object({
     keyId: z.string().min(6, { message: "Input required" }),
@@ -13,6 +14,8 @@ const schemaRegister = z.object({
 });
 
 export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData) {
+
+    console.log('formData:', formData);
 
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
@@ -35,27 +38,27 @@ export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData
 
         const json =
         {
-            "email": session.user.email,
-            "symbols": "SPY",
+            "userId": session.user.id,
             "alpacaKey": formData.get('keyId'),
             "alpacaSecret": formData.get('keySecret')
         }
+        const method = formData.get('isUpdate') === 'true' ? 'PUT' : 'POST';
 
-        var addOrUpdate = formData.get('AddOrUpdate') === 'true' ? 'POST' : 'PUT';
-
-
-        const response = await fetch(`${process.env.ALPACA_API_URL}/UserSettings`, {
-            method: addOrUpdate,
-            body: JSON.stringify(json),
+        console.log('json:', method);
+        var endpoint = `${process.env.ALPACA_API_URL}/UserSettings`;
+        const options: RequestInit = {
+            method,
             headers: {
                 'Content-Type': 'application/json',
             },
-        });
+        };
+        options.body = JSON.stringify(json);
 
-        const success = await response.json();
+        const res = await fetch(endpoint, options);
+        const success = await res.json();
         const message = success ? 'AlpaceCredentialsStored' : 'AlpaceCredentialsStorageFailed';
 
-        const result: any = { message: message, success: success, errors: {} }
+        const result = { message: message, success: success, errors: {} }
         return result;
     }
 }
@@ -65,7 +68,14 @@ const backtestSchemaRegister = z.object({
     name: z.string()
         .min(3)
         .max(10)
-        .regex(/^[a-zA-Z0-9]+$/, "Username must contain only alphabetic characters and numbers"),
+        .regex(/^[a-zA-Z0-9]+$/, "Username must contain only alphabetic characters and numbers")
+        .refine(async (name) => {
+            const response = await fetch(`${process.env.STRATEGY_API_URL}/Strategy/test/${name}`);
+            const exists = await response.json();
+            return !exists;
+          }, {
+            message: "Name already exists",
+          }),
 
     symbol: z.string(),
     takeProfitPercent: z.number().min(1).max(25),
@@ -77,8 +87,6 @@ const backtestSchemaRegister = z.object({
 
 export async function createAlpacaBacktest(prevState: any, formData: FormData) {
 
-    console.log('====================================  formData:', formData);
-
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
         return {
@@ -87,7 +95,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
     }
     const startDate = new Date(Date.parse(formData.get('startDate') as string));
     const endDate = new Date(Date.parse(formData.get('endDate') as string));
-    const validatedFields = backtestSchemaRegister.safeParse({
+    const validatedFields = await backtestSchemaRegister.safeParseAsync({
         name: formData.get('name'),
         symbol: formData.get('symbol'),
         takeProfitPercent: parseFloat(formData.get('takeProfitPercent') as string),
@@ -97,10 +105,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         strategy: formData.get('strategy'),
         timeFrame: formData.get('timeFrame'),
         allowOvernight: formData.get('allowOvernight') === 'true',
-
     });
-
-    console.log('====================================  validatedFields:', validatedFields);
 
     if (!validatedFields.success) {
         return {
@@ -111,7 +116,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
 
         const payload: BacktestSettings = {
             "id": "00000000-0000-0000-0000-000000000000",
-            "userEmail": session.user.email!,
+            "userId": session.user.id!,
             "broker": "Alpaca",
             "name": formData.get('name') as string,
             "symbol": formData.get('symbol') as string,
@@ -126,12 +131,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             "bookmarked": false,
             "stopLossStrategy": parseInt(formData.get('stopLossStrategy') as string),
             "testStamp": new Date().toISOString()
-          };     
-
-    
-
-        console.log('payload:', payload);
-
+        };
 
         const response = await fetch(`${process.env.ALPACA_API_URL}/Backtest`, {
             method: 'POST',
@@ -141,7 +141,16 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             },
         });
 
-        const success = await response.json();
+        console.log('response:', response);
+        let success = false;
+
+
+        console.log('response:', response.status);
+
+        if (response.ok) {
+
+            success = await response.json();
+        }
         const message = success ? 'BacktestCreated' : 'BacktestCreationFailed';
 
         const result: any = { message: message, success: success, errors: {} }

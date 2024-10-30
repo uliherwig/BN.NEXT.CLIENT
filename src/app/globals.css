@@ -17,26 +17,20 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 15px;
   /* Default browser setting */
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  height: 100vh;
+  background: white;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
-}
-
-.content-container {
-  height: calc(100vh - 70px);
-  overflow:auto;
 }
 
 .submenu {

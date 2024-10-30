@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import * as React from 'react';
 
 
-export default async function AlpacaDashboard() {
+export default async function Broker() {
   const session = await getServerSession(authOptions) 
 
   return (

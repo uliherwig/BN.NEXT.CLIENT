@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 import { basicFetch } from '@/app/lib/fetchFunctions';
 import { AccountData } from '@/models/AlpacaAccount';
-import BNButton from '@/components/common/bn-button';
+import BNButton from '@/components/common/buttons/bn-button';
 import { errors } from 'jose';
 import { useFormState, useFormStatus } from "react-dom";
 import { addOrUpdateKeyAndSecret } from "@/app/actions/alpaca";
@@ -67,20 +67,8 @@ const KeySecretsForm = (props: AlpacaSecretsFormProps) => {
                     )}
 
                     <div className="text-green-500">{state.message}</div>
-
-
-                </div>
-        
-            </div>
-            <div className="text-slate-800 text-lg mb-4 mt-4">Liste gewählte Assets</div>
-
-            {/* {selectedAssets.map((asset) => (
-                <div key={asset} className="flex justify-between items-center p-2 border-b border-gray-300">
-                    <span>{asset}</span>
-                    <button className="bg-slate-500 text-white p-1 rounded">Löschen</button>
-                </div>
-            ))} */}
-
+                </div>        
+            </div> 
         </div>
     );
 };

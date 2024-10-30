@@ -123,37 +123,27 @@ export const authOptions: NextAuthOptions = {
         if (Date.now() < expiresAt) {
           return token
         }
-
         return refreshAccessToken(token)
       }
 
       if (token) {
         const expiresAt: number = token.expiresAt as number;
-
         if (Date.now() < expiresAt) {
           return token
         }
-
         return refreshAccessToken(token)
       }
     },
 
     async session({ session, token, user }) {
-      // console.log('CALLBACK  session:', session);
-      // console.log('CALLBACK  token:', token);
-      // console.log('CALLBACK  user:', user);
-
 
       const decoded: any = token.accessToken ? jwtDecode(token.accessToken) : null;
 
-      //console.log('CALLBACK  decoded:', decoded);
-
-
       if (token && session.user) {
-        // session.user.id = decoded.sid;
+
         session.user.username = decoded.preferred_username;
         session.user.email = decoded.email;
-    
+        session.user.id = decoded.sub;    
         session.user.name = decoded.name;
 
         // Fetch additional user data from your .NET service
@@ -162,7 +152,6 @@ export const authOptions: NextAuthOptions = {
 
         // // Attach additional user properties to the session
         // session.user = { ...session.user, ...userData };
-
 
       }
       return session;

@@ -28,7 +28,6 @@ const BrokerNavi = () => {
 
     const getLinkClasses = (path: string) => {
         const match = pathname.substring(3, pathname.length);
-        console.log('pathname:', match, 'path:', path);
         if (match === path) {
             return activeLinkClasses;
         }
@@ -49,12 +48,12 @@ const BrokerNavi = () => {
     };
 
     return (
-        <div className="flex flex-col w-[200px]">
+        <div className="flex flex-col w-[200px] pt-2">
             <ul>
                 <li>
                     <Link
                         href="/brokers"
-                        className='grid grid-cols-[30px_auto] items-center text-gray-700 hover:text-gray-900'
+                        className='grid grid-cols-[30px_auto] items-center text-slate-700 hover:text-gray-900'
                         title="Home"
                     >
                         <HomeIcon className="h-6 w-6 text-slate-800"  />
@@ -70,7 +69,7 @@ const BrokerNavi = () => {
                         )}
                         Alpaca
                     </div>
-                    <ul className="p-1 px-2 bg-slate-300" style={{ display: expanded ? 'block' : 'none' }}>
+                    <ul className="ml-7 p-1 px-2 bg-slate-200" style={{ display: expanded ? 'block' : 'none' }}>
                         <li className="my-2">
                             <Link
                                 href="/brokers/alpaca/dashboard"
@@ -85,13 +84,13 @@ const BrokerNavi = () => {
                         </li>
                         <li className="my-2">
                         <Link
-                                href="/brokers/alpaca/backtest"
-                                className={getLinkClasses('/brokers/alpaca/backtest')}
-                                title="Backtest"
-                                onMouseOver={() => setHoveredLink('/brokers/alpaca/backtest')}
+                                href="/brokers/alpaca/strategy-test"
+                                className={getLinkClasses('/brokers/alpaca/strategy-test')}
+                                title="Strategy test"
+                                onMouseOver={() => setHoveredLink('/brokers/alpaca/strategy-test')}
                                 onMouseOut={() => setHoveredLink(null)}
                             >
-                                <RadioButtonCheckedIcon  className={getIconLinkClasses('/brokers/alpaca/backtest')} />
+                                <RadioButtonCheckedIcon  className={getIconLinkClasses('/brokers/alpaca/strategy-test')} />
                          
                                 Strategy Tests
                             </Link>
@@ -108,7 +107,7 @@ const BrokerNavi = () => {
                                 Test Results
                             </Link>
                         </li>
-                        <li className="my-2">
+                        {/* <li className="my-2">
                             <Link
                                 href="/brokers/alpaca/backtest"
                                 className={getLinkClasses('/brokers/alpaca/backtest')}
@@ -119,7 +118,7 @@ const BrokerNavi = () => {
                                      <BarChartIcon  className={getIconLinkClasses('/brokers/alpaca/stockchart')} />
                                 Charting
                             </Link>
-                        </li>
+                        </li> */}
                         <li className="my-2">
                             <Link
                                 href="/brokers/alpaca/settings"

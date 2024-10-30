@@ -60,14 +60,24 @@ const config: Config = {
         'component-head': ['1.1rem', { lineHeight: '2rem', fontWeight: 'bold' }], 
         'subhead': ['1.2rem', { lineHeight: '1.3rem' }], // 24px
         'normal': ['0.9rem', { lineHeight: '0.9rem' }], // 16px
+        'button': ['0.7rem', { lineHeight: '1.0rem' }], // 16px
+      },
+      height: {
+        'content': 'calc(100vh - 70px)',
       },
     },
   },
   plugins: [
     plugin(function({ addUtilities }: { addUtilities: (utilities: Record<string, any>) => void }) {
       addUtilities({
+        '.content-container': {
+          '@apply flex flex-row gap-2 h-content bg-slate-100': {},
+        },
         '.component-container': {
-          '@apply h-full bg-slate-50 p-3 px-4': {},
+          '@apply bg-white p-2 h-full': {},
+        },
+        '.component-head': {
+          '@apply text-component-head mb-2': {},
         },
         '.bg-bn-dark': {
           '@apply bg-slate-700 h-[40px] text-white p-2 px-4': {},

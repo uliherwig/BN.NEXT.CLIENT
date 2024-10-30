@@ -3,12 +3,29 @@ import { createAlpacaBacktest } from "@/app/actions/alpaca";
 import { useFormState } from "react-dom";
 import { firstOrDefault } from "@/utilities";
 import { useEffect, useState } from "react";
-import SubmitButton from "@/components/common/submit-button";
+import SubmitButton from "@/components/common/buttons/submit-button";
 import { format } from 'date-fns';
 import { BreakoutPeriod, StopLossStrategy } from "@/models/strategy/enums";
+import { useDictionary } from "@/provider/dictionary-provider";
+import { BacktestSettings } from "@/models/strategy/test-settings";
+import CircularLoader from "@/components/common/loader";
+import WidgetButton from "@/components/common/buttons/widget-button";
+
+enum StrategySettingsFormState {
+    None,
+    Loading,
+    Idle,
+    Submitting,
+    Success,
+    Error
+}
 
 
-const TestSettingsForm = () => {
+const StrategySettingsForm = () => {
+    const dictionary = useDictionary();
+    const [formState, setFormState] = useState<StrategySettingsFormState>(StrategySettingsFormState.None);
+    const [loading, setLoading] = useState<boolean>(true);
+
     const [state, storeAction] = useFormState<any, FormData>(createAlpacaBacktest, { message: '', success: false, errors: {} });
     const [pending, setPending] = useState(false);
 
@@ -23,27 +40,31 @@ const TestSettingsForm = () => {
         if (state.success) {
             setPending(false)
         }
-        if(state.errors) {
+        if (state.errors) {
             setPending(false)
         }
     }, [state]);
 
-    useEffect(() => {
-        console.log('pending:', pending);
-    }, [pending]);
-
     const handleSubmit = (e: any) => {
-        setPending(e)
+        setPending(e);
+        if (e === 'true') {
+            setFormState(StrategySettingsFormState.Submitting);
+        }
     }
 
     return (
-        <div className="component-container">
-            <div className="text-component-head mb-2">Start Backtest</div>
-            <div className="flex flex-row gap-4 w-full">
-                <div className="w-full text-sm">
+        <div className="component-container  overflow-hidden">
+            <div className="text-component-head">Create a new Strategy</div>
+            <div className="h-full w-full overflow-hidden">
+                <div className="w-full">
 
                     <div className="text-slate-800 text-lg mb-4">Einstellungen Backtest (Empfohlende Einstellungen)</div>
-                    {!state.success && !pending && (
+
+
+                    {/* {loading && (
+                        <CircularLoader />
+                    )} */}
+                    {formState === StrategySettingsFormState.None && (
                         <form action={storeAction} className='flex flex-col gap-2'>
                             <table className="w-full border-collapse">
                                 <tbody>
@@ -152,25 +173,23 @@ const TestSettingsForm = () => {
                         </form>
                     )}
 
-                    {state.success && (
+                    {formState === StrategySettingsFormState.Success && (
                         <>
 
                             <div className="text-green-500">Der Test wurde durchgeführt. </div>
 
-                            {/*
-                            Anzeige der Settings
-                             Button für neustart */}
-
-
+                            <WidgetButton type="button" label="Load Test Result" method={() => { setFormState(StrategySettingsFormState.None) }} />
+                            <WidgetButton type="button" label="Update Test Result List" method={() => { setFormState(StrategySettingsFormState.None) }} />
+                            <WidgetButton type="button" label="Create New Strategy" method={() => { setFormState(StrategySettingsFormState.None) }} />
 
                         </>
 
 
                     )}
 
-                    {pending && (
+                    {formState === StrategySettingsFormState.Submitting && (
                         <>
-
+                            <div className="p-10"> <CircularLoader /></div>
                             <div className="text-orange-500">Der Test läuft gerade.... </div>
                             <div>Das kann einige Minuten dauern.</div>
 
@@ -197,4 +216,4 @@ const TestSettingsForm = () => {
     );
 };
 
-export default TestSettingsForm;
+export default StrategySettingsForm;

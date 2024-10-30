@@ -5,17 +5,18 @@ import AlpacaAssets from '@/components/alpaca/assets/AlpacaAssets';
 import { authOptions } from '@/app/lib/auth';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
+import Dashboard from '@/components/alpaca/dashboard/dashboard';
 
 
-export default async function AlpacaDashboard() {
+export default async function AlpacaDashboardPage() {
 
+ 
   const session = await getServerSession(authOptions) 
 
   if (session === null) {
     redirect('/en/brokers');
-    return null;
   }
   return (
-    <div>DASHBOARD</div>
+    <Dashboard email={session.user?.email as string} />
   );
 }

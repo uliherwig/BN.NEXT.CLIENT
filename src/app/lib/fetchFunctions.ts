@@ -1,6 +1,9 @@
 export const basicFetch = async<returnType>(endpoint: string): Promise<returnType> => {
 
+    console.log('endpoint:', endpoint);
     const res = await fetch(endpoint);  
+
+    console.log('res:', res);
     return await res.json();
 
 }

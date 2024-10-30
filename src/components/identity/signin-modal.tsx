@@ -4,11 +4,14 @@ import { useEffect, useRef, useState } from 'react';
 import { Dialog, DialogContent, DialogContentText, DialogTitle, IconButton } from '@mui/material';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import BnButton from '../common/bn-button';
+import BnButton from '../common/buttons/bn-button';
 import fetchService, { basicFetch } from '@/app/lib/fetchFunctions';
 import test from 'node:test';
+import { useDictionary } from '@/provider/dictionary-provider';
 
-const SignInDialog = ({ dict , isOpen, closeDialog }: { dict: Record<string, string> , isOpen: boolean , closeDialog : Function }) => {
+const SignInDialog = ({  isOpen, closeDialog }: { isOpen: boolean , closeDialog : Function }) => {
+
+ 
 
     const { data: session, status } = useSession()
     const [loading, setLoading] = useState(false);
@@ -45,27 +48,31 @@ const SignInDialog = ({ dict , isOpen, closeDialog }: { dict: Record<string, str
             closeDialog(false);
         }
     };
+    const dictionary = useDictionary();
+    if (!dictionary) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <>     
             <Dialog
                 open={isOpen}
                 onClose={() => closeDialog(false)} >
-                <DialogTitle>{dict.AUTH_welcome}</DialogTitle>
+                <DialogTitle>{dictionary.AUTH_welcome}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {dict.AUTH_login}
+                        {dictionary.AUTH_login}
                     </DialogContentText>
                     <form onSubmit={handleSubmit} className='my-2'>
                         <div className='flex flex-col'>
                             <label>Username</label>
                             <input type="text" className='border border-slate-400 w-full p-1' name="username" required onFocus={() => setLoginError('')} />
-                            <label>{dict.AUTH_password}</label>
+                            <label>{dictionary.AUTH_password}</label>
                             <input className='border border-slate-400 w-full p-1'
                                 type="password"
                                 name="password"
                                 required />
-                            <BnButton type='submit' label={dict.AUTH_login} />
+                            <BnButton type='submit' label={dictionary.AUTH_login} />
                         </div>
                     </form>
 
@@ -73,7 +80,7 @@ const SignInDialog = ({ dict , isOpen, closeDialog }: { dict: Record<string, str
                         {loginError}
                     </div>
                     <div>
-                        {dict.AUTH_noaccount} <a href="/auth/account" className='text-blue-500'>{dict.AUTH_register}</a>
+                        {dictionary.AUTH_noaccount} <a href="/auth/account" className='text-blue-500'>{dictionary.AUTH_register}</a>
                     </div>
                 </DialogContent>
             </Dialog>

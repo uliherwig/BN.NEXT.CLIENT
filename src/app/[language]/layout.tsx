@@ -26,23 +26,25 @@ export default async function RootLayout({
 
   return (
     <html lang={params.language}>
-      <body className="flex justify-center items-center min-h-screen overflow-hidden">
-        <div className="flex flex-col bg-slate-100 w-full max-w-[1920px]">
+      <head>
+        <title>BN PROJECT</title>
+      </head>
+      <body className="bg-black flex justify-center items-center h-full overflow-hidden">
+        <div className=" max-w-[1920px] w-full h-full">
           <SessionProviderWrapper>
             <DictionaryProvider dictionary={dict}>
               <header className="bg-bn-dark">
                 <Header dict={dict} />
               </header>
-              <main className="content-container">
+              <main className="h-content bg-slate-100">
                 {children}
               </main>
-              <footer className="bg-bn-dark text-xs">
+              <footer className="text-xs h-[30px] bg-bn-dark">
                 &copy; {new Date().getFullYear()} BN PROJECT
               </footer>
             </DictionaryProvider>
           </SessionProviderWrapper>
-        </div>
-      </body>
+        </div> </body>
     </html>
   );
 }

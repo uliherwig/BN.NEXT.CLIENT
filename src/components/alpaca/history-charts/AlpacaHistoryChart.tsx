@@ -4,7 +4,7 @@ import React, { Suspense, use, useEffect, useState } from 'react';
 import LineChart from './Linechart';
 import { BnOhlc } from '@/models/BnOhlc';
 import useSWR, { mutate } from 'swr';
-import CircularIndeterminate from '@/components/common/CircularLoader';
+import CircularLoader from '@/components/common/loader';
 import { ChartParameters } from '@/models/ChartParameters';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -79,7 +79,7 @@ const AlpacaHistoryChart = () => {
                 </div>
             </div>
             <div className='w-full flex-grow'>
-                {isLoading ? <CircularIndeterminate /> : <LineChart data={data} />}
+                {isLoading ? <CircularLoader /> : <LineChart data={data} />}
             </div>
         </div>
     );

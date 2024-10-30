@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useFormState, useFormStatus } from "react-dom";
 import { register } from "@/app/actions/auth";
-import BNButton from '../common/bn-button';
+import BNButton from '../common/buttons/bn-button';
 
 const errorMessageClass = 'text-red-500 text-sm';
 

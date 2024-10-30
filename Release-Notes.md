@@ -4,6 +4,13 @@
 
 - chart with real time data
 
+## Version 2024.10.4
+
+- dashboard column 1 and 2
+- insert/update alpaca credentials modal
+- strategies list - only bookmarked
+- test results of the first strategy
+
 ## Version 2024.10.3
 
 - implement charting modal with flags for open/close event and breakout limits

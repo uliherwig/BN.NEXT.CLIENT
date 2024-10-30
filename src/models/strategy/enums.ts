@@ -1,7 +1,7 @@
 export enum Strategy {
+  None,
   Breakout,
   MovingAverages,
-  // Add other strategies here
 }
 
 export enum BreakoutPeriod {

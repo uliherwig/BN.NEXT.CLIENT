@@ -10,18 +10,13 @@ const SubmitButton: React.FC<ButtonProps> = ({ label, handleFormState }) => {
   const { pending } = useFormStatus()
 
   useEffect(() => {
-    console.log('pending:', pending);
-
     handleFormState(pending);
-
-
-
   }, [pending, handleFormState]);
 
   return (
     <button type='submit' disabled={pending}
-      className="border border-slate-400 w-full mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer"  >
-      {pending ? 'STARTING...' : label.toUpperCase()}
+      className="bg-lime-700 text-white text-normal px-4 h-[28px] cursor-pointer w-full"  >
+      {pending ? 'STARTING...' : label}
     </button>
   );
 };

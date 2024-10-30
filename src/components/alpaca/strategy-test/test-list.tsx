@@ -8,11 +8,11 @@ import { useDictionary } from '@/provider/dictionary-provider';
 import { firstOrDefault } from "@/utilities";
 
 interface UserTestProps {
-    email: string;
+  
     showResult: any
 }
 
-const TestList: React.FC<UserTestProps> = ({ email, showResult }) => {
+const TestList: React.FC<UserTestProps> = ({  showResult }) => {
 
     console.log("TestList ##############################################");
     const dictionary = useDictionary();
@@ -23,7 +23,7 @@ const TestList: React.FC<UserTestProps> = ({ email, showResult }) => {
     }, []);
 
     const updateTests = async () => {
-        const tests = await basicFetch<any>(`/api/strategy/test-settings?email=${email}`);
+        const tests = await basicFetch<any>(`/api/strategy/test-settings?bookmarked=false`);
         console.log(tests);
         setBacktests(tests);
         const latestTest = firstOrDefault(tests, []);
@@ -39,7 +39,7 @@ const TestList: React.FC<UserTestProps> = ({ email, showResult }) => {
     const TABLE_HEAD = ["Name", "Symbol", "Strategy", "Timeframe", "Results"];
     return (
         <div className="component-container">
-            <div className="text-component-head mb-2">{dictionary.BROKERS_backtest} Liste</div>
+            <div className="text-component-head mb-2">Strategy Tests</div>
             {/* <input type="button" value="REfresh" className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer' onClick={updateTests} />      */}
 
             <div className="h-[95%] w-full overflow-hidden">

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
 import { Position } from "@/models/strategy/position";
 import { format } from 'date-fns';
-import ChartPositionModal from "./chart-position-modal";
+import ChartPositionModal from "../chart-position-modal";
 import { TestResult } from "@/models/strategy/test-result";
 
 interface TestResultProps {

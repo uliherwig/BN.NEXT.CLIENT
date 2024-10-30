@@ -2,7 +2,7 @@ import { Strategy, BreakoutPeriod, StopLossStrategy } from "./enums";
 
 export interface BacktestSettings {
   id: string; // Guid in C# corresponds to string in TypeScript
-  userEmail: string;
+  userId: string;
   broker: string;
   name: string;
   symbol: string;
