@@ -2,7 +2,7 @@
 import { useState } from "react";
 import TestPositions from "./test-results";
 import StrategySettingsForm from "./strategy-settings-form";
-import TestList from "./test-list";
+import StrategyList from "./strategy-list";
 import { BacktestSettings } from "@/models/strategy/test-settings";
 
 interface BackTestProps {
@@ -23,7 +23,7 @@ const Backtests: React.FC<BackTestProps> = ({ email }) => {
                     <StrategySettingsForm />
                 </div>
                 <div className="flex-1">
-                    <TestList  showResult={showResult} />
+                    <StrategyList  showResult={showResult} />
                 </div>
                 <div className="flex-1">
                     <TestPositions test={backtest} />

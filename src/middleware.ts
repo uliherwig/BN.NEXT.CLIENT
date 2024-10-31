@@ -16,7 +16,6 @@ function getLocale(request: NextRequest) { return match(new Negotiator({ headers
 export async function middleware(request: NextRequest) {
 
   const url = new URL(request.url) 
-  console.log(url.pathname)
 
   // let API and action routes unchanged   
   if(url.pathname.startsWith('/api') || url.pathname.startsWith('/action')) {

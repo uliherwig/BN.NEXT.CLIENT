@@ -14,12 +14,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-
-    console.log('fetching data');
-
-    // console.log('req:', req);
-    const data = await alpacaTradingService.getAssets();
-  
+    const data = await alpacaTradingService.getAssets();  
 
     return NextResponse.json(data);
   } catch (error) {

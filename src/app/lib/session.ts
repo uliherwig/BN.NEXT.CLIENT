@@ -34,12 +34,7 @@ export async function decrypt(session: string | undefined = '') {
 export async function createSession(accessToken: string) {
 
     const decoded: any = jwtDecode(accessToken);
-
-
-    console.log('createSession:', decoded);
-    const userId = decoded.preferred_username
-
-    console.log('createSession:', userId);
+    const userId = decoded.preferred_username;
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
     const session = await encrypt({ userId, expiresAt })
 

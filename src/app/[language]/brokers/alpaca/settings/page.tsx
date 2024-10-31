@@ -27,7 +27,6 @@ export default async function AlpacaSettingsPage({ params }: LanguageProps) {
         if (session.user) {
             const email = session.user.email ?? "";
             const result : any = await AlpacaUserSettingsService.getAlpacaUserSettings(email);
-            console.log("result", result)
             if (result.status === 404) {
                 userSettings.email = session.user.email ?? "";
          

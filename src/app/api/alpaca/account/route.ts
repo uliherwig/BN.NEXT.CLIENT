@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     if (res.status === 404) {
 
       const result = await res.json();
-      console.log('test:', result);
+   
       if (result.message === 'WrongCredentials') {
         return NextResponse.json({ error: 'WrongCredentials' }, { status: 404 });
       }

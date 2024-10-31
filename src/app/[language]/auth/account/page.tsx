@@ -8,8 +8,6 @@ export default async function UserAccount() {
 
   const session = await getServerSession(authOptions)
 
-  console.log(session)
-
   return (
     <div className="flex bg-slate-100 text-slate-800 content-container w-[50%]">
       <nav className="w-[240px] p-5 border-r border-slate-500">

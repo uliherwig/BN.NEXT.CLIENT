@@ -12,13 +12,12 @@ export async function GET(req: NextRequest) {
     const endDate = req.nextUrl.searchParams.get('endDate') as string;
     const timeFrame = req.nextUrl.searchParams.get('timeFrame') as string;
 
-    console.log('params:', symbol, startDate, endDate, timeFrame);
 
     const url = `${process.env.ALPACA_API_URL}/AlpacaTest/historical-bars/${symbol}?startDate=${startDate}&endDate=${endDate}`
     const data = await basicFetch<any[]>(url);
     return NextResponse.json(data);
   } catch (error) {
-    console.log('error:', error);
+
     return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
   }
 }

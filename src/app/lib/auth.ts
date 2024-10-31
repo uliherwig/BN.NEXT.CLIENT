@@ -28,10 +28,6 @@ const BnProvider = CredentialsProvider({
     });
 
     var result = await res.json();
-    if (res.ok && result) {
-      console.log('authorize:', result);
-    }
-
     const user: User = await result.jwtToken;
 
     if (user) {

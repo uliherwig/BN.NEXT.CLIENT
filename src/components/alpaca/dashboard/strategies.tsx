@@ -10,7 +10,6 @@ import CircularLoader from "../../common/loader";
 import { BreakoutPeriod, Strategy } from "@/models/strategy/enums";
 
 interface UserTestProps {
-
     showResult: any
 }
 

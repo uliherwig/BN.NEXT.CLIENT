@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
 
     if (res.ok) {
       const data = await res.json();
-      console.log('Crednetials data:', data);
+
       return NextResponse.json(data);
     } else {
       return NextResponse.json({ error: ApiError.InternalServerError }, { status: 500 });

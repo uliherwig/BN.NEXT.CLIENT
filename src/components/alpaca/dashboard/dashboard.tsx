@@ -2,7 +2,7 @@
 import { useState } from "react";
 import TestPositions from "../strategy-test/test-results";
 import StrategySettingsForm from "../strategy-test/strategy-settings-form";
-import TestList from "../strategy-test/test-list";
+import StrategyList from "../strategy-test/strategy-list";
 import { BacktestSettings } from "@/models/strategy/test-settings";
 import AlpacaAccount from "./alpaca-account";
 import Strategies from "./strategies";

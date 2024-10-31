@@ -4,8 +4,6 @@ import { z } from 'zod';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
 import { BacktestSettings } from '@/models/strategy/test-settings';
-import { start } from 'repl';
-import { basicFetch } from '../lib/fetchFunctions';
 
 const schemaRegister = z.object({
     keyId: z.string().min(6, { message: "Input required" }),
@@ -14,8 +12,6 @@ const schemaRegister = z.object({
 });
 
 export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData) {
-
-    console.log('formData:', formData);
 
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
@@ -44,7 +40,6 @@ export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData
         }
         const method = formData.get('isUpdate') === 'true' ? 'PUT' : 'POST';
 
-        console.log('json:', method);
         var endpoint = `${process.env.ALPACA_API_URL}/UserSettings`;
         const options: RequestInit = {
             method,
@@ -64,28 +59,11 @@ export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData
 }
 
 
-const backtestSchemaRegister = z.object({
-    name: z.string()
-        .min(3)
-        .max(10)
-        .regex(/^[a-zA-Z0-9]+$/, "Username must contain only alphabetic characters and numbers")
-        .refine(async (name) => {
-            const response = await fetch(`${process.env.STRATEGY_API_URL}/Strategy/test/${name}`);
-            const exists = await response.json();
-            return !exists;
-          }, {
-            message: "Name already exists",
-          }),
 
-    symbol: z.string(),
-    takeProfitPercent: z.number().min(1).max(25),
-    // stopLossPercent: z.number().min(0.001).max(0.5),
-    startDate: z.date().min(new Date(2024, 0, 0), 'Start date may not be before 2024').max(new Date(), 'Start date may not be after today'),
-    endDate: z.date().min(new Date(2024, 0, 0), 'End date may not be before 2024').max(new Date(), 'End date may not be after today'),
-
-});
 
 export async function createAlpacaBacktest(prevState: any, formData: FormData) {
+
+    //console.log('createAlpacaBacktest  formData:', formData);
 
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
@@ -93,8 +71,39 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             errors: { session: ['Session is not available'] },
         };
     }
+
+    const checkStrategyNameAvailability = async (name: string): Promise<boolean> => {
+        const url = `${process.env.STRATEGY_API_URL}/Strategy/${name}/${session.user.id}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        return !data;
+      };
+
+      const backtestSchemaRegister = z.object({
+        name: z.string()
+            .min(3)
+            .max(10)
+            .regex(/^[a-zA-Z0-9]+$/, "Username must contain only alphabetic characters and numbers")
+            .refine(async (name) => {
+                return await checkStrategyNameAvailability(name);     
+              }, {
+                message: "Name already exists",
+              }),
+    
+        symbol: z.string(),
+        takeProfitPercent: z.number().min(1).max(25),
+        // stopLossPercent: z.number().min(0.001).max(0.5),
+        startDate: z.date().min(new Date(2024, 0, 0), 'Start date may not be before 2024').max(new Date(), 'Start date may not be after today'),
+        endDate: z.date().min(new Date(2024, 0, 0), 'End date may not be before 2024').max(new Date(), 'End date may not be after today'),
+    
+    });
+
     const startDate = new Date(Date.parse(formData.get('startDate') as string));
     const endDate = new Date(Date.parse(formData.get('endDate') as string));
+
+    // const test = formData.get('allowOvernight');
+    // console.log('test:', test);
+
     const validatedFields = await backtestSchemaRegister.safeParseAsync({
         name: formData.get('name'),
         symbol: formData.get('symbol'),
@@ -104,11 +113,14 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         endDate: endDate,
         strategy: formData.get('strategy'),
         timeFrame: formData.get('timeFrame'),
-        allowOvernight: formData.get('allowOvernight') === 'true',
+        allowOvernight: formData.get('allowOvernight') === 'on',
     });
+
+    console.log('validatedFields:', validatedFields.success);
 
     if (!validatedFields.success) {
         return {
+            success: false,
             errors: validatedFields.error.flatten().fieldErrors,
         }
 
@@ -141,11 +153,10 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             },
         });
 
-        console.log('response:', response);
         let success = false;
 
 
-        console.log('response:', response.status);
+       // console.log('response:', response.status);
 
         if (response.ok) {
 

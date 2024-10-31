@@ -35,7 +35,6 @@ const AlpacaCredentialsModal: React.FC<AlpacaCredentialsModalProps> = (params) =
 
     useEffect(() => {
 
-        console.log('Alpaca MODAL ##################################################################', params.isOpen);
         if (!params.isOpen) {
             return;
         }
@@ -54,15 +53,10 @@ const AlpacaCredentialsModal: React.FC<AlpacaCredentialsModalProps> = (params) =
     }, [state, params, params.isOpen, params.isUpdate]);
 
     const loadAlpacaCredentials = async () => {
-        console.log('Alpaca MODAL ##################################################################');
         const res = await basicFetch<any>(`/api/alpaca/get-credentials`);
-
-        console.log('Credentials data:', res);
         if (res.error) {
             console.log('Account data:', res.error);
         } else {
-
-
             setAlpacaKey(res.alpacaKey);
             setAlpacaSecret(res.alpacaSecret);
         }
@@ -71,7 +65,6 @@ const AlpacaCredentialsModal: React.FC<AlpacaCredentialsModalProps> = (params) =
         console.log('submitting form', e);
         setPending(e)
     }
-
 
     const btnLabel = params.isUpdate ? 'Update Alpaca Credentials' : 'Add Alpaca Credentials';
 

@@ -8,7 +8,7 @@ interface ButtonProps {
 
 const WidgetButton: React.FC<ButtonProps> = ({ type, label, method,  }) => {
   return (
-    <button type={type} className='bg-green-800 text-white text-normal px-4 h-[28px] cursor-pointer' onClick={() => method()} >
+    <button type={type} className='bg-[#806c4d] text-white text-normal px-4 h-[28px] cursor-pointer' onClick={() => method()} >
       {label}
     </button>
   );

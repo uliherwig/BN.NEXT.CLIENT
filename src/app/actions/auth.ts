@@ -27,7 +27,7 @@ const schemaRegister = z.object({
 
 export async function register(prevState: any, formData: FormData) {
 
-    console.log('formData:', formData);
+ 
 
     const validatedFields = schemaRegister.safeParse({
         username: formData.get('username'),
@@ -40,7 +40,6 @@ export async function register(prevState: any, formData: FormData) {
     }) 
 
     if (!validatedFields.success) {
-        console.log('validatedFields.error.flatten().fieldErrors:', validatedFields.error.flatten().fieldErrors);
         return {
             errors: validatedFields.error.flatten().fieldErrors,
         }

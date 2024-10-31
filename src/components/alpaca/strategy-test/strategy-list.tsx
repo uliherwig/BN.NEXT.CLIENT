@@ -1,20 +1,20 @@
 "use client";
 import { basicFetch } from "@/app/lib/fetchFunctions";
-import { BacktestSettings } from "@/models/strategy/test-settings";
+import { BreakoutPeriod, Strategy } from "@/models/strategy/enums";
 import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 import { IconButton } from "@mui/material";
 import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
 import { firstOrDefault } from "@/utilities";
+import { BacktestSettings } from "@/models/strategy/test-settings";
 
-interface UserTestProps {
+interface StrategyListProps {
   
     showResult: any
 }
 
-const TestList: React.FC<UserTestProps> = ({  showResult }) => {
+const StrategyList: React.FC<StrategyListProps> = ({  showResult }) => {
 
-    console.log("TestList ##############################################");
     const dictionary = useDictionary();
     const [backtests, setBacktests] = useState<BacktestSettings[]>([]);
     useEffect(() => {
@@ -23,13 +23,17 @@ const TestList: React.FC<UserTestProps> = ({  showResult }) => {
     }, []);
 
     const updateTests = async () => {
-        const tests = await basicFetch<any>(`/api/strategy/test-settings?bookmarked=false`);
-        console.log(tests);
+        const tests = await basicFetch<any>(`/api/strategy/test-settings?bookmarked=false`);  
         setBacktests(tests);
         const latestTest = firstOrDefault(tests, []);
         if (latestTest) {
             showResult(latestTest);
         }
+    }
+
+    const displayDetails = (strategy: BacktestSettings) => {
+        
+        showResult(strategy);
     }
 
     if (!dictionary) {
@@ -61,14 +65,14 @@ const TestList: React.FC<UserTestProps> = ({  showResult }) => {
                             </thead>
                             <tbody className='text-slate-900 text-sm overflow-y' >
                                 {backtests.map((item, index) => (
-                                    <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-slate-300' : 'bg-white'}`} >
+                                    <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} onClick={() => displayDetails(item)}>
                                         <td className="px-2 py-1 text-center">{item.name}</td>
                                         <td className=" py-1 text-center">{item.symbol}</td>
                                         <td className="ppy-1 text-center">
-                                            {item.strategy}
+                                            {Strategy[item.strategy]}
                                         </td>
                                         <td className=" py-1 text-center">
-                                            {item.timeFrame}
+                                            {BreakoutPeriod[item.breakoutPeriod] }
                                         </td>
                                         <td className="text-center">
                                             <IconButton aria-label="language" color="primary" onClick={() => showResult(item)}>
@@ -85,4 +89,4 @@ const TestList: React.FC<UserTestProps> = ({  showResult }) => {
     );
 }
 
-export default TestList;
+export default StrategyList;
