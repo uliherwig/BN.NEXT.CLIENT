@@ -45,11 +45,14 @@ const AlpacaCredentialsModal: React.FC<AlpacaCredentialsModalProps> = (params) =
 
         if (state.success) {
             setPending(false)
-            params.closeDialog();
+           // params.closeDialog();
         }
         if (state.errors) {
             setPending(false)
         }
+
+        console.log('state:', state);
+        console.log('params:', params);
     }, [state, params, params.isOpen, params.isUpdate]);
 
     const loadAlpacaCredentials = async () => {

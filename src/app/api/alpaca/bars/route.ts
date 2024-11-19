@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { alpacaDataService } from '../../../../service/alpacaDataService';
 import { basicFetch } from '@/app/lib/fetchFunctions';
-import { BacktestSettings } from '@/models/strategy/test-settings';
+import { StrategySettingsModel } from '@/models/strategy/strategy-settings-model';
 
 
 // API route handler

@@ -1,6 +1,6 @@
 "use client";
 import { basicFetch } from "@/app/lib/fetchFunctions";
-import { BacktestSettings } from "@/models/strategy/test-settings";
+import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
 import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 import { IconButton } from "@mui/material";
 import { useEffect, useState } from 'react';
@@ -9,9 +9,10 @@ import { Position } from "@/models/strategy/position";
 import { format } from 'date-fns';
 import ChartPositionModal from "../chart-position-modal";
 import { TestResult } from "@/models/strategy/test-result";
+import CircularLoader from "@/components/common/loader";
 
 interface TestResultProps {
-    test: BacktestSettings;
+    test: StrategySettingsModel;
 
 }
 
@@ -22,13 +23,15 @@ const TestResults: React.FC<TestResultProps> = (params) => {
     const [positions, setPositions] = useState<Position[]>([]);
     const [selectedPosition, setSelectedPosition] = useState<Position>({} as Position);
     const [result, setResult] = useState<TestResult>({} as TestResult);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        console.log(params)
+        setLoading(true);
         const id = params.test.id;
         if (id !== undefined && id !== '') {
             updatePositions(id);
             updateResult(id);
+            setLoading(false);
         }
     }, [params, params.test]);
 
@@ -40,7 +43,6 @@ const TestResults: React.FC<TestResultProps> = (params) => {
     const updatePositions = async (id: string) => {
         const res = await basicFetch<any>(`/api/strategy/test-positions?testId=${id}`);
         const sortedPositions = res.sort((a: Position, b: Position) => new Date(b.stampClosed).getTime() - new Date(a.stampClosed).getTime());
-        console.log(sortedPositions);
         setPositions(sortedPositions);
     }
 
@@ -66,7 +68,10 @@ const TestResults: React.FC<TestResultProps> = (params) => {
           <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} position={selectedPosition} />
             <div className="component-container">
                 <div className="text-component-head mb-2">Test Result {params.test.name}</div>
-                {/* <input type="button" value="REfresh" className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer' onClick={updateTests} />      */}
+                {loading && (
+                    <CircularLoader />
+                )}
+                 {!loading && (
                 <div className="h-[25%] w-full">
 
                     {result.id == undefined && <div className="mt-6 text-slate-800">Es ist kein Test verfügbar. </div>}
@@ -108,8 +113,8 @@ const TestResults: React.FC<TestResultProps> = (params) => {
                         </table>
                     }
                 </div >
-                {
-                    positions.length > 0 &&
+                )}
+                {positions.length > 0 &&
                     <div className="h-[70%] w-full overflow-hidden pt-5">
                         <div className="h-full overflow-auto">
                             <table className="min-w-full table-fixed border">

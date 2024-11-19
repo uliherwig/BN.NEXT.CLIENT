@@ -3,16 +3,12 @@ import { useState } from "react";
 import TestPositions from "./test-results";
 import StrategySettingsForm from "./strategy-settings-form";
 import StrategyList from "./strategy-list";
-import { BacktestSettings } from "@/models/strategy/test-settings";
+import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
 
-interface BackTestProps {
-    email: string;
-}
+const Backtests = () => {
+    const [backtest, setBacktest] = useState<StrategySettingsModel>({} as StrategySettingsModel);
 
-const Backtests: React.FC<BackTestProps> = ({ email }) => {
-    const [backtest, setBacktest] = useState<BacktestSettings>({} as BacktestSettings);
-
-    const showResult = (e: BacktestSettings) => {
+    const showResult = (e: StrategySettingsModel) => {
         setBacktest(e)
     }
 

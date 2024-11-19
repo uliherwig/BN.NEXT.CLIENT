@@ -1,5 +1,5 @@
 import * as React from 'react';
-import "@/app/globals.css";
+
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
 import { LanguageProps } from '@/models/common/language-props';
@@ -15,6 +15,6 @@ export default async function AlpacaStrategyTestPage({ params }: LanguageProps) 
     redirect('/en/brokers')
   }
   return (
-    <Backtests email={session.user?.email as string} />
+    <Backtests />
   );
 }

@@ -36,7 +36,7 @@ const AlpacaAccount = () => {
         setAccountStatus(AccountStatus.Loading);
         const res = await basicFetch<any>(`/api/alpaca/account`);
 
-        console.log('Account data:', res);
+        console.log('Account data:', res.error);
         if (res.error) {
 
             if (res.error === 'NoCredentials') {
@@ -61,6 +61,7 @@ const AlpacaAccount = () => {
             setAccountData(accData);
             setAccountStatus(AccountStatus.AccountLoaded);
         }
+        console.log('Account Status:', accountStatus);
     }
 
     useEffect(() => {
@@ -137,7 +138,7 @@ const AlpacaAccount = () => {
                 </div>
                 <div className="float-right">
 
-                    <WidgetButton type='button' label='Update Alpaca Credentials' method={() => setIsModalOpen(true)} />
+                    <WidgetButton type='button' label='Store Alpaca Credentials' method={() => setIsModalOpen(true)} />
                 </div>
             </div>
             <AlpacaCredentialsModal isOpen={isModalOpen} closeDialog={closeDialog} isUpdate={(accountStatus === AccountStatus.WrongCredentials || accountStatus === AccountStatus.AccountLoaded)} />

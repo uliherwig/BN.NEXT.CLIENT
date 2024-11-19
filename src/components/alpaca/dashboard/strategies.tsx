@@ -1,12 +1,12 @@
 "use client";
 import { basicFetch } from "@/app/lib/fetchFunctions";
-import { BacktestSettings } from "@/models/strategy/test-settings";
+import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
 import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 import { IconButton } from "@mui/material";
 import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
 import { firstOrDefault } from "@/utilities";
-import CircularLoader from "../../common/loader";
+import CircularLoader from "@/components/common/loader";
 import { BreakoutPeriod, Strategy } from "@/models/strategy/enums";
 
 interface UserTestProps {
@@ -16,7 +16,7 @@ interface UserTestProps {
 const Strategies: React.FC<UserTestProps> = ({ showResult }) => {
 
     const dictionary = useDictionary();
-    const [backtests, setBacktests] = useState<BacktestSettings[]>([]);
+    const [strategies, setStrategies] = useState<StrategySettingsModel[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -24,8 +24,8 @@ const Strategies: React.FC<UserTestProps> = ({ showResult }) => {
     }, []);
 
     const loadStrategies = async () => {
-        const tests = await basicFetch<any>(`/api/strategy/test-settings?bookmarked=true`);
-        setBacktests(tests);
+        const tests = await basicFetch<any>(`/api/strategy?bookmarked=true`);
+        setStrategies(tests);
         showResult(firstOrDefault(tests, null));
         setLoading(false);
     }
@@ -53,9 +53,9 @@ const Strategies: React.FC<UserTestProps> = ({ showResult }) => {
                         <CircularLoader />
                     )}
 
-                    {!loading && backtests.length === 0 && <div className="mt-5 text-slate-800">Es sind keine Strategien vorhanden. Erstellen Sie eine Strategie und starten Sie Ihren ersten Test.</div>}
+                    {!loading && strategies.length === 0 && <div className="mt-5 text-slate-800">Es sind keine Strategien vorhanden. Erstellen Sie eine Strategie und starten Sie Ihren ersten Test.</div>}
 
-                    {backtests.length > 0 &&
+                    {strategies.length > 0 &&
                         <table className="min-w-full table-fixed border">
                             <thead className="bg-slate-700 sticky top-0 z-10">
                                 <tr>
@@ -68,7 +68,7 @@ const Strategies: React.FC<UserTestProps> = ({ showResult }) => {
                                 </tr>
                             </thead>
                             <tbody className='text-slate-900 text-sm overflow-y' >
-                                {backtests.map((item, index) => (
+                                {strategies.map((item, index) => (
                                     <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-slate-300' : 'bg-white'}`} >
                                         <td className="px-2 py-1 text-center">{item.name}</td>
                                         <td className=" py-1 text-center">{item.symbol}</td>

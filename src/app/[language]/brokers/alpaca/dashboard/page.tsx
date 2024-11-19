@@ -17,6 +17,6 @@ export default async function AlpacaDashboardPage() {
     redirect('/en/brokers');
   }
   return (
-    <Dashboard email={session.user?.email as string} />
+    <Dashboard />
   );
 }

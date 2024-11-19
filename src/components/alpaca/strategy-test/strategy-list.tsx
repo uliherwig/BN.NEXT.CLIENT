@@ -2,37 +2,85 @@
 import { basicFetch } from "@/app/lib/fetchFunctions";
 import { BreakoutPeriod, Strategy } from "@/models/strategy/enums";
 import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
 import { firstOrDefault } from "@/utilities";
-import { BacktestSettings } from "@/models/strategy/test-settings";
+import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import CircularLoader from "@/components/common/loader";
 
 interface StrategyListProps {
-  
     showResult: any
 }
 
-const StrategyList: React.FC<StrategyListProps> = ({  showResult }) => {
+const StrategyList: React.FC<StrategyListProps> = ({ showResult }) => {
 
     const dictionary = useDictionary();
-    const [backtests, setBacktests] = useState<BacktestSettings[]>([]);
+    const [strategies, setStrategies] = useState<StrategySettingsModel[]>([]);
+    const [selectedStrategy, setSelectedStrategy] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true);
+
     useEffect(() => {
-        console.log("latestTest ");
         updateTests();
     }, []);
 
     const updateTests = async () => {
-        const tests = await basicFetch<any>(`/api/strategy/test-settings?bookmarked=false`);  
-        setBacktests(tests);
-        const latestTest = firstOrDefault(tests, []);
+        const strats = await basicFetch<StrategySettingsModel[]>(`/api/strategy?bookmarked=false`);
+        setStrategies(strats);
+        const latestTest = firstOrDefault(strats, {} as StrategySettingsModel);
         if (latestTest) {
+            setSelectedStrategy(latestTest.id);
             showResult(latestTest);
         }
+        setLoading(false);
     }
 
-    const displayDetails = (strategy: BacktestSettings) => {
-        
+    const bookmarkStrategy = async (strategy: StrategySettingsModel) => {
+        strategy.bookmarked = !strategy.bookmarked;
+
+        var endpoint = '/api/strategy';
+        const options: RequestInit = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(strategy)
+        };
+
+        const res = await fetch(endpoint, options);
+        if (res.ok) {
+            toast.success('Strategy bookmark changed successfully!');
+        } else {
+            toast.error('Failed to change bookmark.');
+        }
+        updateTests();
+    }
+
+    const deleteStrategy = async (id: string) => {
+        var endpoint = `/api/strategy?testId=${id}`;
+        const options: RequestInit = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        const res = await fetch(endpoint, options);
+        if (res.ok) {
+            toast.success('Strategy deleted successfully!');
+        } else {
+            toast.error('Failed to delete strategy.');
+        }
+        updateTests();
+    }
+
+    const displayDetails = (strategy: StrategySettingsModel) => {
+        setSelectedStrategy(strategy.id);
         showResult(strategy);
     }
 
@@ -40,51 +88,96 @@ const StrategyList: React.FC<StrategyListProps> = ({  showResult }) => {
         return <div>Loading...</div>;
     }
 
-    const TABLE_HEAD = ["Name", "Symbol", "Strategy", "Timeframe", "Results"];
+    const TABLE_HEAD = ["Symbol", "Strategy", "Timeframe"];
     return (
         <div className="component-container">
-            <div className="text-component-head mb-2">Strategy Tests</div>
-            {/* <input type="button" value="REfresh" className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer' onClick={updateTests} />      */}
-
+            <div className="text-component-head mb-2">Strategies</div>
             <div className="h-[95%] w-full overflow-hidden">
-                <div className="h-full overflow-auto">
+                {loading && (
+                    <CircularLoader />
+                )}
+                {!loading && (
 
-                    {backtests.length === 0 && <div className="mt-5 text-slate-800">Es sind keine Tests verfügbar. Starten Sie Ihren ersten Test.</div>}
+                    <div className="h-full overflow-auto">
+                        {strategies.length === 0 && <div className="mt-5 text-slate-800">Es sind keine Tests verfügbar. Starten Sie Ihren ersten Test.</div>}
 
-                    {backtests.length > 0 &&
-                        <table className="min-w-full table-fixed border">
-                            <thead className="bg-slate-700 sticky top-0">
-                                <tr>
-                                    {TABLE_HEAD.map((column) => (
-                                        <th key={column} className="px-2 py-1 text-center text-white text-xs">
-                                            {column}
+                        {strategies.length > 0 &&
+                            <table className="min-w-full table-fixed border">
+                                <thead className="bg-slate-700 sticky top-0">
+                                    <tr>
+                                        <th className="px-2 py-1  text-left text-white text-xs">
+                                            Name
                                         </th>
-                                    ))}
-
-                                </tr>
-                            </thead>
-                            <tbody className='text-slate-900 text-sm overflow-y' >
-                                {backtests.map((item, index) => (
-                                    <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} onClick={() => displayDetails(item)}>
-                                        <td className="px-2 py-1 text-center">{item.name}</td>
-                                        <td className=" py-1 text-center">{item.symbol}</td>
-                                        <td className="ppy-1 text-center">
-                                            {Strategy[item.strategy]}
-                                        </td>
-                                        <td className=" py-1 text-center">
-                                            {BreakoutPeriod[item.breakoutPeriod] }
-                                        </td>
-                                        <td className="text-center">
-                                            <IconButton aria-label="language" color="primary" onClick={() => showResult(item)}>
-                                                <SmartDisplayIcon className='text-slate-800' />
-                                            </IconButton>
-                                        </td>
+                                        {TABLE_HEAD.map((column) => (
+                                            <th key={column} className="px-2 py-1 text-center text-white text-xs">
+                                                {column}
+                                            </th>
+                                        ))}
+                                        <th className="px-4 py-1 w-11 text-right text-white text-xs">
+                                            Actions
+                                        </th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>}
-                </div>
+                                </thead>
+                                <tbody className='text-slate-900 text-sm overflow-y' >
+                                    {strategies.map((item, index) => (
+                                        <>
+                                            <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'} ${selectedStrategy === item.id ? 'font-bold border border-t-zinc-900' : ''}`} >
+                                                <td className="px-2 py-1 text-left cursor-pointer" onClick={() => displayDetails(item)}>{item.name}</td>
+                                                <td className=" py-1 text-center">{item.symbol}</td>
+                                                <td className="ppy-1 text-center">
+                                                    {Strategy[item.strategy]}
+                                                </td>
+                                                <td className=" py-1 text-center">
+                                                    {BreakoutPeriod[item.breakoutPeriod]}
+                                                </td>
+                                                <td className="text-right">
+                                                    <Tooltip title="Bookmark Strategy">
+                                                        <IconButton aria-label="bookmark" color="primary" size="small" onClick={() => bookmarkStrategy(item)}>
+                                                            {item.bookmarked ? <BookmarkIcon className="text-slate-800" /> : <BookmarkBorderIcon className="text-slate-800" />}
+                                                        </IconButton>
+                                                    </Tooltip>
+
+                                                    <Tooltip title="Delete Strategy">
+                                                        <IconButton aria-label="delete" color="primary" size="small" onClick={() => deleteStrategy(item.id)}>
+                                                            <DeleteIcon className="text-slate-800" />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </td>
+                                            </tr>
+                                            <tr key={item.id + '2'} className={`border border-b-zinc-900 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}  ${selectedStrategy === item.id ? '' : 'hidden'} `} >
+                                                <td colSpan={5} className="px-2 py-1 text-left">
+
+                                                    <div className="flex text-center">
+                                                        <div className="flex-1">
+                                                            <div className="">SL Strategy</div>
+                                                            <div >{item.stopLossStrategy}</div>
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <div >TP (%)</div>
+                                                            <div>{item.takeProfitPercent}</div>
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <div>Trailing Stop</div>
+                                                            <div >{item.trailingStop}</div>
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <div className="">Allow Overnight</div>
+                                                            <div className="">{item.allowOvernight ? 'Yes' : 'No'}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </>
+                                    ))}
+                                </tbody>
+                            </table>}
+                    </div>)}
             </div>
+            <ToastContainer position="bottom-right"
+                autoClose={2500}
+                hideProgressBar={true}
+                closeOnClick
+                theme="colored" />
         </div>
     );
 }

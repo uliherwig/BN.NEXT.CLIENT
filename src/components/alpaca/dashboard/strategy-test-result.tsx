@@ -1,6 +1,6 @@
 "use client";
 import { basicFetch } from "@/app/lib/fetchFunctions";
-import { BacktestSettings } from "@/models/strategy/test-settings";
+import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
 import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 import { IconButton } from "@mui/material";
 import { useEffect, useState } from 'react';
@@ -8,9 +8,10 @@ import { useDictionary } from '@/provider/dictionary-provider';
 import { Position } from "@/models/strategy/position";
 import { format } from 'date-fns';
 import { TestResult } from "@/models/strategy/test-result";
+import CircularLoader from "@/components/common/loader";
 
 interface TestResultProps {
-    test: BacktestSettings;
+    strat: StrategySettingsModel;
 
 }
 
@@ -21,32 +22,33 @@ const StrategyTestResult: React.FC<TestResultProps> = (params) => {
     const [positions, setPositions] = useState<Position[]>([]);
     const [selectedPosition, setSelectedPosition] = useState<Position>({} as Position);
     const [result, setResult] = useState<TestResult>({} as TestResult);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        console.log(params)
-        const id = params.test?.id;
+        const id = params.strat?.id;
         if (id !== undefined && id !== '') {
             updatePositions(id);
             updateResult(id);
         }
-    }, [params, params.test]);
+    }, [params, params.strat]);
 
     const updateResult = async (id: string) => {
+        setLoading(true);
         const res = await basicFetch<any>(`/api/strategy/test-result?testId=${id}`);
         setResult(res);
+        setLoading(false);
     }
 
     const updatePositions = async (id: string) => {
         const res = await basicFetch<any>(`/api/strategy/test-positions?testId=${id}`);
         const sortedPositions = res.sort((a: Position, b: Position) => new Date(b.stampClosed).getTime() - new Date(a.stampClosed).getTime());
-        console.log(sortedPositions);
         setPositions(sortedPositions);
+
     }
 
 
 
     const showPositionAndChart = (position: Position) => {
-        console.log(position);
         setSelectedPosition(position);
     }
 
@@ -57,15 +59,18 @@ const StrategyTestResult: React.FC<TestResultProps> = (params) => {
     const TABLE_HEAD = ["Side", "Start", "Stop", "Signal", "Profit/Loss", "Actions"];
     return (
         <>
-        
+
             <div className="component-container">
-                <div className="text-component-head mb-2">Test Result {params.test?.name}</div>
-                {/* <input type="button" value="REfresh" className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer' onClick={updateTests} />      */}
+                <div className="text-component-head mb-2">Test Result {params.strat?.name}</div>
+                {loading && (
+                    <CircularLoader />
+                )}
                 <div className="h-[25%] w-full">
 
-                    {result.id == undefined && <div className="mt-6 text-slate-800">Es ist kein Test vorhanden. </div>}
 
-                    {result !== undefined && result !== null && result.id !== undefined && result.id !== '' &&
+                    {!loading && result.id == undefined && <div className="mt-6 text-slate-800">Es ist kein Test vorhanden. </div>}
+
+                    {!loading && result !== undefined && result !== null && result.id !== undefined && result.id !== '' &&
                         <table>
                             <tbody>
                                 <tr>
@@ -144,7 +149,7 @@ const StrategyTestResult: React.FC<TestResultProps> = (params) => {
                     </div>
                 }
             </div >
-          
+
         </>
     );
 

@@ -4,6 +4,13 @@
 
 - chart with real time data
 
+## Version 2024.11.1
+
+- bugfix dashboard
+- strategy list delete/bookmark function
+- toaster message implemented
+- show details function in strategy list
+
 ## Version 2024.10.4
 
 - dashboard column 1 and 2

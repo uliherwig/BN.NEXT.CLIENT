@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
-import { BacktestSettings } from '@/models/strategy/test-settings';
+import { StrategySettingsModel } from '@/models/strategy/strategy-settings-model';
 
 const schemaRegister = z.object({
     keyId: z.string().min(6, { message: "Input required" }),
@@ -126,7 +126,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
 
     } else {
 
-        const payload: BacktestSettings = {
+        const payload: StrategySettingsModel = {
             "id": "00000000-0000-0000-0000-000000000000",
             "userId": session.user.id!,
             "broker": "Alpaca",
