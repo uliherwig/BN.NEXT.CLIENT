@@ -1,20 +1,20 @@
-import { Strategy, BreakoutPeriod, StopLossStrategy } from "./enums";
+import { StrategyEnum } from "./enums";
 
 export interface StrategySettingsModel {
-  id: string; // Guid in C# corresponds to string in TypeScript
+  id: string;
   userId: string;
+  strategyType: StrategyEnum;
   broker: string;
   name: string;
-  symbol: string;
+  asset: string;
+  quantity: number;
   takeProfitPercent: number;
   stopLossPercent: number;
-  startDate: string; // DateTime in C# corresponds to string in TypeScript (ISO 8601 format)
-  endDate: string; // DateTime in C# corresponds to string in TypeScript (ISO 8601 format)
-  strategy: Strategy;
-  breakoutPeriod: BreakoutPeriod;
+  startDate: string;
+  endDate: string;
   trailingStop: number;
   allowOvernight: boolean;
   bookmarked: boolean;
-  stopLossStrategy: StopLossStrategy;
-  testStamp: string; // DateTime in C# corresponds to string in TypeScript (ISO 8601 format)
+  testStamp: string;
+  strategyParams: string;
 }

@@ -1,6 +1,6 @@
 export interface TestResult {
   id: string; // Guid in C# maps to string in TypeScript
-  symbol: string;
+  asset: string;
   startDate: Date; // DateTime in C# maps to Date in TypeScript
   endDate: Date; // DateTime in C# maps to Date in TypeScript
   timeFrame: string; // TimeSpan in C# maps to string in TypeScript

@@ -12,7 +12,6 @@ import CheckboxSlate from "@/components/common/checkbox/checkbox-slate";
 import { basicFetch } from "@/app/lib/fetchFunctions";
 import { AlpacaAssetModel } from "@/models/alpaca/alpaca-asset-model";
 import CircularLoader from "@/components/common/loader";
-import StrategySettingsFormBreakout from "./strategy-settings-form-breakout";
 
 enum StrategySettingsFormState {
     None,
@@ -22,12 +21,12 @@ enum StrategySettingsFormState {
     Error
 }
 
-interface StrategySettingsFormProps {
+interface StrategySettingsFormSMAProps {
     updateStrategies: any;
 }
 
 
-const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrategies }) => {
+const StrategySettingsFormSMA: React.FC<StrategySettingsFormSMAProps> = ({ updateStrategies }) => {
     const dictionary = useDictionary();
     const [formState, setFormState] = useState<StrategySettingsFormState>(StrategySettingsFormState.None);
     const [assets, setAssets] = useState<AlpacaAssetModel[]>([]);
@@ -78,20 +77,20 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
             <div className="h-full w-full overflow-hidden">
                 <div className="w-full">
 
-                    <div className="text-slate-800 text-lg mb-4">Strategy Settings</div>
+                    <div className="text-slate-800 text-lg mb-4">Strategy</div>
 
                     <form action={storeAction} className='flex flex-col gap-2'>
                         <table className="w-full border-collapse">
                             <tbody>
                                 <tr>
-                                    <td className="pb-1  w-[30%]"><label>Name</label></td>
+                                    <td className="pb-1  w-[30%]"><label>Backtest Name</label></td>
                                     <td className="pb-1">
                                         <input type="text" name="name" className="border border-slate-400 w-full p-1" defaultValue="test" disabled={pending} />
                                         <div className="error-message">{firstOrDefault(state?.errors?.name, '')}</div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className="pb-1"><label>Strategy Type</label></td>
+                                    <td className="pb-1"><label>Strategie</label></td>
                                     <td className="pb-1">
                                         <select name="strategy" className="border border-slate-400 w-full p-1" title="Strategy" onChange={(e) => { setStrategy(e.target.value) }} disabled={pending}>
                                             <option value="0">Select Strategy</option>
@@ -103,7 +102,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                 {strategy !== StrategyEnum.None.toString() && (
                                     <>
                                         <tr>
-                                            <td className="pb-1"><label>Asset</label></td>
+                                            <td className="pb-1"><label>Symbol</label></td>
                                             <td className="pb-1">
                                                 <select name="symbol" className="border border-slate-400 w-full p-1" title="Symbol" disabled={pending}>
                                                     {assets.map((asset) => (
@@ -135,8 +134,38 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                                 <div className="error-message">{firstOrDefault(state?.errors?.endDate, '')}</div>
                                             </td>
                                         </tr>
-                                        {strategy === StrategyEnum.Breakout.toString() && (
-                                            <StrategySettingsFormBreakout pending={pending} state={state} />
+                                        <tr>
+                                            <td className="pb-1"><label>Breakout Period</label></td>
+                                            <td className="pb-1">
+                                                <select name="breakoutPeriod" className="border border-slate-400 w-full p-1" title="Time Frame" defaultValue={BreakoutPeriodEnum.Day} disabled={pending}>
+                                                    <option value={BreakoutPeriodEnum.Minute}>1 Minute</option>
+                                                    <option value={BreakoutPeriodEnum.TenMinutes}>10 Minutes</option>
+                                                    <option value={BreakoutPeriodEnum.Hour}>1 Hour</option>
+                                                    <option value={BreakoutPeriodEnum.Day}>1 Day</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="pb-1"><label>Stop Loss Strategy</label></td>
+                                            <td className="pb-1">
+                                                <select name="stopLossStrategy" className="border border-slate-400 w-full p-1" title="Time Frame"
+                                                    defaultValue="0" onChange={(e) => { setStopLossType(e.target.value) }} disabled={pending}>
+                                                    <option value={StopLossTypeEnum.Breakout}>Prev. Minimum</option>
+                                                    <option value={StopLossTypeEnum.CustomLimit}>Custom limits</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        {stopLossType !== '0' && (
+                                            <>
+                                                <tr>
+                                                    <td className="pb-1"><label>Stop Loss Percent</label></td>
+                                                    <td className="pb-1">
+                                                        <input type="text" name="stopLossPercent" className="border border-slate-400 w-full p-1" defaultValue="0.01" disabled={pending} />
+                                                        <div className="error-message">{firstOrDefault(state?.errors?.stopLossPercent, '')}</div>
+                                                    </td>
+                                                </tr>
+
+                                            </>
                                         )}
                                         <tr>
                                             <td className="pb-1"><label>Take Profit Percent</label></td>
@@ -167,7 +196,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                                 )}
                                                 <p className="mt-4">
                                                     {formState !== StrategySettingsFormState.Success && (
-                                                        <SubmitButton label="Run Backtest" handleFormState={handleSubmit} />
+                                                        <SubmitButton label="Test Strategy" handleFormState={handleSubmit} />
                                                     )}
                                                 </p>
                                             </td>
@@ -211,4 +240,4 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
     );
 };
 
-export default StrategySettingsForm;
+export default StrategySettingsFormSMA;

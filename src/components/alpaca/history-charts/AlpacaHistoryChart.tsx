@@ -1,8 +1,7 @@
 
 "use client"
-import React, { Suspense, use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LineChart from './Linechart';
-import { BnOhlc } from '@/models/BnOhlc';
 import useSWR, { mutate } from 'swr';
 import CircularLoader from '@/components/common/loader';
 import { ChartParameters } from '@/models/ChartParameters';

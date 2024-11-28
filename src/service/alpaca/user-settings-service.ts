@@ -1,4 +1,4 @@
-import { AlpacaUserSettings } from "@/models/alpaca/user-settings";
+import { AlpacaUserSettings } from "@/models/alpaca/alpaca-user-settings";
 import fetchWithCache, { basicFetch , basicPost} from "../../app/lib/fetchFunctions";
 
 export const AlpacaUserSettingsService = {

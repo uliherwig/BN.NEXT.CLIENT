@@ -1,21 +1,19 @@
-import { Side } from "./enums";
+import { SideEnum, StrategyEnum } from "./enums";
 
 export interface Position {
-  id: string;
-  testId: string;
+  id: string; 
+  strategyId: string; 
   symbol: string;
   quantity: number;
-  side: Side;
-  priceOpen: number;
+  side: SideEnum;
+  priceOpen: number; 
   priceClose: number;
   profitLoss: number;
   takeProfit: number;
-  stopLoss: number;
-  stampOpened: Date;
-  stampClosed: Date;
+  stopLoss: number; 
+  stampOpened: string; 
+  stampClosed: string; 
   closeSignal: string;
-  prevLow: number;
-  prevHigh: number;
-  prevLowStamp: Date;
-  prevHighStamp: Date;
+  strategyType: StrategyEnum;
+  strategyParams: string;
 }

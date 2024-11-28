@@ -77,25 +77,25 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         const res = await fetch(url);
         const data = await res.json();
         return !data;
-      };
+    };
 
-      const backtestSchemaRegister = z.object({
+    const backtestSchemaRegister = z.object({
         name: z.string()
             .min(3)
             .max(10)
             .regex(/^[a-zA-Z0-9]+$/, "Username must contain only alphabetic characters and numbers")
             .refine(async (name) => {
-                return await checkStrategyNameAvailability(name);     
-              }, {
+                return await checkStrategyNameAvailability(name);
+            }, {
                 message: "Name already exists",
-              }),
-    
+            }),
+
         symbol: z.string(),
         takeProfitPercent: z.number().min(1).max(25),
         // stopLossPercent: z.number().min(0.001).max(0.5),
         startDate: z.date().min(new Date(2024, 0, 0), 'Start date may not be before 2024').max(new Date(), 'Start date may not be after today'),
         endDate: z.date().min(new Date(2024, 0, 0), 'End date may not be before 2024').max(new Date(), 'End date may not be after today'),
-    
+
     });
 
     const startDate = new Date(Date.parse(formData.get('startDate') as string));
@@ -131,19 +131,26 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             "userId": session.user.id!,
             "broker": "Alpaca",
             "name": formData.get('name') as string,
-            "symbol": formData.get('symbol') as string,
+            "asset": formData.get('symbol') as string,
+            "quantity": parseFloat(formData.get('quantity') as string),
             "takeProfitPercent": parseFloat(formData.get('takeProfitPercent') as string),
             "stopLossPercent": 0.0,
             "startDate": startDate.toISOString(),
             "endDate": endDate.toISOString(),
-            "strategy": parseInt(formData.get('strategy') as string),
-            "breakoutPeriod": parseInt(formData.get('breakoutPeriod') as string),
+            "strategyType": parseInt(formData.get('strategy') as string),
             "trailingStop": parseFloat(formData.get('trailingStop') as string),
             "allowOvernight": formData.get('allowOvernight') === 'on',
             "bookmarked": false,
-            "stopLossStrategy": parseInt(formData.get('stopLossStrategy') as string),
-            "testStamp": new Date().toISOString()
+            "testStamp": new Date().toISOString(),
+            "strategyParams": JSON.stringify({
+                "breakoutPeriod": parseInt(formData.get('breakoutPeriod') as string),
+                "stopLossType": parseInt(formData.get('stopLossStrategy') as string),
+            }),
         };
+
+
+        console.log('payload:', payload);
+        console.log('JSON.stringify(payload)', JSON.stringify(payload));
 
         const response = await fetch(`${process.env.ALPACA_API_URL}/Backtest`, {
             method: 'POST',
@@ -156,7 +163,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         let success = false;
 
 
-       // console.log('response:', response.status);
+        // console.log('response:', response.status);
 
         if (response.ok) {
 

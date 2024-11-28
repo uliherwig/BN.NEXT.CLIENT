@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
 import { firstOrDefault } from "@/utilities";
 import CircularLoader from "@/components/common/loader";
-import { BreakoutPeriod, Strategy } from "@/models/strategy/enums";
+import { BreakoutPeriodEnum, StrategyEnum } from "@/models/strategy/enums";
 
 interface UserTestProps {
     showResult: any
@@ -30,11 +30,11 @@ const Strategies: React.FC<UserTestProps> = ({ showResult }) => {
         setLoading(false);
     }
 
-    const getStrategyString = (value: Strategy): string => {
-        return Strategy[value];
+    const getStrategyString = (value: StrategyEnum): string => {
+        return StrategyEnum[value];
     }
-    const getBreakoutPeriodString = (value: BreakoutPeriod): string => {
-        return BreakoutPeriod[value];
+    const getBreakoutPeriodString = (value: BreakoutPeriodEnum): string => {
+        return BreakoutPeriodEnum[value];
     }
     if (!dictionary) {
         return <div>Loading...</div>;
@@ -71,7 +71,7 @@ const Strategies: React.FC<UserTestProps> = ({ showResult }) => {
                                 {strategies.map((item, index) => (
                                     <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-slate-300' : 'bg-white'}`} >
                                         <td className="px-2 py-1 text-center">{item.name}</td>
-                                        <td className=" py-1 text-center">{item.symbol}</td>
+                                        <td className=" py-1 text-center">{item.asset}</td>
                                         <td className="ppy-1 text-center">
                                             {getStrategyString(item.strategy)}
                                         </td>

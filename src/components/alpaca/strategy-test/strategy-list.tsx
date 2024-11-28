@@ -1,6 +1,6 @@
 "use client";
 import { basicFetch } from "@/app/lib/fetchFunctions";
-import { BreakoutPeriod, Strategy } from "@/models/strategy/enums";
+import { BreakoutPeriodEnum, StrategyEnum } from "@/models/strategy/enums";
 import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 import { IconButton, Tooltip } from "@mui/material";
 import { useEffect, useState } from 'react';
@@ -13,29 +13,31 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/components/common/loader";
+import StrategyListBreakout from "./strategy-list-breakout";
 
 interface StrategyListProps {
-    showResult: any
+    showResult: any;
+    hasUpdate: boolean;
 }
 
-const StrategyList: React.FC<StrategyListProps> = ({ showResult }) => {
+const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate }) => {
 
     const dictionary = useDictionary();
     const [strategies, setStrategies] = useState<StrategySettingsModel[]>([]);
-    const [selectedStrategy, setSelectedStrategy] = useState<string>('');
+    const [selectedStrategy, setSelectedStrategy] = useState<StrategySettingsModel>({} as StrategySettingsModel);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         updateTests();
-    }, []);
+    }, [hasUpdate]);
 
     const updateTests = async () => {
         const strats = await basicFetch<StrategySettingsModel[]>(`/api/strategy?bookmarked=false`);
         setStrategies(strats);
-        const latestTest = firstOrDefault(strats, {} as StrategySettingsModel);
-        if (latestTest) {
-            setSelectedStrategy(latestTest.id);
-            showResult(latestTest);
+        const latestStrategy = firstOrDefault(strats, {} as StrategySettingsModel);
+        if (latestStrategy) {
+            setSelectedStrategy(latestStrategy);
+            showResult(latestStrategy);
         }
         setLoading(false);
     }
@@ -80,7 +82,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult }) => {
     }
 
     const displayDetails = (strategy: StrategySettingsModel) => {
-        setSelectedStrategy(strategy.id);
+        setSelectedStrategy(strategy);
         showResult(strategy);
     }
 
@@ -88,7 +90,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult }) => {
         return <div>Loading...</div>;
     }
 
-    const TABLE_HEAD = ["Symbol", "Strategy", "Timeframe"];
+    const TABLE_HEAD = ["Type", "Asset", "TP(%)", "Trail. Stop(%)", "Overnight"];
     return (
         <div className="component-container">
             <div className="text-component-head mb-2">Strategies</div>
@@ -103,7 +105,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult }) => {
 
                         {strategies.length > 0 &&
                             <table className="min-w-full table-fixed border">
-                                <thead className="bg-slate-700 sticky top-0">
+                                <thead className="bg-slate-700 sticky top-[-2px] z-50">
                                     <tr>
                                         <th className="px-2 py-1  text-left text-white text-xs">
                                             Name
@@ -121,15 +123,16 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult }) => {
                                 <tbody className='text-slate-900 text-sm overflow-y' >
                                     {strategies.map((item, index) => (
                                         <>
-                                            <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'} ${selectedStrategy === item.id ? 'font-bold border border-t-zinc-900' : ''}`} >
+                                            <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'} ${selectedStrategy.id === item.id ? 'font-bold border border-t-zinc-900' : ''}`} >
                                                 <td className="px-2 py-1 text-left cursor-pointer" onClick={() => displayDetails(item)}>{item.name}</td>
-                                                <td className=" py-1 text-center">{item.symbol}</td>
                                                 <td className="ppy-1 text-center">
-                                                    {Strategy[item.strategy]}
+                                                    {StrategyEnum[item.strategyType]}
                                                 </td>
-                                                <td className=" py-1 text-center">
-                                                    {BreakoutPeriod[item.breakoutPeriod]}
-                                                </td>
+                                                <td className=" py-1 text-center">{item.asset}</td>
+                                                <td className=" py-1 text-center">{item.takeProfitPercent}</td>
+                                                <td className=" py-1 text-center">{item.trailingStop === 0 ? 'No' : item.trailingStop }</td>
+                                                <td className=" py-1 text-center">{item.allowOvernight ? 'Yes' : 'No'}</td>
+
                                                 <td className="text-right">
                                                     <Tooltip title="Bookmark Strategy">
                                                         <IconButton aria-label="bookmark" color="primary" size="small" onClick={() => bookmarkStrategy(item)}>
@@ -144,27 +147,12 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult }) => {
                                                     </Tooltip>
                                                 </td>
                                             </tr>
-                                            <tr key={item.id + '2'} className={`border border-b-zinc-900 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}  ${selectedStrategy === item.id ? '' : 'hidden'} `} >
+                                            <tr key={item.id + '2'} className={`border border-b-zinc-900 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}  ${selectedStrategy.id === item.id ? '' : 'hidden'} `} >
                                                 <td colSpan={5} className="px-2 py-1 text-left">
+                                                    {item.strategyType === StrategyEnum.Breakout && (
+                                                        <StrategyListBreakout strategy={item} />
+                                                    )}
 
-                                                    <div className="flex text-center">
-                                                        <div className="flex-1">
-                                                            <div className="">SL Strategy</div>
-                                                            <div >{item.stopLossStrategy}</div>
-                                                        </div>
-                                                        <div className="flex-1">
-                                                            <div >TP (%)</div>
-                                                            <div>{item.takeProfitPercent}</div>
-                                                        </div>
-                                                        <div className="flex-1">
-                                                            <div>Trailing Stop</div>
-                                                            <div >{item.trailingStop}</div>
-                                                        </div>
-                                                        <div className="flex-1">
-                                                            <div className="">Allow Overnight</div>
-                                                            <div className="">{item.allowOvernight ? 'Yes' : 'No'}</div>
-                                                        </div>
-                                                    </div>
                                                 </td>
                                             </tr>
                                         </>

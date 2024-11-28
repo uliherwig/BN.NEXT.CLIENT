@@ -75,7 +75,7 @@ const StrategyTestResult: React.FC<TestResultProps> = (params) => {
                             <tbody>
                                 <tr>
                                     <td className="px-2 py-1">Symbol</td>
-                                    <td className="px-2 py-1">{result.symbol}</td>
+                                    <td className="px-2 py-1">{result.asset}</td>
                                     <td className="px-2 py-1">TimeFrame</td>
                                     <td className="px-2 py-1">{result.timeFrame}</td>
                                 </tr>

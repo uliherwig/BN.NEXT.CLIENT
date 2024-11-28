@@ -116,7 +116,7 @@ const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
                 )}
             </div>
 
-            <SignInDialog dict={dict} isOpen={dialogOpen} closeDialog={closeDialog} />
+            <SignInDialog isOpen={dialogOpen} closeDialog={closeDialog} />
         </>
     );
 }

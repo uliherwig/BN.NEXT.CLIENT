@@ -4,6 +4,12 @@
 
 - chart with real time data
 
+## Version 2024.11.2
+
+- refactored data submit
+- add update buttons to create strategy widget
+- update strategy list, regarding different strategy types
+
 ## Version 2024.11.1
 
 - bugfix dashboard

@@ -7,19 +7,24 @@ import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model
 
 const Backtests = () => {
     const [backtest, setBacktest] = useState<StrategySettingsModel>({} as StrategySettingsModel);
+    const [hasUpdate, setHasUpdate] = useState<boolean>(false);
 
     const showResult = (e: StrategySettingsModel) => {
         setBacktest(e)
+    }
+    const updateStrategies = (e: boolean) => {
+        console.log('updateStrategies', e);
+        setHasUpdate(!hasUpdate);
     }
 
     return (
         <>
             <div className="flex flex-row gap-4 w-full content-container">
                 <div className="flex-1">
-                    <StrategySettingsForm />
+                    <StrategySettingsForm updateStrategies={updateStrategies} />
                 </div>
                 <div className="flex-1">
-                    <StrategyList  showResult={showResult} />
+                    <StrategyList  showResult={showResult} hasUpdate={hasUpdate} />
                 </div>
                 <div className="flex-1">
                     <TestPositions test={backtest} />

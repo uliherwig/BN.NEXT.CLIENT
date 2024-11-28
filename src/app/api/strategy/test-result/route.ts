@@ -6,6 +6,7 @@ export async function GET(req: NextRequest) {
     try {
         const testId = req.nextUrl.searchParams.get('testId') as string;
         const endpoint = `${process.env.STRATEGY_API_URL}/strategy/results/${testId}`;
+        console.log('endpoint:', endpoint);
         var data = await basicFetch<TestResult>(endpoint);
         return NextResponse.json(data);
     } catch (error) {

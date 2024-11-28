@@ -1,23 +1,26 @@
-export enum Strategy {
+export enum StrategyEnum {
   None,
   Breakout,
-  MovingAverages,
+  MeanReversion,
+  Momentum,
+  Reversal,
+  TrendFollowing,
+  SimpleMovingAverage,
 }
 
-export enum BreakoutPeriod {
+export enum BreakoutPeriodEnum {
   Minute,
   TenMinutes,
   Hour,
   Day,
 }
 
-export enum Side {
+export enum SideEnum {
   Buy,
   Sell
 }
 
-
-export enum StopLossStrategy {
+export enum StopLossTypeEnum {
   Breakout,
   CustomLimit
 }

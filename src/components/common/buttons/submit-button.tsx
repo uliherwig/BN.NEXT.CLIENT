@@ -15,7 +15,7 @@ const SubmitButton: React.FC<ButtonProps> = ({ label, handleFormState }) => {
 
   return (
     <button type='submit' disabled={pending}
-      className="bg-indigo-900 text-white text-normal px-4 h-[28px] cursor-pointer w-full"  >
+      className="bg-indigo-900 text-white text-normal px-4 h-[28px] cursor-pointer w-full font-bold"  >
       {pending ? 'STARTING...' : label}
     </button>
   );

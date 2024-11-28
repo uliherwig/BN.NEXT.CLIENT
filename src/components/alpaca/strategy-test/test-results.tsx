@@ -10,10 +10,10 @@ import { format } from 'date-fns';
 import ChartPositionModal from "../chart-position-modal";
 import { TestResult } from "@/models/strategy/test-result";
 import CircularLoader from "@/components/common/loader";
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 interface TestResultProps {
     test: StrategySettingsModel;
-
 }
 
 const TestResults: React.FC<TestResultProps> = (params) => {
@@ -31,8 +31,9 @@ const TestResults: React.FC<TestResultProps> = (params) => {
         if (id !== undefined && id !== '') {
             updatePositions(id);
             updateResult(id);
-            setLoading(false);
+           
         }
+         setLoading(false);
     }, [params, params.test]);
 
     const updateResult = async (id: string) => {
@@ -53,7 +54,6 @@ const TestResults: React.FC<TestResultProps> = (params) => {
     };
 
     const showPositionAndChart = (position: Position) => {
-        console.log(position);
         setSelectedPosition(position);
         setDialogOpen(true);
     }
@@ -72,7 +72,7 @@ const TestResults: React.FC<TestResultProps> = (params) => {
                     <CircularLoader />
                 )}
                  {!loading && (
-                <div className="h-[25%] w-full">
+                <div className="h-[17%] w-full">
 
                     {result.id == undefined && <div className="mt-6 text-slate-800">Es ist kein Test verfügbar. </div>}
 
@@ -80,17 +80,16 @@ const TestResults: React.FC<TestResultProps> = (params) => {
                         <table>
                             <tbody>
                                 <tr>
-                                    <td className="px-2 py-1">Symbol</td>
-                                    <td className="px-2 py-1">{result.symbol}</td>
-                                    <td className="px-2 py-1">TimeFrame</td>
-                                    <td className="px-2 py-1">{result.timeFrame}</td>
+                                    <td className="px-2 py-1">Asset</td>
+                                    <td className="px-2 py-1">{result.asset}</td>
+                                    <td className="px-2 py-1" colSpan={2}>{format(new Date(result.startDate), 'dd.MM.yy')} - {format(new Date(result.endDate), 'dd.MM.yy')}</td>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <td className="px-2 py-1">Start Date</td>
                                     <td className="px-2 py-1">{format(new Date(result.startDate), 'dd.MM.yy')}</td>
                                     <td className="px-2 py-1">End Date</td>
                                     <td className="px-2 py-1">{format(new Date(result.endDate), 'dd.MM.yy')}</td>
-                                </tr>
+                                </tr> */}
                                 <tr>
                                     <td className="px-2 py-1">Profit</td>
                                     <td className="px-2 py-1">{result.totalProfitLoss}</td>
@@ -115,22 +114,21 @@ const TestResults: React.FC<TestResultProps> = (params) => {
                 </div >
                 )}
                 {positions.length > 0 &&
-                    <div className="h-[70%] w-full overflow-hidden pt-5">
+                    <div className="h-[78%] w-full overflow-hidden pt-5">
                         <div className="h-full overflow-auto">
                             <table className="min-w-full table-fixed border">
-                                <thead className="bg-slate-700 sticky top-0 z-50" >
+                                <thead className="bg-slate-700 sticky top-[-2px] z-50" >
                                     <tr>
                                         {TABLE_HEAD.map((column) => (
                                             <th key={column} className="px-2 py-1 text-center text-white text-xs">
                                                 {column}
                                             </th>
                                         ))}
-
                                     </tr>
                                 </thead>
                                 <tbody className='text-slate-800 text-sm overflow-y' >
                                     {positions.map((item, index) => (
-                                        <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-slate-300' : 'bg-white'}`} >
+                                        <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} >
                                             <td className="px-2 py-1 text-center">{item.side === 0 ? 'BUY' : 'SELL'}</td>
                                             <td className=" py-1 text-center">{format(new Date(item.stampOpened), 'dd.MM.yy HH:mm')}</td>
                                             <td className="ppy-1 text-center">
@@ -144,7 +142,7 @@ const TestResults: React.FC<TestResultProps> = (params) => {
                                             </td>
                                             <td className="text-center">
                                                 <IconButton aria-label="language" color="primary" onClick={() => showPositionAndChart(item)}>
-                                                    <SmartDisplayIcon className='text-slate-800' />
+                                                    <BarChartIcon className='text-slate-800' />
                                                 </IconButton>
                                             </td>
                                         </tr>

@@ -4,14 +4,14 @@ import HighchartsReact from 'highcharts-react-official';
 import Highcharts, { color } from "highcharts/highstock";
 import { BnOhlc } from '@/models/BnOhlc';
 import { Position } from '@/models/strategy/position';
-import { Side } from '@/models/strategy/enums';
+import { SideEnum } from '@/models/strategy/enums';
 
 type PositionChartProps = {
     data: any[];
     position: Position;
 };
 
-const PositionChart: React.FC<PositionChartProps> = (params) => {
+const PositionChartBreakout: React.FC<PositionChartProps> = (params) => {
 
     const [chartOptions, setChartOptions] = useState({}); 
 
@@ -19,8 +19,19 @@ const PositionChart: React.FC<PositionChartProps> = (params) => {
     const t1 = new Date(params.position.stampOpened).getTime();
     const t2 = new Date(params.position.stampClosed).getTime();
 
-    const preLowStamp = new Date(params.position.prevLowStamp).getTime();
-    const preHighStamp = new Date(params.position.prevHighStamp).getTime();
+    var breakoutParams = JSON.parse(params.position.strategyParams);
+
+    console.log('breakoutParams:', breakoutParams);
+
+
+    const preLowStamp = new Date(breakoutParams.PrevLowStamp).getTime();
+    const preHighStamp = new Date(breakoutParams.PrevHighStamp).getTime();
+
+    const prevLow = breakoutParams.PrevLow;
+    const prevHigh = breakoutParams.PrevHigh;
+
+    console.log('prevLow:', prevLow, 'prevHigh:', prevHigh);
+    console.log('prevLowStamp:', preLowStamp, 'prevHighStamp:', preHighStamp);
 
     //
     console.log('pos', params.position);
@@ -69,7 +80,7 @@ const PositionChart: React.FC<PositionChartProps> = (params) => {
             },
 
             title: {
-                text: `Position Side: ${Side[params.position.side] } TakeProfit: ${params.position.takeProfit} StopLoss: ${params.position.stopLoss}  Profit/Loss: ${params.position.profitLoss}` 
+                text: `Position Side: ${SideEnum[params.position.side] } TakeProfit: ${params.position.takeProfit} StopLoss: ${params.position.stopLoss}  Profit/Loss: ${params.position.profitLoss}` 
             },
             xAxis: {
                 ordinal: true,
@@ -144,15 +155,15 @@ const PositionChart: React.FC<PositionChartProps> = (params) => {
                 type: 'flags',
                 data: [{
                     x: preLowStamp,
-                    y: params.position.prevLow,
+                    y: prevLow,
                     title: 'L',
-                    text: 'Previous Low' + params.position.prevLow,
+                    text: 'Previous Low' + prevLow,
                     color: '#0000ff'
                 }, {
                     x: preHighStamp,
-                    y: params.position.prevHigh,
+                    y: prevHigh,
                     title: 'H',
-                    text: 'Previous High ' + params.position.prevHigh,
+                    text: 'Previous High ' + prevHigh,
                     color: '#ff0000'
                 }],
                 // onSeries: 'dataseries',
@@ -185,4 +196,4 @@ const PositionChart: React.FC<PositionChartProps> = (params) => {
     )
 }
 
-export default PositionChart;
+export default PositionChartBreakout;
