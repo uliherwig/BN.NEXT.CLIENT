@@ -14,6 +14,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/components/common/loader";
 import StrategyListBreakout from "./strategy-list-breakout";
+import StrategyListSMA from "./strategy-list-sma";
 
 interface StrategyListProps {
     showResult: any;
@@ -151,6 +152,9 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate }) =>
                                                 <td colSpan={5} className="px-2 py-1 text-left">
                                                     {item.strategyType === StrategyEnum.Breakout && (
                                                         <StrategyListBreakout strategy={item} />
+                                                    )}
+                                                    {item.strategyType === StrategyEnum.SimpleMovingAverage && (
+                                                        <StrategyListSMA strategy={item} />
                                                     )}
 
                                                 </td>

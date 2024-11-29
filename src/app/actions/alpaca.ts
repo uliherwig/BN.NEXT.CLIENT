@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
 import { StrategySettingsModel } from '@/models/strategy/strategy-settings-model';
+import { StrategyEnum } from '@/models/strategy/enums';
 
 const schemaRegister = z.object({
     keyId: z.string().min(6, { message: "Input required" }),
@@ -63,7 +64,7 @@ export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData
 
 export async function createAlpacaBacktest(prevState: any, formData: FormData) {
 
-    //console.log('createAlpacaBacktest  formData:', formData);
+    // console.log('createAlpacaBacktest  formData:', formData);
 
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
@@ -72,7 +73,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         };
     }
 
-    const checkStrategyNameAvailability = async (name: string): Promise<boolean> => {
+    const isStrategyNameAvailable = async (name: string): Promise<boolean> => {
         const url = `${process.env.STRATEGY_API_URL}/Strategy/${name}/${session.user.id}`;
         const res = await fetch(url);
         const data = await res.json();
@@ -85,7 +86,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             .max(10)
             .regex(/^[a-zA-Z0-9]+$/, "Username must contain only alphabetic characters and numbers")
             .refine(async (name) => {
-                return await checkStrategyNameAvailability(name);
+                return await isStrategyNameAvailable(name);
             }, {
                 message: "Name already exists",
             }),
@@ -98,11 +99,9 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
 
     });
 
+
     const startDate = new Date(Date.parse(formData.get('startDate') as string));
     const endDate = new Date(Date.parse(formData.get('endDate') as string));
-
-    // const test = formData.get('allowOvernight');
-    // console.log('test:', test);
 
     const validatedFields = await backtestSchemaRegister.safeParseAsync({
         name: formData.get('name'),
@@ -126,6 +125,8 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
 
     } else {
 
+        let strategyParams = GetStrategyParams(formData);
+
         const payload: StrategySettingsModel = {
             "id": "00000000-0000-0000-0000-000000000000",
             "userId": session.user.id!,
@@ -142,10 +143,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             "allowOvernight": formData.get('allowOvernight') === 'on',
             "bookmarked": false,
             "testStamp": new Date().toISOString(),
-            "strategyParams": JSON.stringify({
-                "breakoutPeriod": parseInt(formData.get('breakoutPeriod') as string),
-                "stopLossType": parseInt(formData.get('stopLossStrategy') as string),
-            }),
+            "strategyParams": strategyParams,
         };
 
 
@@ -162,16 +160,37 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
 
         let success = false;
 
-
-        // console.log('response:', response.status);
-
         if (response.ok) {
-
             success = await response.json();
         }
-        const message = success ? 'BacktestCreated' : 'BacktestCreationFailed';
 
-        const result: any = { message: message, success: success, errors: {} }
+        const result: any = { message: '', success: success, errors: {} }
         return result;
     }
+
+}
+
+
+const GetStrategyParams = (formData: FormData) => {
+    var strategyType = parseInt(formData.get('strategy') as string);
+    let strategyParams: string;
+
+    switch (strategyType) {
+        case StrategyEnum.SimpleMovingAverage:
+            strategyParams = JSON.stringify({
+                shortPeriod: parseInt(formData.get('shortPeriod') as string),
+                longPeriod: parseInt(formData.get('longPeriod') as string),
+            });
+            break;
+        case StrategyEnum.Breakout:
+            strategyParams = JSON.stringify({
+                breakoutPeriod: parseInt(formData.get('breakoutPeriod') as string),
+                stopLossType: parseInt(formData.get('stopLossStrategy') as string),
+            });
+            break;
+        default:
+            throw new Error('Unknown strategy type');
+    }
+
+    return strategyParams;
 }

@@ -9,6 +9,7 @@ import PositionChartBreakout from './history-charts/position-chart-breakout';
 import { format } from 'date-fns';
 import CloseIcon from '@mui/icons-material/Close';
 import { StrategyEnum } from '@/models/strategy/enums';
+import PositionChartSMA from './history-charts/position-chart-sma';
 
 interface ChartPositionModalProps {
     isOpen: boolean;
@@ -28,11 +29,12 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
         }
     }, [params.isOpen]);
 
-
     const getChartData = async () => {
         setLoading(true);
 
         let dateOpened = new Date(params.position.stampOpened);
+
+    console.log('params.position:', params.position.strategyType);
 
         if (params.position.strategyType === StrategyEnum.Breakout) {
 
@@ -43,11 +45,11 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
 
         }
 
-        dateOpened.setDate(dateOpened.getDate() - 10);
+        dateOpened.setDate(dateOpened.getDate() - 1);
 
         const formattedDateOpened = format(new Date(dateOpened), 'yyyy-MM-dd');
         const dateClosed = new Date(params.position.stampClosed);
-        dateClosed.setDate(dateClosed.getDate() + 10);
+        dateClosed.setDate(dateClosed.getDate() + 1);
         const formattedDateClosed = format(new Date(dateClosed), 'yyyy-MM-dd');
 
         console.log('dateOpened:', formattedDateOpened, 'dateClosed:', formattedDateClosed);
@@ -75,6 +77,9 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
                 <DialogContent>
                     {params.position.strategyType === StrategyEnum.Breakout && <>
                         <div className='w-[900px] h-[600px]'> {loading ? <CircularLoader /> : <PositionChartBreakout data={chartData} position={params.position} />}</div>
+                    </>}
+                    {params.position.strategyType === StrategyEnum.SimpleMovingAverage && <>
+                        <div className='w-[900px] h-[600px]'> {loading ? <CircularLoader /> : <PositionChartSMA data={chartData} position={params.position} />}</div>
                     </>}
 
                 </DialogContent>

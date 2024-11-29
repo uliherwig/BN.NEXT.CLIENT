@@ -13,6 +13,7 @@ import { basicFetch } from "@/app/lib/fetchFunctions";
 import { AlpacaAssetModel } from "@/models/alpaca/alpaca-asset-model";
 import CircularLoader from "@/components/common/loader";
 import StrategySettingsFormBreakout from "./strategy-settings-form-breakout";
+import StrategySettingsFormSMA from "./strategy-settings-form-sma";
 
 enum StrategySettingsFormState {
     None,
@@ -95,8 +96,8 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                     <td className="pb-1">
                                         <select name="strategy" className="border border-slate-400 w-full p-1" title="Strategy" onChange={(e) => { setStrategy(e.target.value) }} disabled={pending}>
                                             <option value="0">Select Strategy</option>
-                                            <option value="1">Breakout</option>
-                                            <option value="2">Moving Averages</option>
+                                            <option value={StrategyEnum.Breakout}>Breakout</option>
+                                            <option value={StrategyEnum.SimpleMovingAverage}>Simple Moving Averages</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -137,6 +138,9 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                         </tr>
                                         {strategy === StrategyEnum.Breakout.toString() && (
                                             <StrategySettingsFormBreakout pending={pending} state={state} />
+                                        )}
+                                        {strategy === StrategyEnum.SimpleMovingAverage.toString() && (
+                                            <StrategySettingsFormSMA pending={pending} state={state} />
                                         )}
                                         <tr>
                                             <td className="pb-1"><label>Take Profit Percent</label></td>

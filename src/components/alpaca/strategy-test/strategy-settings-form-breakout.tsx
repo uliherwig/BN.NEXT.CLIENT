@@ -2,15 +2,21 @@
 import { firstOrDefault } from "@/utilities";
 import React, { useState } from "react";
 import { BreakoutPeriodEnum, StopLossTypeEnum } from "@/models/strategy/enums";
+import { useDictionary } from "@/provider/dictionary-provider";
 
 interface StrategySettingsBreakoutProps {
     pending: boolean;
-    state: any;}
+    state: any;
+}
 
 
 const StrategySettingsFormBreakout: React.FC<StrategySettingsBreakoutProps> = ({ pending, state }) => {
-    const [stopLossType, setStopLossType] = useState<string>('0');
+    const dictionary = useDictionary();
 
+    const [stopLossType, setStopLossType] = useState<string>('0');
+    if (!dictionary) {
+        return <div>Loading...</div>;
+    }
     return (
         <>
             <tr>

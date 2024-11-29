@@ -4,6 +4,11 @@
 
 - chart with real time data
 
+## Version 2024.12.1
+
+- SMA strategy settings
+- strategy review page
+
 ## Version 2024.11.2
 
 - refactored data submit

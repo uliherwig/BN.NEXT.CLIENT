@@ -16,6 +16,6 @@ export default async function AlpacaReviewPage({ params }: LanguageProps) {
     redirect('/en/brokers')
   }
   return (
-    <Review test={'XYZ'} />
+    <Review />
   );
 }

@@ -20,7 +20,7 @@ const Review: React.FC = () => {
 
     return (
         <div className="component-container">
-            <div className="text-component-head mb-2">Stragegy Review</div>
+            <div className="text-component-head mb-2">Strategy Review</div>
             <div className="h-[95%] w-full overflow-hidden">
                 {loading && (
                     <CircularLoader />
