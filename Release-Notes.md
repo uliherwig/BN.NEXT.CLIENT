@@ -6,6 +6,11 @@
 
 ## Version 2024.12.1
 
+- SMA Strategy Form Refactorings
+- Review Page - extended Infos and Charting
+
+## Version 2024.11.3
+
 - SMA strategy settings
 - strategy review page
 

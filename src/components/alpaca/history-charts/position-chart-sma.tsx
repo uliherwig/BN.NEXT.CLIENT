@@ -5,31 +5,55 @@ import Highcharts, { color } from "highcharts/highstock";
 import { BnOhlc } from '@/models/BnOhlc';
 import { Position } from '@/models/strategy/position';
 import { SideEnum } from '@/models/strategy/enums';
+import CircularLoader from '@/components/common/loader';
 
 type PositionChartProps = {
     data: any[];
-    position: Position;
+    positions: Position[];
 };
 
 const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
 
     const [chartOptions, setChartOptions] = useState({});
+    const [loading, setLoading] = useState(true);
 
     const short: [number, number][] = [];
     const long: [number, number][] = [];
     const ohlc: [number, number, number, number, number][] = [];
 
-    const t1 = new Date(params.position.stampOpened).getTime();
-    const t2 = new Date(params.position.stampClosed).getTime();
+    const times: number[] = [];
+    params.positions.forEach((pos) => {
+        times.push(new Date(pos.stampOpened).getTime());
+        times.push(new Date(pos.stampClosed).getTime());
+    })
 
-    var smaParams = JSON.parse(params.position.strategyParams);
 
-    console.log('smaParams:', smaParams);
+    const smaParams = JSON.parse(params.positions[0].strategyParams);
 
-    //
-    console.log('pos', params.position);
+    const flagsData = params.positions.map((pos, index) => {
+        return {
+            id: 'position' + index,
+            type: 'flags',
+            data: [{
+                x: times[index * 2],
+                y: pos.priceOpen,
+                title: 'O',
+                text: `${SideEnum[pos.side]} ${pos.priceOpen}`,
+                color: '#0000ff'
+            }, {
+                x: times[index * 2 + 1],
+                y: pos.priceClose,
+                title: 'C',
+                text: `Closed ${pos.priceClose}` + '<br/>P/L: ' + pos.profitLoss,
+                color: '#ff0000'
+            }],
+            shape: 'squarepin',
+            borderRadius: 3,
+            width: 16
+        };
+    });
 
-    const initialize = () => {
+    const initialize = async () => {
         const volume: any = [];
         const dataLength = params.data.length
         console.log('data:', dataLength);
@@ -38,9 +62,6 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
         const groupingUnits = [[
             'minute',                         // unit name
             [1]                             // allowed multiples
-        ], [
-            'day',
-            [1, 2, 3, 4, 6]
         ]];
 
         for (let i = 0; i < dataLength; i += 1) {
@@ -55,7 +76,7 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
                 params.data[i].c // close
             ]);
 
-            if (ohlc.length >= 5) {
+            if (ohlc.length >= smaParams.LongPeriod) {
                 const shorties = ohlc.slice(smaParams.ShortPeriod * -1);
                 const shortAvg = shorties.map(item => item[4]).reduce((a, b) => a + b, 0) / smaParams.ShortPeriod;
 
@@ -78,11 +99,11 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
                 params.data[i].v // the volume
             ]);
         }
-        console.log('short:', short);
-        updateSeries(ohlc, short, long, volume, groupingUnits);
+
+        await updateSeries(ohlc, short, long, volume, groupingUnits, flagsData);
     }
 
-    const updateSeries = (ohlc: any, short: any, long: any, volume: any, groupingUnits: any) => {
+    const updateSeries = async (ohlc: any, short: any, long: any, volume: any, groupingUnits: any, flagsData: any) => {
         setChartOptions({
 
             chart: {
@@ -90,9 +111,7 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
                 width: '900'
             },
 
-            title: {
-                text: `Position Side: ${SideEnum[params.position.side]} TakeProfit: ${params.position.takeProfit} StopLoss: ${params.position.stopLoss}  Profit/Loss: ${params.position.profitLoss}`
-            },
+     
             xAxis: {
                 ordinal: true,
 
@@ -145,7 +164,7 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
                 id: 'long',
                 name: 'Long Period',
                 data: long
-            }, 
+            },
             {
                 type: 'column',
                 name: 'Volume',
@@ -154,35 +173,18 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
                 dataGrouping: {
                     units: groupingUnits
                 }
-            }, 
-            {
-                type: 'flags',
-                data: [{
-                    x: t1,
-                    y: params.position.priceOpen,
-                    title: 'O',
-                    text: 'Position Opened ' + params.position.priceOpen,
-                    color: '#0000ff'
-                }, {
-                    x: t2,
-                    y: params.position.priceClose,
-                    title: 'C',
-                    text: 'Position Closed ' + params.position.priceClose + '<br/>P/L: ' + params.position.profitLoss,
-                    color: '#ff0000'
-                }],
-                // onSeries: 'dataseries',
-                shape: 'squarepin',
-                borderRadius: 3,
-                width: 16
-            }]
+            },
+
+            ].concat(flagsData)
         });
+
     }
 
     useEffect(() => {
-        console.log(params)
 
         if (params.data.length > 0) {
             initialize();
+            setLoading(false);
         }
 
     }, [params, params.data]);
@@ -190,11 +192,15 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
 
     return (
         <div className='w-full h-full flex items-center justify-center'>
-            <HighchartsReact
-                highcharts={Highcharts}
-                options={chartOptions}
-                constructorType={"stockChart"}
-            />
+            {loading ? (
+                <CircularLoader />
+            ) : (
+                <HighchartsReact
+                    highcharts={Highcharts}
+                    options={chartOptions}
+                    constructorType={"stockChart"}
+                />
+            )}
         </div>
 
     )

@@ -1,53 +1,35 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { IconButton } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { IconButton, Menu, MenuItem } from '@mui/material';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { basicFetch, basicPost } from '@/app/lib/fetchFunctions';
 import SignInDialog from './signin-modal';
+import { useDictionary } from '@/provider/dictionary-provider';
+
+const AuthenticationMenu = () => {
 
 
-const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
+  
 
-    const [isClient, setIsClient] = useState(false);
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const menuOpen = Boolean(anchorEl);
 
-    const [menuOpen, setMenuOpen] = useState(false);
-    const menuRef = useRef(null);
-
-    const toggleMenu = () => {
-        setMenuOpen(!menuOpen);
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
     };
 
-    const handleClickOutside = (event: any) => {
-        if (menuRef.current && !(menuRef.current as HTMLElement).contains(event.target)) {
-            setMenuOpen(false);
-        }
+    const handleMenuClose = () => {
+        setAnchorEl(null);
     };
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            if (menuOpen) {
-                window.addEventListener('mousedown', handleClickOutside);
-            } else {
-                window.removeEventListener('mousedown', handleClickOutside);
-            }
-            return () => {
-                window.removeEventListener('mousedown', handleClickOutside);
-            };
-        }
-    }, [menuOpen]);
-
 
     const [dialogOpen, setDialogOpen] = useState(false);
-    const { data: session, status } = useSession()
+    const { data: session, status } = useSession();
 
     useEffect(() => {
-       // console.log('session:', session);
         if (session && session.user) {
-           // console.log('session.user:', session.user?.name);
+            // console.log('session.user:', session.user?.name);
         }
     }, [session]);
 
@@ -57,7 +39,6 @@ const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
 
     const handleSignOut = async () => {
         try {
-
             const result = await basicPost('/api/identity/signout', {});
             await signOut();
         } catch (error) {
@@ -71,54 +52,59 @@ const AuthenticationMenu = ({ dict }: { dict: Record<string, string> }) => {
             if (res.error && res.error === 'RefreshAccessTokenError') {
                 await signOut();
             }
-        }
+        };
         testAuth();
     }, []);
+    const dict = useDictionary();
+    if (!dict) {
+        return <div>Loading...</div>;
+    }
 
     return (
-        <>
-            <div className="relative inline-block mr-2">
-                <IconButton aria-label="language" color="primary" onClick={toggleMenu}>
-                    <ManageAccountsRoundedIcon className='text-slate-50' />
-                    <span className='text-sm text-slate-50 ml-1 min-w-fit'>{session && session.user?.username}</span>
-                </IconButton>
 
-                {isClient && menuOpen && (
-                    <div ref={menuRef} className="absolute left-[-20px] mt-0 w-36 bg-slate-800 border border-gray-200 rounded shadow-lg z-50">
-                        {status === 'authenticated' ? (
-                            <ul className="flex flex-col p-2">
-                                <li className="mb-2 text-slate-200">
-                                    Hi {session && session.user?.name}
-                                    <div></div>
-                                </li>
-                                <li className="mb-2">
-                                    <a className="text-slate-200 hover:text-white" href="/auth/account">{dict.AUTH_myaccount}</a>
-                                </li>
-                                <li className="mb-2">
-                                    <a className="text-slate-200 hover:text-white" href="#" onClick={() => { handleSignOut() }}>{dict.AUTH_logout}</a>
-                                </li>
-                            </ul>
-                        ) : (
-                            <ul className="flex flex-col p-2">
-                                <li className="mb-2 text-slate-200">
-                                    {dict.AUTH_welcome}
-                                    <div></div>
-                                </li>
-                                <li className="mb-2">
-                                    <a className="text-slate-200 hover:text-white" href="/auth/account">{dict.AUTH_register}</a>
-                                </li>
-                                <li className="mb-2">
-                                    <a className="text-slate-200 hover:text-white" href="#" onClick={() => { setDialogOpen(true); setMenuOpen(false) }}>{dict.AUTH_login}</a>
-                                </li>
-                            </ul>
-                        )}
-                    </div>
-                )}
-            </div>
+        <div className="relative mr-2 z-100">
+            <IconButton aria-label="account" color="primary" onClick={handleMenuOpen}>
+                <ManageAccountsRoundedIcon className='text-slate-50' />
+                <span className='text-sm text-slate-50 ml-1 min-w-fit'>{session && session.user?.username}</span>
+            </IconButton>
 
+            <Menu
+                anchorEl={anchorEl}
+                open={menuOpen}
+                onClose={handleMenuClose}
+                MenuListProps={{
+                    'aria-labelledby': 'account-button',
+                }}
+                sx={{
+                    '& .MuiPaper-root': {
+                        backgroundColor: 'rgb(51 65 85)', // Tailwind's bg-slate-700
+                        color: 'rgb(226 232 240)', // Tailwind's text-slate-200
+                    },
+                }}
+
+            >
+                            {status === 'authenticated' ? [
+                        <MenuItem key="myaccount" onClick={handleMenuClose}>
+                            <a className="text-slate-200 hover:text-white" href="/auth/account">{dict.AUTH_myaccount}</a>
+                        </MenuItem>,
+                        <MenuItem key="logout" onClick={() => { handleSignOut(); handleMenuClose(); }}>
+                            {dict.AUTH_logout}
+                        </MenuItem>
+                    ] : [
+                        <MenuItem key="register" onClick={handleMenuClose}>
+                            <a className="text-slate-200 hover:text-white" href="/auth/account">{dict.AUTH_register}</a>
+                        </MenuItem>,
+                        <MenuItem key="login" onClick={() => { setDialogOpen(true); handleMenuClose(); }}>
+                            {dict.AUTH_login}
+                        </MenuItem>
+                    ]}
+            </Menu>
             <SignInDialog isOpen={dialogOpen} closeDialog={closeDialog} />
-        </>
+        </div>
+
+
+
     );
-}
+};
 
 export default AuthenticationMenu;

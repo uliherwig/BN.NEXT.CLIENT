@@ -2,33 +2,31 @@
 import { useState } from "react";
 import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
 import AlpacaAccount from "./alpaca-account";
-import Strategies from "./strategies";
 import AlpacaPositions from "./alpaca-positions";
 import StrategyExecution from "./strategy-execution";
-import StrategyTestResult from "./strategy-test-result";
+import StrategyList from "../strategy-test/strategy-list";
+import TestResults from "../strategy-test/test-results";
 
 const Dashboard: React.FC = () => {
 
-    const [testSettings, setTestSettings] = useState<StrategySettingsModel>({} as StrategySettingsModel);
+    const [strategySettings, setStrategySettings] = useState<StrategySettingsModel>({} as StrategySettingsModel);
 
     const updateComponents = (e: StrategySettingsModel) => {
-        setTestSettings(e);
+        setStrategySettings(e);
     }
 
     return (
         <>
             <div className="content-container">
-                <div className="flex-1 flex flex-col gap-2">
-                    <div className="h-[310px]">
-                        <AlpacaAccount />
-                    </div>
-                    <Strategies showResult={updateComponents} />
+                <div className="flex-1">               
+                    <StrategyList showResult={updateComponents} hasUpdate={false} showBookmarked={true} />
                 </div>
                 <div className="flex-1">
-                    <StrategyTestResult strat={testSettings} />
+                    <TestResults strategySettings={strategySettings} />
                 </div>
                 <div className="flex-1">
                     <div className="h-[30%] bg-white">
+                        <AlpacaAccount />
                         <StrategyExecution />
                         <AlpacaPositions />
                     </div>

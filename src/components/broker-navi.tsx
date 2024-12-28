@@ -13,7 +13,10 @@ import { useState } from "react";
 import { usePathname } from 'next/navigation';
 import { useDictionary } from "@/provider/dictionary-provider";
 
-const BrokerNavi = () => {
+interface BrokerNaviProps {
+    language: string;
+}
+const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
     const [expanded, setExpanded] = useState(true);
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const pathname = usePathname();
@@ -57,7 +60,7 @@ const BrokerNavi = () => {
             <ul>
                 <li>
                     <Link
-                        href="/brokers"
+                        href={`/${props.language}/brokers`}
                         className='grid grid-cols-[30px_auto] items-center text-slate-700 hover:text-gray-900'
                         title={dictionary.NAVI_HOME}
                     >
@@ -77,7 +80,7 @@ const BrokerNavi = () => {
                     <ul className="ml-7 p-1 px-2 bg-gray-200" style={{ display: expanded ? 'block' : 'none' }}>
                         <li className="my-2">
                             <Link
-                                href="/brokers/alpaca/dashboard"
+                                href={`/${props.language}/brokers/alpaca/dashboard`}
                                 className={getLinkClasses('/brokers/alpaca/dashboard')}
                                 title={dictionary.NAVI_DASHBOARD}
                                 onMouseOver={() => setHoveredLink('/brokers/alpaca/dashboard')}
@@ -89,7 +92,7 @@ const BrokerNavi = () => {
                         </li>
                         <li className="my-2">
                             <Link
-                                href="/brokers/alpaca/strategy-test"
+                                href={`/${props.language}/brokers/alpaca/strategy-test`}
                                 className={getLinkClasses('/brokers/alpaca/strategy-test')}
                                 title={dictionary.NAVI_STRATEGY_TESTS}
                                 onMouseOver={() => setHoveredLink('/brokers/alpaca/strategy-test')}
@@ -101,7 +104,7 @@ const BrokerNavi = () => {
                         </li>
                         <li className="my-2">
                             <Link
-                                href="/brokers/alpaca/review"
+                                href={`/${props.language}/brokers/alpaca/review`}
                                 className={getLinkClasses('/brokers/alpaca/review')}
                                 title={dictionary.NAVI_REVIEW}
                                 onMouseOver={() => setHoveredLink('/brokers/alpaca/review')}
@@ -113,19 +116,19 @@ const BrokerNavi = () => {
                         </li>
                         <li className="my-2">
                             <Link
-                                href="/brokers/alpaca/settings"
+                                href={`/${props.language}/brokers/alpaca/settings`}
                                 className={getLinkClasses('/brokers/alpaca/settings')}
-                                title={dictionary.NAVI_SETTINGS}
+                                title={dictionary.NAVI_EXECUTION}
                                 onMouseOver={() => setHoveredLink('/brokers/alpaca/settings')}
                                 onMouseOut={() => setHoveredLink(null)}
                             >
                                 <SettingsIcon className={getIconLinkClasses('/brokers/alpaca/settings')} />
-                                {dictionary.NAVI_SETTINGS}
+                                {dictionary.NAVI_EXECUTION}
                             </Link>
                         </li>
                         <li className="my-2">
                             <Link
-                                href="/brokers/alpaca/info"
+                                href={`/${props.language}/brokers/alpaca/info`}
                                 className={getLinkClasses('/brokers/alpaca/info')}
                                 title={dictionary.NAVI_INFO}
                                 onMouseOver={() => setHoveredLink('/brokers/alpaca/info')}

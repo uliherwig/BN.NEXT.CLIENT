@@ -36,11 +36,11 @@ const StrategySettingsFormBreakout: React.FC<StrategySettingsBreakoutProps> = ({
                     <select name="stopLossStrategy" className="border border-slate-400 w-full p-1" title="Time Frame"
                         defaultValue="0" onChange={(e) => { setStopLossType(e.target.value) }} disabled={pending}>
                         <option value={StopLossTypeEnum.Breakout}>Prev. Minimum</option>
-                        <option value={StopLossTypeEnum.CustomLimit}>Custom limits</option>
+                        <option value={StopLossTypeEnum.None}>Custom limits</option>
                     </select>
                 </td>
             </tr>
-            {stopLossType !== '0' && (
+            {stopLossType === StopLossTypeEnum.None.toString() && (
                 <>
                     <tr>
                         <td className="pb-1"><label>Stop Loss Percent</label></td>

@@ -10,3 +10,13 @@ export const formatUSD = new Intl.NumberFormat('en-US', {
     currency: 'USD',
 });
 
+export const UserLanguage = {
+    get: () => {
+        return localStorage.getItem('lang') || 'en';
+    },
+    set: (lang: string) => {
+        localStorage.setItem('lang', lang);
+    }
+}
+
+

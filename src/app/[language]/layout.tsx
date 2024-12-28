@@ -6,9 +6,10 @@ import Header from "@/components/common/header";
 import { LanguageProps } from "@/models/common/language-props";
 import { getDictionary } from "../lib/dictionaries/dictionaries";
 import SessionProviderWrapper from "@/provider/session-provider-wrapper";
-import ToastProvider from "@/components/common/toast-container";
-import { getSession } from "next-auth/react";
+
 import { DictionaryProvider } from "@/provider/dictionary-provider";
+import CookieConsent from "@/components/common/cookie-consent";
+
 
 // prerender static pages for each language
 export async function generateStaticParams() {
@@ -32,9 +33,10 @@ export default async function RootLayout({
       <body className="bg-black flex justify-center items-center h-full overflow-hidden">
         <div className=" max-w-[1920px] w-full h-full">
           <SessionProviderWrapper>
+
             <DictionaryProvider dictionary={dict}>
               <header className="bg-bn-dark">
-                <Header dict={dict} />
+                <Header dict={dict} language={params.language} />
               </header>
               <main className="h-content bg-slate-100">
                 {children}
@@ -42,7 +44,9 @@ export default async function RootLayout({
               <footer className="text-xs h-[30px] bg-bn-dark">
                 &copy; {new Date().getFullYear()} BN PROJECT
               </footer>
+              <CookieConsent />
             </DictionaryProvider>
+  
           </SessionProviderWrapper>
         </div> </body>
     </html>

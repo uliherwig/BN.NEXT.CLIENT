@@ -95,9 +95,9 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                     <td className="pb-1"><label>Strategy Type</label></td>
                                     <td className="pb-1">
                                         <select name="strategy" className="border border-slate-400 w-full p-1" title="Strategy" onChange={(e) => { setStrategy(e.target.value) }} disabled={pending}>
-                                            <option value="0">Select Strategy</option>
+                                            <option value={StrategyEnum.None}>Select Strategy</option>
                                             <option value={StrategyEnum.Breakout}>Breakout</option>
-                                            <option value={StrategyEnum.SimpleMovingAverage}>Simple Moving Averages</option>
+                                            <option value={StrategyEnum.SMA}>SMA Simple Moving Averages</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -139,7 +139,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                         {strategy === StrategyEnum.Breakout.toString() && (
                                             <StrategySettingsFormBreakout pending={pending} state={state} />
                                         )}
-                                        {strategy === StrategyEnum.SimpleMovingAverage.toString() && (
+                                        {strategy === StrategyEnum.SMA.toString() && (
                                             <StrategySettingsFormSMA pending={pending} state={state} />
                                         )}
                                         <tr>
@@ -184,33 +184,15 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
 
                     {formState === StrategySettingsFormState.Success && (
                         <>
-
                             <div className="text-green-500 my-2">Der Test wurde durchgeführt. </div>
                             <div className="flex flex-row gap-2">
                                 <WidgetButton type="button" label="Update Test Result List" method={updateStrategies} />
                                 <WidgetButton type="button" label="Create New Strategy" method={() => { setFormState(StrategySettingsFormState.None) }} />
                             </div>
                         </>
-
-
                     )}
-
-
-
-
-
                 </div>
-
             </div>
-
-
-            {/* {selectedAssets.map((asset) => (
-            <div key={asset} className="flex justify-between items-center p-2 border-b border-gray-300">
-                <span>{asset}</span>
-                <button className="bg-slate-500 text-white p-1 rounded">Löschen</button>
-            </div>
-        ))} */}
-
         </div>
     );
 };

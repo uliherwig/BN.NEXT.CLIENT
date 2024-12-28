@@ -8,33 +8,81 @@ import { SideEnum } from '@/models/strategy/enums';
 
 type PositionChartProps = {
     data: any[];
-    position: Position;
+    positions: Position[];
 };
+
+interface PositionBreakouts {
+    PrevLow: number;
+    PrevHigh: number;
+    PrevLowStamp: number;
+    PrevHighStamp: number;
+}
 
 const PositionChartBreakout: React.FC<PositionChartProps> = (params) => {
 
-    const [chartOptions, setChartOptions] = useState({}); 
+    const [chartOptions, setChartOptions] = useState({});
 
 
-    const t1 = new Date(params.position.stampOpened).getTime();
-    const t2 = new Date(params.position.stampClosed).getTime();
+    const times: number[] = [];
+    const positionBreakouts: PositionBreakouts[] = [];
+    params.positions.forEach((pos) => {
+        times.push(new Date(pos.stampOpened).getTime());
+        times.push(new Date(pos.stampClosed).getTime());
 
-    var breakoutParams = JSON.parse(params.position.strategyParams);
+        var breakoutParams = JSON.parse(pos.strategyParams);
+        const preLowStamp = new Date(breakoutParams.PrevLowStamp).getTime();
+        const preHighStamp = new Date(breakoutParams.PrevHighStamp).getTime();
+        const prevLow = breakoutParams.PrevLow;
+        const prevHigh = breakoutParams.PrevHigh;
+        positionBreakouts.push({ PrevLow: prevLow, PrevHigh: prevHigh, PrevLowStamp: preLowStamp, PrevHighStamp: preHighStamp });
 
-    console.log('breakoutParams:', breakoutParams);
+    })
 
+    const positionFlags = params.positions.map((pos, index) => {
+        return {
+            id: 'position' + index,
+            type: 'flags',
+            data: [{
+                x: times[index * 2],
+                y: pos.priceOpen,
+                title: 'O',
+                text: `${SideEnum[pos.side]} ${pos.priceOpen}`,
+                color: '#0000ff'
+            }, {
+                x: times[index * 2 + 1],
+                y: pos.priceClose,
+                title: 'C',
+                text: `Closed ${pos.priceClose}` + '<br/>P/L: ' + pos.profitLoss,
+                color: '#ff0000'
+            }],
+            shape: 'squarepin',
+            borderRadius: 3,
+            width: 16
+        };
+    });
 
-    const preLowStamp = new Date(breakoutParams.PrevLowStamp).getTime();
-    const preHighStamp = new Date(breakoutParams.PrevHighStamp).getTime();
-
-    const prevLow = breakoutParams.PrevLow;
-    const prevHigh = breakoutParams.PrevHigh;
-
-    console.log('prevLow:', prevLow, 'prevHigh:', prevHigh);
-    console.log('prevLowStamp:', preLowStamp, 'prevHighStamp:', preHighStamp);
-
-    //
-    console.log('pos', params.position);
+    const breakoutFlags = params.positions.map((pos, index) => {
+        return {
+            type: 'flags',
+            data: [{
+                x: positionBreakouts[index].PrevLowStamp,
+                y: positionBreakouts[index].PrevLow,
+                title: 'L',
+                text: 'Previous Low' + positionBreakouts[index].PrevLow,
+                color: '#0000ff'
+            }, {
+                x: positionBreakouts[index].PrevHighStamp,
+                y: positionBreakouts[index].PrevHigh,
+                title: 'H',
+                text: 'Previous High ' + positionBreakouts[index].PrevHigh,
+                color: '#ff0000'
+            }],
+            // onSeries: 'dataseries',
+            shape: 'squarepin',
+            borderRadius: 3,
+            width: 16
+        };
+    });
 
     const initialize = () => {
         // split the data set into ohlc and volume
@@ -43,13 +91,7 @@ const PositionChartBreakout: React.FC<PositionChartProps> = (params) => {
         const dataLength = params.data.length
         console.log('data:', dataLength);
         // set the allowed units for data grouping
-        const groupingUnits = [[
-            'minute',                         // unit name
-            [1]                             // allowed multiples
-        ], [
-            'day',
-            [1, 2, 3, 4, 6]
-        ]];
+      
 
         for (let i = 0; i < dataLength; i += 1) {
 
@@ -68,10 +110,10 @@ const PositionChartBreakout: React.FC<PositionChartProps> = (params) => {
                 params.data[i].v // the volume
             ]);
         }
-        updateSeries(ohlc, volume, groupingUnits);
+        updateSeries(ohlc, volume, positionFlags, breakoutFlags);
     }
 
-    const updateSeries = (ohlc: any, volume: any, groupingUnits: any) => {
+    const updateSeries = (ohlc: any, volume: any,  positionFlags:any, breakoutFlags : any) => {
         setChartOptions({
 
             chart: {
@@ -79,9 +121,7 @@ const PositionChartBreakout: React.FC<PositionChartProps> = (params) => {
                 width: '900'
             },
 
-            title: {
-                text: `Position Side: ${SideEnum[params.position.side] } TakeProfit: ${params.position.takeProfit} StopLoss: ${params.position.stopLoss}  Profit/Loss: ${params.position.profitLoss}` 
-            },
+      
             xAxis: {
                 ordinal: true,
 
@@ -121,66 +161,21 @@ const PositionChartBreakout: React.FC<PositionChartProps> = (params) => {
                 type: 'candlestick',
                 name: 'SPY',
                 data: ohlc,
-                dataGrouping: {
-                    units: groupingUnits
-                }
+              
             }, {
                 type: 'column',
                 name: 'Volume',
                 data: volume,
                 yAxis: 1,
-                dataGrouping: {
-                    units: groupingUnits
-                }
-            },{
-                type: 'flags',
-                data: [{
-                    x: t1,
-                    y: params.position.priceOpen,
-                    title: 'O',
-                    text: 'Position Opened ' + params.position.priceOpen,
-                    color: '#0000ff'
-                }, {
-                    x: t2,
-                    y: params.position.priceClose,
-                    title: 'C',
-                    text: 'Position Closed ' + params.position.priceClose + '<br/>P/L: ' + params.position.profitLoss,
-                    color: '#ff0000'
-                }],
-                // onSeries: 'dataseries',
-                shape: 'squarepin',
-                borderRadius: 3,
-                width: 16
-              },{
-                type: 'flags',
-                data: [{
-                    x: preLowStamp,
-                    y: prevLow,
-                    title: 'L',
-                    text: 'Previous Low' + prevLow,
-                    color: '#0000ff'
-                }, {
-                    x: preHighStamp,
-                    y: prevHigh,
-                    title: 'H',
-                    text: 'Previous High ' + prevHigh,
-                    color: '#ff0000'
-                }],
-                // onSeries: 'dataseries',
-                shape: 'squarepin',
-                borderRadius: 3,
-                width: 16
-              }]
+         
+            }].concat(positionFlags).concat(breakoutFlags)
         });
     }
 
     useEffect(() => {
-        console.log(params)
-
         if (params.data.length > 0) {
             initialize();
         }
-
     }, [params, params.data]);
 
 

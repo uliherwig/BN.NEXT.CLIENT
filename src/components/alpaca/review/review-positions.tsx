@@ -7,21 +7,17 @@ import { useDictionary } from '@/provider/dictionary-provider';
 import { Position } from "@/models/strategy/position";
 import { format } from 'date-fns';
 import ChartPositionModal from "../chart-position-modal";
-import { TestResult } from "@/models/strategy/test-result";
 import CircularLoader from "@/components/common/loader";
 import BarChartIcon from '@mui/icons-material/BarChart';
 
-interface TestResultProps {
+interface ReviewPositionsProps {
     strategySettings: StrategySettingsModel;
 }
 
-const TestResults: React.FC<TestResultProps> = (params) => {
-
-
+const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
     const dictionary = useDictionary();
     const [positions, setPositions] = useState<Position[]>([]);
-    const [selectedPosition, setSelectedPosition] = useState<Position>({} as Position);
-    const [result, setResult] = useState<TestResult>({} as TestResult);
+    const [selectedPositions, setSelectedPositions] = useState<Position[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -29,21 +25,15 @@ const TestResults: React.FC<TestResultProps> = (params) => {
         const id = params.strategySettings.id;
         if (id !== undefined && id !== '') {
             updatePositions(id);
-            updateResult(id);
-           
         }
-         setLoading(false);
+      
     }, [params, params.strategySettings]);
-
-    const updateResult = async (id: string) => {
-        const res = await basicFetch<any>(`/api/strategy/test-result?testId=${id}`);
-        setResult(res);
-    }
 
     const updatePositions = async (id: string) => {
         const res = await basicFetch<any>(`/api/strategy/test-positions?testId=${id}`);
         const sortedPositions = res.sort((a: Position, b: Position) => new Date(b.stampClosed).getTime() - new Date(a.stampClosed).getTime());
         setPositions(sortedPositions);
+        setLoading(false);
     }
 
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -52,8 +42,9 @@ const TestResults: React.FC<TestResultProps> = (params) => {
         setDialogOpen(false);
     };
 
-    const showPositionAndChart = (position: Position) => {
-        setSelectedPosition(position);
+    const createChart = (index: number, numberOfPositions: number) => {
+        const positionsToChart = positions.slice(index, index + numberOfPositions);
+        setSelectedPositions(positionsToChart);
         setDialogOpen(true);
     }
 
@@ -61,68 +52,30 @@ const TestResults: React.FC<TestResultProps> = (params) => {
         return <div>Loading...</div>;
     }
 
-    const TABLE_HEAD = ["Side", "Start", "Stop", "Signal", "Profit/Loss", "Actions"];
+    const TABLE_HEAD = ["Side", "Start", "Stop", "Open", "Close", "SL", "TP", "Closed By", "Profit/Loss"];
     return (
         <>
-          <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} positions={[selectedPosition]} />
+            <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} positions={selectedPositions} />
             <div className="component-container">
-                <div className="text-component-head mb-2">Test Result {params.strategySettings.name}</div>
+                <div className="text-component-head mb-2">Test Positions {params.strategySettings.name}</div>
                 {loading && (
                     <CircularLoader />
                 )}
-                 {!loading && (
-                <div className="h-[17%] w-full">
 
-                    {!loading && result.id == undefined && <div className="mt-6 text-slate-800">Es ist kein Test verfügbar. </div>}
-
-                    {result !== undefined && result !== null && result.id !== undefined && result.id !== '' &&
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td className="px-2 py-1">Asset</td>
-                                    <td className="px-2 py-1">{result.asset}</td>
-                                    <td className="px-2 py-1" colSpan={2}>{format(new Date(result.startDate), 'dd.MM.yy')} - {format(new Date(result.endDate), 'dd.MM.yy')}</td>
-                                </tr>
-                                {/* <tr>
-                                    <td className="px-2 py-1">Start Date</td>
-                                    <td className="px-2 py-1">{format(new Date(result.startDate), 'dd.MM.yy')}</td>
-                                    <td className="px-2 py-1">End Date</td>
-                                    <td className="px-2 py-1">{format(new Date(result.endDate), 'dd.MM.yy')}</td>
-                                </tr> */}
-                                <tr>
-                                    <td className="px-2 py-1">Profit</td>
-                                    <td className="px-2 py-1">{result.totalProfitLoss}</td>
-                                    <td className="px-2 py-1">Number Positions</td>
-                                    <td className="px-2 py-1">{result.numberOfPositions}</td>
-                                </tr>
-                                <tr>
-                                    <td className="px-2 py-1">Profit Buy</td>
-                                    <td className="px-2 py-1">{result.buyProfitLoss}</td>
-                                    <td className="px-2 py-1">Number Buy Positions</td>
-                                    <td className="px-2 py-1">{result.numberOfBuyPositions}</td>
-                                </tr>
-                                <tr>
-                                    <td className="px-2 py-1">Profit Sell</td>
-                                    <td className="px-2 py-1">{result.sellProfitLoss}</td>
-                                    <td className="px-2 py-1">Number Sell Positions</td>
-                                    <td className="px-2 py-1">{result.numberOfSellPositions}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    }
-                </div >
-                )}
                 {positions.length > 0 &&
-                    <div className="h-[78%] w-full overflow-hidden pt-5">
+                    <div className="h-[93%] w-full overflow-hidden">
                         <div className="h-full overflow-auto">
                             <table className="min-w-full table-fixed border">
-                                <thead className="bg-slate-700 sticky top-[-2px] z-50" >
+                                <thead className="bg-slate-700 sticky top-[-2px] z-10" >
                                     <tr>
                                         {TABLE_HEAD.map((column) => (
                                             <th key={column} className="px-2 py-1 text-center text-white text-xs">
                                                 {column}
                                             </th>
                                         ))}
+                                        <th className="px-2 py-1 text-center text-white text-xs" colSpan={2}>
+                                            Charts
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className='text-slate-800 text-sm overflow-y' >
@@ -134,16 +87,36 @@ const TestResults: React.FC<TestResultProps> = (params) => {
                                                 {format(new Date(item.stampClosed), 'dd.MM.yy HH:mm')}
                                             </td>
                                             <td className=" py-1 text-center">
-                                                {item.closeSignal}
+                                                {item.priceOpen.toFixed(2)}
                                             </td>
                                             <td className=" py-1 text-center">
+                                                {item.priceClose.toFixed(2)}
+                                            </td>
+                                            <td className=" py-1 text-center">
+                                                {item.stopLoss.toFixed(2)}
+                                            </td>
+                                            <td className=" py-1 text-center">
+                                                {item.takeProfit.toFixed(2)}
+                                            </td>
+                                            <td className=" py-1 text-center">
+                                                {item.closeSignal}
+                                            </td>
+                                            <td className={`py-1 text-center ${item.profitLoss > 0 ? 'text-green-500' : item.profitLoss < 0 ? 'text-red-500' : ''}`}>
                                                 {item.profitLoss.toPrecision(2)}
                                             </td>
                                             <td className="text-center">
-                                                <IconButton aria-label="language" color="primary" onClick={() => showPositionAndChart(item)}>
+                                                <IconButton aria-label="language" color="primary" onClick={() => createChart(index , 1)}>
                                                     <BarChartIcon className='text-slate-800' />
                                                 </IconButton>
                                             </td>
+                                            {index % 5 === 0 &&
+                                                <td className="text-center" rowSpan={5}>
+                                                    <IconButton aria-label="language" color="primary" onClick={() => createChart(index, 5)}>
+                                                        <BarChartIcon className='text-slate-800' />
+                                                    </IconButton>
+                                                </td>
+                                            }
+
                                         </tr>
                                     ))}
                                 </tbody>
@@ -152,10 +125,9 @@ const TestResults: React.FC<TestResultProps> = (params) => {
                     </div>
                 }
             </div >
-          
         </>
     );
 
 }
 
-export default TestResults;
+export default ReviewPositions;

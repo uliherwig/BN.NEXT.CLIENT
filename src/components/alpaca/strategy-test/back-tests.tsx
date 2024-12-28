@@ -27,7 +27,7 @@ const Backtests = () => {
                     <StrategyList  showResult={showResult} hasUpdate={hasUpdate} />
                 </div>
                 <div className="flex-1">
-                    <TestPositions test={backtest} />
+                    <TestPositions strategySettings={backtest} />
                 </div>
             </div>
         </>

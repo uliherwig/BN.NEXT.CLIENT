@@ -5,7 +5,7 @@ export enum StrategyEnum {
   Momentum,
   Reversal,
   TrendFollowing,
-  SimpleMovingAverage,
+  SMA,
 }
 
 export enum BreakoutPeriodEnum {
@@ -16,12 +16,14 @@ export enum BreakoutPeriodEnum {
 }
 
 export enum SideEnum {
+  None,
   Buy,
   Sell
 }
 
 export enum StopLossTypeEnum {
+  None,
   Breakout,
-  CustomLimit
+  SMANextCrossing,
 }
 

@@ -1,3 +1,4 @@
+import { StopLossTypeEnum } from "@/models/strategy/enums";
 import { SMASettingsModel } from "@/models/strategy/sma-settings-model";
 import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
 import { useDictionary } from "@/provider/dictionary-provider";
@@ -17,16 +18,24 @@ const StrategyListSMA: React.FC<StrategyListSMAProps> = ({ strategy }) => {
 
     return (
 
-        <div className="flex text-center">
-            <div className="flex-1">
-                <div className="">Short Period</div>
-                <div >{smaParams.shortPeriod}</div>
-            </div>
-            <div className="flex-1">
-                <div >Long Period</div>
-                <div>{smaParams.longPeriod}</div>
-            </div>
-        </div>
+<div className="flex flex-row gap-2 text-center w-full">
+    <div className="flex-1">
+        <div>StopLossType</div>
+        <div>{StopLossTypeEnum[smaParams.stopLossType]}</div>
+    </div>
+    <div className="flex-1">
+        <div>Short Period</div>
+        <div>{smaParams.shortPeriod}</div>
+    </div>
+    <div className="flex-1">
+        <div>Long Period</div>
+        <div>{smaParams.longPeriod}</div>
+    </div>
+    <div className="flex-1">
+        <div>Threshold</div>
+        <div>{smaParams.intersectionThreshold}</div>
+    </div>
+</div>
 
     );
 }

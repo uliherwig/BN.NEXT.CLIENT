@@ -16,11 +16,20 @@ export async function GET(req: NextRequest) {
         if (!userId) {
             return NextResponse.json({ error: ApiError.Unauthorized });
         }
+
+        const strategyId = req.nextUrl.searchParams.get('strategyId') as string;
+        if (strategyId) {
+            const endpoint = `${process.env.STRATEGY_API_URL}/strategy/${strategyId}`;
+            var data = await basicFetch<StrategySettingsModel>(endpoint);
+            return NextResponse.json(data);
+        } else {
+            const bookmarked = req.nextUrl.searchParams.get('bookmarked') as string;
+            const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings/${userId}?bookmarked=${bookmarked}`;
+            var dats = await basicFetch<StrategySettingsModel[]>(endpoint);
+            return NextResponse.json(dats);
+        }
         
-        const bookmarked = req.nextUrl.searchParams.get('bookmarked') as string;
-        const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings/${userId}?bookmarked=${bookmarked}`;
-        var data = await basicFetch<StrategySettingsModel[]>(endpoint);
-        return NextResponse.json(data);
+
     } catch (error) {
         console.log('error:', error);
         return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });

@@ -27,20 +27,12 @@ const StrategyListBreakout: React.FC<StrategyListBreakoutProps> = ({ strategy })
                     <div >StopLoss Type</div>
                     <div>{StopLossTypeEnum[breakoutParams.stopLossType]}</div>
                 </div>
-                {breakoutParams.stopLossType === StopLossTypeEnum.CustomLimit && (
+                {breakoutParams.stopLossType === StopLossTypeEnum.None && (
                     <div className="flex-1">
                         <div>Stop Loss Percent</div>
                         <div>{strategy.stopLossPercent}</div>
                     </div>
-                )}
-                {/* <div className="flex-1">
-                                                            <div>Trailing Stop</div>
-                                                            <div >{item.trailingStop}</div>
-                                                        </div>
-                                                        <div className="flex-1">
-                                                            <div className="">Allow Overnight</div>
-                                                            <div className="">{item.allowOvernight ? 'Yes' : 'No'}</div>
-                                                        </div> */}
+                )}   
             </div>
         </div>
     );

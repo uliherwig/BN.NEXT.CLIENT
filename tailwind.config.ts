@@ -71,10 +71,10 @@ const config: Config = {
     plugin(function({ addUtilities }: { addUtilities: (utilities: Record<string, any>) => void }) {
       addUtilities({
         '.content-container': {
-          '@apply flex flex-row gap-2 h-content bg-slate-100': {},
+          '@apply flex flex-row gap-0.5 h-content bg-slate-400': {},
         },
         '.component-container': {
-          '@apply bg-white p-2 h-full': {},
+          '@apply bg-white p-4 py-2 h-full': {},
         },
         '.component-head': {
           '@apply text-component-head mb-2': {},

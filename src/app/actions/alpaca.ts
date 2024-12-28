@@ -176,10 +176,12 @@ const GetStrategyParams = (formData: FormData) => {
     let strategyParams: string;
 
     switch (strategyType) {
-        case StrategyEnum.SimpleMovingAverage:
+        case StrategyEnum.SMA:
             strategyParams = JSON.stringify({
                 shortPeriod: parseInt(formData.get('shortPeriod') as string),
                 longPeriod: parseInt(formData.get('longPeriod') as string),
+                stopLossType: parseInt(formData.get('stopLossStrategy') as string),
+                intersectionThreshold : parseFloat(formData.get('intersectionThreshold') as string),
             });
             break;
         case StrategyEnum.Breakout:

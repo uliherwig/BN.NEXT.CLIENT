@@ -15,13 +15,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/components/common/loader";
 import StrategyListBreakout from "./strategy-list-breakout";
 import StrategyListSMA from "./strategy-list-sma";
+import React from "react";
 
 interface StrategyListProps {
     showResult: any;
     hasUpdate: boolean;
+    showBookmarked?: boolean;
 }
 
-const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate }) => {
+const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, showBookmarked }) => {
 
     const dictionary = useDictionary();
     const [strategies, setStrategies] = useState<StrategySettingsModel[]>([]);
@@ -33,7 +35,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate }) =>
     }, [hasUpdate]);
 
     const updateTests = async () => {
-        const strats = await basicFetch<StrategySettingsModel[]>(`/api/strategy?bookmarked=false`);
+        const strats = await basicFetch<StrategySettingsModel[]>(`/api/strategy?bookmarked=${showBookmarked ? 'true' : 'false'}`);
         setStrategies(strats);
         const latestStrategy = firstOrDefault(strats, {} as StrategySettingsModel);
         if (latestStrategy) {
@@ -123,15 +125,15 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate }) =>
                                 </thead>
                                 <tbody className='text-slate-900 text-sm overflow-y' >
                                     {strategies.map((item, index) => (
-                                        <>
-                                            <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'} ${selectedStrategy.id === item.id ? 'font-bold border border-t-zinc-900' : ''}`} >
+                                        <React.Fragment key={item.id}>
+                                            <tr className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'} ${selectedStrategy.id === item.id ? 'font-bold border border-t-zinc-900' : ''}`} >
                                                 <td className="px-2 py-1 text-left cursor-pointer" onClick={() => displayDetails(item)}>{item.name}</td>
                                                 <td className="ppy-1 text-center">
                                                     {StrategyEnum[item.strategyType]}
                                                 </td>
                                                 <td className=" py-1 text-center">{item.asset}</td>
                                                 <td className=" py-1 text-center">{item.takeProfitPercent}</td>
-                                                <td className=" py-1 text-center">{item.trailingStop === 0 ? 'No' : item.trailingStop }</td>
+                                                <td className=" py-1 text-center">{item.trailingStop === 0 ? 'No' : item.trailingStop}</td>
                                                 <td className=" py-1 text-center">{item.allowOvernight ? 'Yes' : 'No'}</td>
 
                                                 <td className="text-right">
@@ -148,18 +150,18 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate }) =>
                                                     </Tooltip>
                                                 </td>
                                             </tr>
-                                            <tr key={item.id + '2'} className={`border border-b-zinc-900 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}  ${selectedStrategy.id === item.id ? '' : 'hidden'} `} >
+                                            <tr  className={`border border-b-zinc-900 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}  ${selectedStrategy.id === item.id ? '' : 'hidden'} `} >
                                                 <td colSpan={5} className="px-2 py-1 text-left">
                                                     {item.strategyType === StrategyEnum.Breakout && (
                                                         <StrategyListBreakout strategy={item} />
                                                     )}
-                                                    {item.strategyType === StrategyEnum.SimpleMovingAverage && (
+                                                    {item.strategyType === StrategyEnum.SMA && (
                                                         <StrategyListSMA strategy={item} />
                                                     )}
 
                                                 </td>
                                             </tr>
-                                        </>
+                                        </React.Fragment >
                                     ))}
                                 </tbody>
                             </table>}
