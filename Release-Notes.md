@@ -4,6 +4,10 @@
 
 - chart with real time data
 
+## Version 2025.01.1
+
+- imprint, disclaimer, contact
+
 ## Version 2024.12.1
 
 - SMA Strategy Form Refactorings
