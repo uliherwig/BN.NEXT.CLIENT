@@ -8,10 +8,7 @@ import { basicFetch, basicPost } from '@/app/lib/fetchFunctions';
 import SignInDialog from './signin-modal';
 import { useDictionary } from '@/provider/dictionary-provider';
 
-const AuthenticationMenu = () => {
-
-
-  
+const AuthenticationMenu = () => {  
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const menuOpen = Boolean(anchorEl);

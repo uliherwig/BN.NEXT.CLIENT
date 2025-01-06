@@ -1,6 +1,6 @@
 import Link from "next/link";
-import LanguageSwitch from "../language-switch";
-import AuthenticationMenu from "../identity/auth-menu";
+import LanguageSwitch from "./language-switch";
+import AuthenticationMenu from "./identity/auth-menu";
 
 interface HeaderProps {
   dict: Record<string, string>;
@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> =  (params) => {
         {dict.HEADER_Blogs}
       </Link>
     </div>
-    <AuthenticationMenu dict={dict} />
+    <AuthenticationMenu />
     <LanguageSwitch />
   </div>
   );
