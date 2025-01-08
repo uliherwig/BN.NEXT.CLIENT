@@ -8,7 +8,6 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
-
 import { useState } from "react";
 import { usePathname } from 'next/navigation';
 import { useDictionary } from "@/provider/dictionary-provider";

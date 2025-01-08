@@ -1,6 +1,5 @@
 import * as React from 'react';
 import "@/app/globals.css";
-import AlpacaAssets from '@/components/alpaca/assets/AlpacaAssets';
 import KeySecretsForm from '@/components/alpaca/key-secrets-form';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
@@ -47,9 +46,7 @@ export default async function AlpacaSettingsPage({ params }: LanguageProps) {
             <div className="flex-1 content-container">
                 <KeySecretsForm userSettings={userSettings} dict={dict} />
             </div>
-            <div className="flex-1 content-container">
-                <AlpacaAssets />
-            </div>
+       
             <div className="flex-1 content-container">
                 <MyAccount />
             </div>

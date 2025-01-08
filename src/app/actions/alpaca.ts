@@ -150,7 +150,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         console.log('payload:', payload);
         console.log('JSON.stringify(payload)', JSON.stringify(payload));
 
-        const response = await fetch(`${process.env.ALPACA_API_URL}/Backtest`, {
+        const response = await fetch(`${process.env.ALPACA_API_URL}/AlpacaTest`, {
             method: 'POST',
             body: JSON.stringify(payload),
             headers: {
