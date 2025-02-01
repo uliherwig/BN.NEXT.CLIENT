@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { basicFetch } from '@/app/lib/fetchFunctions';
-import { AccountData } from '@/models/AlpacaAccount';
+import { AlpacaAccountModel } from '@/models/alpaca/alpaca-account-model';
 import CircularLoader from '../../common/loader';
 import { format } from 'date-fns';
 import { formatUSD } from '@/utilities';
@@ -20,7 +20,7 @@ enum AccountStatus {
 
 const AlpacaAccount = () => {
 
-    const [accountData, setAccountData] = useState<AccountData | null>(null);
+    const [accountData, setAccountData] = useState<AlpacaAccountModel | null>(null);
     const [accountStatus, setAccountStatus] = useState<AccountStatus>(AccountStatus.None);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,7 +51,9 @@ const AlpacaAccount = () => {
 
         } else {
 
-            var accData: AccountData = {
+            var accData: AlpacaAccountModel = {
+                userId: res.userId,
+                accountStatus: res.accountStatus,
                 accountId: res.accountId,
                 accountNumber: res.accountNumber,
                 accruedFees: res.accruedFees,

@@ -1,6 +1,6 @@
 import { StopLossTypeEnum } from "./enums";
 
-export interface SMASettingsModel {
+export interface SMASettings {
     shortPeriod: number;
     longPeriod: number;
     stopLossType: StopLossTypeEnum;

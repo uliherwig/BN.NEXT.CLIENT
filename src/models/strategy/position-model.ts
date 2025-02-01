@@ -1,6 +1,6 @@
 import { SideEnum, StrategyEnum } from "./enums";
 
-export interface Position {
+export interface PositionModel {
   id: string; 
   strategyId: string; 
   symbol: string;

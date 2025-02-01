@@ -39,20 +39,19 @@ const AlpacaCredentialsModal: React.FC<AlpacaCredentialsModalProps> = (params) =
             return;
         }
 
-        if (params.isOpen && params.isUpdate) {
-            loadAlpacaCredentials();
-        }
+        // if (params.isOpen && params.isUpdate) {
+        //     loadAlpacaCredentials();
+        // }
 
         if (state.success) {
             setPending(false)
-           // params.closeDialog();
+            params.closeDialog();
         }
         if (state.errors) {
             setPending(false)
         }
 
-        console.log('state:', state);
-        console.log('params:', params);
+
     }, [state, params, params.isOpen, params.isUpdate]);
 
     const loadAlpacaCredentials = async () => {
@@ -64,8 +63,8 @@ const AlpacaCredentialsModal: React.FC<AlpacaCredentialsModalProps> = (params) =
             setAlpacaSecret(res.alpacaSecret);
         }
     }
-    const handleSubmit = (e: any) => {
-        console.log('submitting form', e);
+    
+    const handleSubmit = (e: any) => {      
         setPending(e)
     }
 
@@ -106,10 +105,7 @@ const AlpacaCredentialsModal: React.FC<AlpacaCredentialsModalProps> = (params) =
                             <CancelButton label={dictionary.COMMON_CANCEL} onCancel={() => params.closeDialog()} />
                             <SubmitButton label={btnLabel} handleFormState={handleSubmit} />
                         </div>
-
-
                     </form>
-
                 </DialogContent>
             </Dialog>
         </>

@@ -1,4 +1,4 @@
-import { AlpacaAsset } from "@/models/AlpacaAsset";
+import { AlpacaAsset } from "@/models/alpaca/alpaca-asset-model";
 import fetchWithCache, { basicFetch, basicPost } from "@/app/lib/fetchFunctions";
 
 export const alpacaTradingService = {

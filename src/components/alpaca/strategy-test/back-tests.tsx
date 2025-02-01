@@ -3,17 +3,16 @@ import { useState } from "react";
 import TestPositions from "./test-results";
 import StrategySettingsForm from "./strategy-settings-form";
 import StrategyList from "./strategy-list";
-import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
+import { StrategySettings } from "@/models/strategy/strategy-settings";
 
 const Backtests = () => {
-    const [backtest, setBacktest] = useState<StrategySettingsModel>({} as StrategySettingsModel);
+    const [backtest, setBacktest] = useState<StrategySettings>({} as StrategySettings);
     const [hasUpdate, setHasUpdate] = useState<boolean>(false);
 
-    const showResult = (e: StrategySettingsModel) => {
+    const showResult = (e: StrategySettings) => {
         setBacktest(e)
     }
     const updateStrategies = (e: boolean) => {
-        console.log('updateStrategies', e);
         setHasUpdate(!hasUpdate);
     }
 
@@ -24,7 +23,7 @@ const Backtests = () => {
                     <StrategySettingsForm updateStrategies={updateStrategies} />
                 </div>
                 <div className="flex-1">
-                    <StrategyList  showResult={showResult} hasUpdate={hasUpdate} />
+                    <StrategyList  showResult={showResult} hasUpdate={hasUpdate} showBookmarked={false} />
                 </div>
                 <div className="flex-1">
                     <TestPositions strategySettings={backtest} />

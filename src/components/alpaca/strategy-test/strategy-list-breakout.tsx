@@ -1,16 +1,16 @@
-import { BreakoutSettingsModel } from "@/models/strategy/breakout-settings-model";
+import { BreakoutSettings } from "@/models/strategy/breakout-settings";
 import { BreakoutPeriodEnum, StopLossTypeEnum } from "@/models/strategy/enums";
-import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
+import { StrategySettings } from "@/models/strategy/strategy-settings";
 import { useDictionary } from "@/provider/dictionary-provider";
 
 interface StrategyListBreakoutProps {
-    strategy: StrategySettingsModel;
+    strategy: StrategySettings;
 }
 
 const StrategyListBreakout: React.FC<StrategyListBreakoutProps> = ({ strategy }) => {
     const dictionary = useDictionary();
 
-    const breakoutParams = JSON.parse(strategy.strategyParams) as BreakoutSettingsModel;
+    const breakoutParams = JSON.parse(strategy.strategyParams) as BreakoutSettings;
 
     if (!dictionary) {
         return <div>Loading...</div>;

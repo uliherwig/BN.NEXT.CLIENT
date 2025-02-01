@@ -1,10 +1,10 @@
 "use client";
 import { basicFetch } from "@/app/lib/fetchFunctions";
-import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
+import { StrategySettings } from "@/models/strategy/strategy-settings";
 import { IconButton } from "@mui/material";
 import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
-import { Position } from "@/models/strategy/position";
+import { PositionModel } from "@/models/strategy/position-model";
 import { format } from 'date-fns';
 import ChartPositionModal from "../chart-position-modal";
 import CircularLoader from "@/components/common/loader";
@@ -12,14 +12,14 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { TestResult } from "@/models/strategy/test-result";
 
 interface ReviewTestResultProps {
-    settings: StrategySettingsModel;
+    settings: StrategySettings;
 }
 
 const ReviewTestResult: React.FC<ReviewTestResultProps> = (params) => {
 
 
     const dictionary = useDictionary();
-    const [selectedPosition, setSelectedPosition] = useState<Position>({} as Position);
+    const [selectedPosition, setSelectedPosition] = useState<PositionModel>({} as PositionModel);
     const [result, setResult] = useState<TestResult>({} as TestResult);
     const [loading, setLoading] = useState<boolean>(true);
 

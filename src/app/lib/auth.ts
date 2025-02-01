@@ -141,6 +141,8 @@ export const authOptions: NextAuthOptions = {
         session.user.email = decoded.email;
         session.user.id = decoded.sub;    
         session.user.name = decoded.name;
+        // session.user.role = decoded.role;
+        session.accessToken = token.accessToken;
 
         // Fetch additional user data from your .NET service
         // const res = await fetch(`http://localhost:5044/Account/login/${token.id}`);   // does not exist yet

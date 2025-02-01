@@ -1,15 +1,15 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { basicFetch } from '@/app/lib/fetchFunctions';
-import { AccountData } from '@/models/AlpacaAccount';
+import { AlpacaAccountModel } from '@/models/alpaca/alpaca-account-model';
 
 const MyAccount = () => {
 
-    const [accountData, setAccountData] = useState<AccountData | null>(null); 
+    const [accountData, setAccountData] = useState<AlpacaAccountModel | null>(null); 
 
     const testAccount = async () => {  
-        const res = await basicFetch<AccountData>(`/api/alpaca/accounts`);
-        var accData: AccountData = {
+        const res = await basicFetch<AlpacaAccountModel>(`/api/alpaca/accounts`);
+        var accData: AlpacaAccountModel = {
             accountId: res.accountId,
             accountNumber: res.accountNumber,
             accruedFees: res.accruedFees,

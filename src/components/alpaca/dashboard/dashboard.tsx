@@ -1,17 +1,17 @@
 "use client";
 import { useState } from "react";
-import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
-import AlpacaAccount from "./alpaca-account";
+import { StrategySettings } from "@/models/strategy/strategy-settings";
 import AlpacaPositions from "./alpaca-positions";
 import StrategyExecution from "./strategy-execution";
 import StrategyList from "../strategy-test/strategy-list";
 import TestResults from "../strategy-test/test-results";
+import AlpacaAccount from "./alpaca-account";
 
 const Dashboard: React.FC = () => {
 
-    const [strategySettings, setStrategySettings] = useState<StrategySettingsModel>({} as StrategySettingsModel);
+    const [strategySettings, setStrategySettings] = useState<StrategySettings>({} as StrategySettings);
 
-    const updateComponents = (e: StrategySettingsModel) => {
+    const updateComponents = (e: StrategySettings) => {
         setStrategySettings(e);
     }
 

@@ -32,12 +32,12 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ selectStrategy }) =
     const selectStrategyInfo = async (info: StrategyInfo) => {
         setStrategyName(info.label);
         selectStrategy(info)
-    } 
+    }
 
     const filterStrategy = async (e: any) => {
         setLoading(true);
         setStrategyFilter(e.target.value);
-        await loadStrategyInfos(e.target.value);      
+        await loadStrategyInfos(e.target.value);
     }
 
     const loadStrategyInfos = async (filter: number) => {
@@ -56,7 +56,7 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ selectStrategy }) =
         return <div>Loading...</div>;
     }
     return (
-        <div className="component-container h-[300px]">
+        <div className="component-container">
             <div className="text-component-head mb-2">Selected Strategy : {strategyName} </div>
 
             {loading && (
@@ -64,21 +64,21 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ selectStrategy }) =
             )}
             {!loading && (
                 <div className="h-full w-full overflow-auto flex">
-                    <div className='flex-1 pt-2'>   <Autocomplete
-
-                        options={strategyInfos}
-                        size="small"
-                        sx={{ width: 200 }}
-                        onChange={(event, newValue) => {
-                            if (newValue) {
-                                selectStrategyInfo(newValue);
-                            }
-                        }}
-                        renderInput={(params) => <TextField {...params} label="Select Strategy" />}
-                    /></div>
+                    <div className='flex-1 pt-2'>
+                        <Autocomplete
+                            options={strategyInfos}
+                            size="small"
+                            sx={{ width: 200 }}
+                            onChange={(event, newValue) => {
+                                if (newValue) {
+                                    selectStrategyInfo(newValue);
+                                }
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Select Strategy" />}
+                        /></div>
                     <div className='flex-1'>
                         <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                        <InputLabel id="demo-select-small-label">Select Strategy Type</InputLabel>
+                            <InputLabel id="demo-select-small-label">Select Strategy Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
@@ -92,12 +92,8 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ selectStrategy }) =
                             </Select>
                         </FormControl>
                     </div>
-
-
-
                 </div>
             )}
-
         </div>
     );
 }

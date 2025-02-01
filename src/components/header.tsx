@@ -1,4 +1,6 @@
 import Link from "next/link";
+import logo from "@/assets/bn-logo.svg";
+import Image from 'next/image'
 import LanguageSwitch from "./language-switch";
 import AuthenticationMenu from "./identity/auth-menu";
 
@@ -14,8 +16,15 @@ const Header: React.FC<HeaderProps> =  (params) => {
 
   return (
     <div className="flex justify-between items-center p-1 w-full h-full">
+   
+      <Image
+      src={logo}
+      width={40}
+      height={40}
+      alt="BN-Project Logo"
+    />
     <Link href={`/${language}`} title="home">
-      <h1 className="w-[250px]">{dict.HEADER_title}</h1>
+      <h1 className="ml-5 w-[200px]">{dict.HEADER_title}</h1>
     </Link>
 
     <div className="flex items-center w-full">
@@ -33,7 +42,7 @@ const Header: React.FC<HeaderProps> =  (params) => {
       </Link>
     </div>
     <AuthenticationMenu />
-    <LanguageSwitch />
+    <LanguageSwitch language = {language} />
   </div>
   );
 }

@@ -18,6 +18,8 @@ const WidgetTemplate: React.FC<WidgetTemplateProps> = ({ test }) => {
        setLoading(false);
     }, []);
 
+    const TABLE_HEAD = ['Column 1', 'Column 2', 'Column 3', 'Column 4', 'Column 5', 'Column 6'];
+
     if (!dictionary) {
         return <div>Loading...</div>;
     }
@@ -30,8 +32,37 @@ const WidgetTemplate: React.FC<WidgetTemplateProps> = ({ test }) => {
                 )}
                 {!loading && (
                     <div className="h-full overflow-auto">
-                        {/* Your code here */}
-                    </div>
+                        {/* example table */}
+                    
+                            <table className="min-w-full table-fixed border">
+                                <thead className="bg-slate-700 sticky top-[-2px] z-50" >
+                                <tr className='text-white text-xs'>
+                                        {TABLE_HEAD.map((column, index) => (
+                                            <th key={column} className={index === 0 ? "px-2 py-1 text-left" : "px-2 py-1 text-cente" }>
+                                                {column}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody className='text-slate-800 text-sm overflow-y' >
+                                    {TABLE_HEAD.map((item, index) => (
+                                        <tr key={index} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} >
+                                            <td className="px-2 py-1 text-center"></td>
+                                            <td className=" py-1 text-center"></td>
+                                            <td className="ppy-1 text-center">
+                                            </td>
+                                            <td className=" py-1 text-center">
+                                            </td>
+                                            <td className=" py-1 text-center">
+                                            </td>
+                                            <td className="text-center">                                 
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                
                 )}
             </div>
         </div>

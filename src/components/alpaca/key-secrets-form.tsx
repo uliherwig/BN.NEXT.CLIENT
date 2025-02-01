@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 
 import { basicFetch } from '@/app/lib/fetchFunctions';
-import { AccountData } from '@/models/AlpacaAccount';
+import { AlpacaAccountModel } from '@/models/alpaca/alpaca-account-model';
 import BNButton from '@/components/common/buttons/bn-button';
 import { errors } from 'jose';
 import { useFormState, useFormStatus } from "react-dom";

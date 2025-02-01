@@ -1,11 +1,11 @@
 import { useDictionary } from "@/provider/dictionary-provider";
-import { Position } from "@/models/strategy/position";
+import { PositionModel } from "@/models/strategy/position-model";
 import { useState } from "react";
 
 const AlpacaPositions: React.FC = () => {
 
     const dictionary = useDictionary();
-    const [positions, setPositions] = useState<Position[]>([]);
+    const [positions, setPositions] = useState<PositionModel[]>([]);
 
 
     if (!dictionary) {

@@ -6,7 +6,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
 import { firstOrDefault } from "@/utilities";
-import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
+import { StrategySettings } from "@/models/strategy/strategy-settings";
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -26,8 +26,8 @@ interface StrategyListProps {
 const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, showBookmarked }) => {
 
     const dictionary = useDictionary();
-    const [strategies, setStrategies] = useState<StrategySettingsModel[]>([]);
-    const [selectedStrategy, setSelectedStrategy] = useState<StrategySettingsModel>({} as StrategySettingsModel);
+    const [strategies, setStrategies] = useState<StrategySettings[]>([]);
+    const [selectedStrategy, setSelectedStrategy] = useState<StrategySettings>({} as StrategySettings);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -35,9 +35,9 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
     }, [hasUpdate]);
 
     const updateTests = async () => {
-        const strats = await basicFetch<StrategySettingsModel[]>(`/api/strategy?bookmarked=${showBookmarked ? 'true' : 'false'}`);
+        const strats = await basicFetch<StrategySettings[]>(`/api/strategy/list?bookmarked=${showBookmarked}`);
         setStrategies(strats);
-        const latestStrategy = firstOrDefault(strats, {} as StrategySettingsModel);
+        const latestStrategy = firstOrDefault(strats, {} as StrategySettings);
         if (latestStrategy) {
             setSelectedStrategy(latestStrategy);
             showResult(latestStrategy);
@@ -45,7 +45,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
         setLoading(false);
     }
 
-    const bookmarkStrategy = async (strategy: StrategySettingsModel) => {
+    const bookmarkStrategy = async (strategy: StrategySettings) => {
         strategy.bookmarked = !strategy.bookmarked;
 
         var endpoint = '/api/strategy';
@@ -84,7 +84,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
         updateTests();
     }
 
-    const displayDetails = (strategy: StrategySettingsModel) => {
+    const displayDetails = (strategy: StrategySettings) => {
         setSelectedStrategy(strategy);
         showResult(strategy);
     }

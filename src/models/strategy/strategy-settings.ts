@@ -1,6 +1,6 @@
 import { StrategyEnum } from "./enums";
 
-export interface StrategySettingsModel {
+export interface StrategySettings {
   id: string;
   userId: string;
   strategyType: StrategyEnum;

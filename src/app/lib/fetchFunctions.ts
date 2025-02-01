@@ -1,17 +1,23 @@
-export const basicFetch = async<returnType>(endpoint: string): Promise<returnType> => {
+export const basicFetch = async<returnType>(endpoint: string, token: string = ''): Promise<returnType> => {
 
-    // console.log('endpoint:', endpoint);
-    const res = await fetch(endpoint); 
-
+    const res = await fetch(endpoint, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    if (!res.ok) {
+        console.log('Error fetching data:', res.statusText + ' ' + endpoint);
+        throw new Error(`Error fetching data: ${res.statusText}`);
+    }
     return await res.json();
-
 }
 
 export const basicPost = async<returnType>(
     endpoint: string,
     body?: any
 ): Promise<returnType> => {
-    
+
     const method: string = 'POST';
 
     const options: RequestInit = {

@@ -4,6 +4,14 @@
 
 - chart with real time data
 
+## Version 2025.01.3
+
+- Alpaca Execution
+
+## Version 2025.01.2
+
+- Informations for Alpaca Usage
+
 ## Version 2025.01.1
 
 - imprint, disclaimer, contact

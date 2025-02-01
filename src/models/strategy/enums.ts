@@ -16,7 +16,6 @@ export enum BreakoutPeriodEnum {
 }
 
 export enum SideEnum {
-  None,
   Buy,
   Sell
 }

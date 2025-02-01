@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { basicFetch, fetchWithCache } from '@/app/lib/fetchFunctions';
 import { authOptions } from '@/app/lib/auth';
 import { getServerSession } from 'next-auth';
-import { AccountData } from '@/models/AlpacaAccount';
+import { AlpacaAccountModel } from '@/models/alpaca/alpaca-account-model';
 import { ApiError } from '@/models/common/api-error';
 
 export async function GET(req: NextRequest) {

@@ -80,7 +80,7 @@ const config: Config = {
           '@apply text-component-head mb-2': {},
         },
         '.bg-bn-dark': {
-          '@apply bg-slate-700 h-[40px] text-white p-2 px-4': {},
+          '@apply bg-slate-700 h-[40px] text-white p-2': {},
         },
         '.error-message': {
           '@apply text-red-500 text-sm': {},

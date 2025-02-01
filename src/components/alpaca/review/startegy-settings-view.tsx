@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
 import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/components/common/loader";
-import { StrategySettingsModel } from '@/models/strategy/strategy-settings-model';
+import { StrategySettings } from '@/models/strategy/strategy-settings';
 import { StrategyEnum } from '@/models/strategy/enums';
 import { format } from 'date-fns';
 import StrategyListBreakout from '../strategy-test/strategy-list-breakout';
 import StrategyListSMA from '../strategy-test/strategy-list-sma';
 
 interface StrategySettingsViewProps {
-    settings: StrategySettingsModel
+    settings: StrategySettings
 }
 
 const StrategySettingsView: React.FC<StrategySettingsViewProps> = ({ settings }) => {

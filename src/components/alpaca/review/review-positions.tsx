@@ -1,23 +1,23 @@
 "use client";
 import { basicFetch } from "@/app/lib/fetchFunctions";
-import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
+import { StrategySettings } from "@/models/strategy/strategy-settings";
 import { IconButton } from "@mui/material";
 import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
-import { Position } from "@/models/strategy/position";
+import { PositionModel } from "@/models/strategy/position-model";
 import { format } from 'date-fns';
 import ChartPositionModal from "../chart-position-modal";
 import CircularLoader from "@/components/common/loader";
 import BarChartIcon from '@mui/icons-material/BarChart';
 
 interface ReviewPositionsProps {
-    strategySettings: StrategySettingsModel;
+    strategySettings: StrategySettings;
 }
 
 const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
     const dictionary = useDictionary();
-    const [positions, setPositions] = useState<Position[]>([]);
-    const [selectedPositions, setSelectedPositions] = useState<Position[]>([]);
+    const [positions, setPositions] = useState<PositionModel[]>([]);
+    const [selectedPositions, setSelectedPositions] = useState<PositionModel[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -31,7 +31,7 @@ const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
 
     const updatePositions = async (id: string) => {
         const res = await basicFetch<any>(`/api/strategy/test-positions?testId=${id}`);
-        const sortedPositions = res.sort((a: Position, b: Position) => new Date(b.stampClosed).getTime() - new Date(a.stampClosed).getTime());
+        const sortedPositions = res.sort((a: PositionModel, b: PositionModel) => new Date(b.stampClosed).getTime() - new Date(a.stampClosed).getTime());
         setPositions(sortedPositions);
         setLoading(false);
     }

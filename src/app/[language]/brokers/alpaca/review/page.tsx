@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
 import { LanguageProps } from '@/models/common/language-props';
 import { redirect } from 'next/navigation';
-import Review from '@/components/alpaca/review/review';
+import AlpacaReview from '@/components/alpaca/review/review';
 
 export default async function AlpacaReviewPage({ params }: LanguageProps) {
 
@@ -13,6 +13,6 @@ export default async function AlpacaReviewPage({ params }: LanguageProps) {
     redirect(`/${params.language}/brokers`)
   }
   return (
-    <Review />
+    <AlpacaReview />
   );
 }

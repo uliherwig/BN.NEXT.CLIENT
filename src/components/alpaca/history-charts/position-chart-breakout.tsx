@@ -2,13 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts, { color } from "highcharts/highstock";
-import { BnOhlc } from '@/models/BnOhlc';
-import { Position } from '@/models/strategy/position';
+import { PositionModel } from '@/models/strategy/position-model';
 import { SideEnum } from '@/models/strategy/enums';
 
 type PositionChartProps = {
     data: any[];
-    positions: Position[];
+    positions: PositionModel[];
 };
 
 interface PositionBreakouts {

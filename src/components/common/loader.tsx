@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 
 export default function CircularLoader() {
   return (
-    <div className='w-full h-full flex items-center justify-center'>
+    <div className='w-full h-full flex items-center justify-center p-4'>
       <CircularProgress />
     </div>
   );

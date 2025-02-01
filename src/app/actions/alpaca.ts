@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
-import { StrategySettingsModel } from '@/models/strategy/strategy-settings-model';
+import { StrategySettings } from '@/models/strategy/strategy-settings';
 import { StrategyEnum } from '@/models/strategy/enums';
 
 const schemaRegister = z.object({
@@ -60,11 +60,9 @@ export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData
 }
 
 
-
-
 export async function createAlpacaBacktest(prevState: any, formData: FormData) {
 
-    // console.log('createAlpacaBacktest  formData:', formData);
+    console.log('createAlpacaBacktest  formData:', formData);
 
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
@@ -127,7 +125,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
 
         let strategyParams = GetStrategyParams(formData);
 
-        const payload: StrategySettingsModel = {
+        const payload: StrategySettings = {
             "id": "00000000-0000-0000-0000-000000000000",
             "userId": session.user.id!,
             "broker": "Alpaca",
@@ -146,11 +144,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             "strategyParams": strategyParams,
         };
 
-
-        console.log('payload:', payload);
-        console.log('JSON.stringify(payload)', JSON.stringify(payload));
-
-        const response = await fetch(`${process.env.ALPACA_API_URL}/AlpacaTest`, {
+        const response = await fetch(`${process.env.ALPACA_API_URL}/AlpacaTest/run-test`, {
             method: 'POST',
             body: JSON.stringify(payload),
             headers: {
@@ -170,6 +164,34 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
 
 }
 
+export async function alpacaExecutionAction(prevState: any, formData: FormData) {
+    const session = await getServerSession(authOptions)
+    if (!session || !session.user) {
+        return {
+            errors: { session: ['Session is not available'] },
+        };
+    }
+
+    var userId = session.user.id;
+    var strategyId = formData.get('strategyId');
+    var isExecuting = formData.get('isExecuting');
+
+    var endpoint = (isExecuting === 'false') ?
+        `${process.env.ALPACA_API_URL}/AlpacaTest/start-execution/${userId}/${strategyId}` :
+        `${process.env.ALPACA_API_URL}/AlpacaTest/stop-execution/${userId}`;
+
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    return response.ok;
+
+}
+
+
 
 const GetStrategyParams = (formData: FormData) => {
     var strategyType = parseInt(formData.get('strategy') as string);
@@ -181,7 +203,7 @@ const GetStrategyParams = (formData: FormData) => {
                 shortPeriod: parseInt(formData.get('shortPeriod') as string),
                 longPeriod: parseInt(formData.get('longPeriod') as string),
                 stopLossType: parseInt(formData.get('stopLossStrategy') as string),
-                intersectionThreshold : parseFloat(formData.get('intersectionThreshold') as string),
+                intersectionThreshold: parseFloat(formData.get('intersectionThreshold') as string),
             });
             break;
         case StrategyEnum.Breakout:

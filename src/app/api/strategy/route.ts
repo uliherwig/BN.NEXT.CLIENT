@@ -1,9 +1,11 @@
 import { authOptions } from "@/app/lib/auth";
 import { basicFetch } from "@/app/lib/fetchFunctions";
-import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
+import { StrategySettings } from "@/models/strategy/strategy-settings";
 import { getServerSession } from "next-auth";
 import { ApiError } from "@/models/common/api-error";
 import { NextRequest, NextResponse } from "next/server";
+
+// TODO split this to 2 endpoints
 
 export async function GET(req: NextRequest) {
     try {
@@ -16,19 +18,21 @@ export async function GET(req: NextRequest) {
         if (!userId) {
             return NextResponse.json({ error: ApiError.Unauthorized });
         }
+        // console.log('session:', session);
+        // console.log('session:', session.accessToken);
+        // console.log('session:', authOptions.jwt);
 
-        const strategyId = req.nextUrl.searchParams.get('strategyId') as string;
+        const strategyId = req.nextUrl.searchParams.get('strategyId') as string;     
         if (strategyId) {
-            const endpoint = `${process.env.STRATEGY_API_URL}/strategy/${strategyId}`;
-            var data = await basicFetch<StrategySettingsModel>(endpoint);
+            const endpoint = `${process.env.STRATEGY_API_URL}/strategy/${strategyId}`;          
+            var data = await basicFetch<StrategySettings>(endpoint, session.accessToken);        
             return NextResponse.json(data);
-        } else {
+        } else {           
             const bookmarked = req.nextUrl.searchParams.get('bookmarked') as string;
             const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings/${userId}?bookmarked=${bookmarked}`;
-            var dats = await basicFetch<StrategySettingsModel[]>(endpoint);
+            var dats = await basicFetch<StrategySettings[]>(endpoint);
             return NextResponse.json(dats);
-        }
-        
+        }        
 
     } catch (error) {
         console.log('error:', error);

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { basicFetch } from '@/app/lib/fetchFunctions';
-import { Position } from '@/models/strategy/position';
+import { PositionModel } from '@/models/strategy/position-model';
 import CircularLoader from '../common/loader';
 import PositionChartBreakout from './history-charts/position-chart-breakout';
 import { format } from 'date-fns';
@@ -14,7 +14,7 @@ import PositionChartSMA from './history-charts/position-chart-sma';
 interface ChartPositionModalProps {
     isOpen: boolean;
     closeDialog: Function;
-    positions: Position[];
+    positions: PositionModel[];
 
 }
 

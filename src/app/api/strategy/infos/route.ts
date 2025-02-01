@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/lib/auth";
 import { basicFetch } from "@/app/lib/fetchFunctions";
-import { StrategySettingsModel } from "@/models/strategy/strategy-settings-model";
+import { StrategySettings } from "@/models/strategy/strategy-settings";
 import { getServerSession } from "next-auth";
 import { ApiError } from "@/models/common/api-error";
 import { NextRequest, NextResponse } from "next/server";
