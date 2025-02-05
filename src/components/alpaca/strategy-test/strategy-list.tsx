@@ -45,6 +45,10 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
         setLoading(false);
     }
 
+    if (!dictionary) {
+        return <div>Loading...</div>;
+    }
+
     const bookmarkStrategy = async (strategy: StrategySettings) => {
         strategy.bookmarked = !strategy.bookmarked;
 
@@ -59,9 +63,9 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
 
         const res = await fetch(endpoint, options);
         if (res.ok) {
-            toast.success('Strategy bookmark changed successfully!');
+            toast.success(dictionary.DASH_BOOKMARK_SUCCESS);
         } else {
-            toast.error('Failed to change bookmark.');
+            toast.error(dictionary.DASH_BOOKMARK_FAILURE);
         }
         updateTests();
     }
@@ -77,9 +81,9 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
 
         const res = await fetch(endpoint, options);
         if (res.ok) {
-            toast.success('Strategy deleted successfully!');
+            toast.success(dictionary.DASH_DELETE_SUCCESS);
         } else {
-            toast.error('Failed to delete strategy.');
+            toast.error(dictionary.DASH_DELETE_FAILURE);
         }
         updateTests();
     }
@@ -89,29 +93,34 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
         showResult(strategy);
     }
 
-    if (!dictionary) {
-        return <div>Loading...</div>;
-    }
 
-    const TABLE_HEAD = ["Type", "Asset", "TP(%)", "Trail. Stop(%)", "Overnight"];
+
+
+    const TABLE_HEAD = [
+        dictionary.DASH_TYPE,
+        dictionary.DASH_ASSET,
+        dictionary.DASH_TP_PERCENT,
+        dictionary.DASH_TRAILING_STOP_PERCENT,
+        dictionary.DASH_OVERNIGHT
+    ];
+
     return (
         <div className="component-container">
-            <div className="text-component-head mb-2">Strategies</div>
+            <div className="text-component-head mb-2">{dictionary.DASH_STRATEGIES}</div>
             <div className="h-[95%] w-full overflow-hidden">
                 {loading && (
                     <CircularLoader />
                 )}
                 {!loading && (
-
                     <div className="h-full overflow-auto">
-                        {strategies.length === 0 && <div className="mt-5 text-slate-800">Es sind keine Tests verfügbar. Starten Sie Ihren ersten Test.</div>}
+                        {strategies.length === 0 && <div className="mt-5 text-slate-800">{dictionary.DASH_NO_TESTS_AVAILABLE}</div>}
 
                         {strategies.length > 0 &&
                             <table className="min-w-full table-fixed border">
                                 <thead className="bg-slate-700 sticky top-[-2px] z-50">
                                     <tr>
-                                        <th className="px-2 py-1  text-left text-white text-xs">
-                                            Name
+                                        <th className="px-2 py-1 text-left text-white text-xs">
+                                            {dictionary.DASH_NAME}
                                         </th>
                                         {TABLE_HEAD.map((column) => (
                                             <th key={column} className="px-2 py-1 text-center text-white text-xs">
@@ -119,11 +128,11 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
                                             </th>
                                         ))}
                                         <th className="px-4 py-1 w-11 text-right text-white text-xs">
-                                            Actions
+                                            {dictionary.DASH_ACTIONS}
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className='text-slate-900 text-sm overflow-y' >
+                                <tbody className='text-slate-900 text-sm overflow-y'>
                                     {strategies.map((item, index) => (
                                         <React.Fragment key={item.id}>
                                             <tr className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'} ${selectedStrategy.id === item.id ? 'font-bold border border-t-zinc-900' : ''}`} >
@@ -131,26 +140,26 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
                                                 <td className="ppy-1 text-center">
                                                     {StrategyEnum[item.strategyType]}
                                                 </td>
-                                                <td className=" py-1 text-center">{item.asset}</td>
-                                                <td className=" py-1 text-center">{item.takeProfitPercent}</td>
-                                                <td className=" py-1 text-center">{item.trailingStop === 0 ? 'No' : item.trailingStop}</td>
-                                                <td className=" py-1 text-center">{item.allowOvernight ? 'Yes' : 'No'}</td>
+                                                <td className="py-1 text-center">{item.asset}</td>
+                                                <td className="py-1 text-center">{item.takeProfitPercent}</td>
+                                                <td className="py-1 text-center">{item.trailingStop === 0 ? dictionary.DASH_NO : item.trailingStop}</td>
+                                                <td className="py-1 text-center">{item.allowOvernight ? dictionary.COMMON_YES : dictionary.COMMON_NO}</td>
 
-                                                <td className="text-right">
-                                                    <Tooltip title="Bookmark Strategy">
+                                                <td className="text-right w-[70px]">
+                                                    <Tooltip title={dictionary.DASH_BOOKMARK_STRATEGY}>
                                                         <IconButton aria-label="bookmark" color="primary" size="small" onClick={() => bookmarkStrategy(item)}>
                                                             {item.bookmarked ? <BookmarkIcon className="text-slate-800" /> : <BookmarkBorderIcon className="text-slate-800" />}
                                                         </IconButton>
                                                     </Tooltip>
 
-                                                    <Tooltip title="Delete Strategy">
+                                                    <Tooltip title={dictionary.DASH_DELETE_STRATEGY}>
                                                         <IconButton aria-label="delete" color="primary" size="small" onClick={() => deleteStrategy(item.id)}>
                                                             <DeleteIcon className="text-slate-800" />
                                                         </IconButton>
                                                     </Tooltip>
                                                 </td>
                                             </tr>
-                                            <tr  className={`border border-b-zinc-900 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}  ${selectedStrategy.id === item.id ? '' : 'hidden'} `} >
+                                            <tr className={`border border-b-zinc-900 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}  ${selectedStrategy.id === item.id ? '' : 'hidden'}`} >
                                                 <td colSpan={5} className="px-2 py-1 text-left">
                                                     {item.strategyType === StrategyEnum.Breakout && (
                                                         <StrategyListBreakout strategy={item} />
@@ -158,10 +167,9 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
                                                     {item.strategyType === StrategyEnum.SMA && (
                                                         <StrategyListSMA strategy={item} />
                                                     )}
-
                                                 </td>
                                             </tr>
-                                        </React.Fragment >
+                                        </React.Fragment>
                                     ))}
                                 </tbody>
                             </table>}

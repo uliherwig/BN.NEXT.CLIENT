@@ -27,7 +27,6 @@ interface StrategySettingsFormProps {
     updateStrategies: any;
 }
 
-
 const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrategies }) => {
     const dictionary = useDictionary();
     const [formState, setFormState] = useState<StrategySettingsFormState>(StrategySettingsFormState.None);
@@ -42,23 +41,19 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
     const today = new Date()
     const formattedDate = format(today, 'yyyy-MM-dd');
 
-
     useEffect(() => {
         getAssets();
     }, []);
 
-
     useEffect(() => {
         console.log(formState);
     }, [formState]);
-
 
     useEffect(() => {
         console.log('state:', state);
         if (state.success) {
             setFormState(StrategySettingsFormState.Success);
         }
-
     }, [state]);
 
     const getAssets = async () => {
@@ -71,40 +66,41 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
         console.log('pending:', pending);
     }
 
-    const handleFocus = (fieldName: any) => { };
+    if (!dictionary) {
+        return <div>{"Loading..."}</div>;
+    }
+
 
     return (
-        <div className="component-container  overflow-hidden">
-            <div className="text-component-head">Create a new Strategy</div>
+        <div className="component-container overflow-hidden">
+            <div className="text-component-head">{dictionary.TEST_CREATE_NEW_STRATEGY}</div>
             <div className="h-full w-full overflow-hidden">
                 <div className="w-full">
-
-                    <div className="text-slate-800 text-lg mb-4">Strategy Settings</div>
-
+                    <div className="text-slate-800 text-lg mb-4">{dictionary.TEST_STRATEGY_SETTINGS}</div>
                     <form action={storeAction} className='flex flex-col gap-2'>
                         <table className="w-full border-collapse">
                             <tbody>
                                 <tr>
-                                    <td className="pb-1  w-[30%]"><label>Name</label></td>
+                                    <td className="pb-1 w-[30%]"><label>{dictionary.TEST_NAME}</label></td>
                                     <td className="pb-1">
                                         <input type="text" name="name" className="border border-slate-400 w-full p-1" defaultValue="test" disabled={pending} />
                                         <div className="error-message">{firstOrDefault(state?.errors?.name, '')}</div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className="pb-1"><label>Strategy Type</label></td>
+                                    <td className="pb-1"><label>{dictionary.TEST_STRATEGY_TYPE}</label></td>
                                     <td className="pb-1">
                                         <select name="strategy" className="border border-slate-400 w-full p-1" title="Strategy" onChange={(e) => { setStrategy(e.target.value) }} disabled={pending}>
-                                            <option value={StrategyEnum.None}>Select Strategy</option>
-                                            <option value={StrategyEnum.Breakout}>Breakout</option>
-                                            <option value={StrategyEnum.SMA}>SMA Simple Moving Averages</option>
+                                            <option value={StrategyEnum.None}>{dictionary.TEST_SELECT_STRATEGY}</option>
+                                            <option value={StrategyEnum.Breakout}>{dictionary.TEST_BREAKOUT}</option>
+                                            <option value={StrategyEnum.SMA}>{dictionary.TEST_SMA}</option>
                                         </select>
                                     </td>
                                 </tr>
                                 {strategy !== StrategyEnum.None.toString() && (
                                     <>
                                         <tr>
-                                            <td className="pb-1"><label>Asset</label></td>
+                                            <td className="pb-1"><label>{dictionary.TEST_ASSET}</label></td>
                                             <td className="pb-1">
                                                 <select name="symbol" className="border border-slate-400 w-full p-1" title="Symbol" disabled={pending}>
                                                     {assets.map((asset) => (
@@ -116,21 +112,21 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td className="pb-1"><label>Quantity</label></td>
+                                            <td className="pb-1"><label>{dictionary.TEST_QUANTITY}</label></td>
                                             <td className="pb-1">
                                                 <input type="number" name="quantity" className="border border-slate-400 w-full p-1" defaultValue="1" disabled={pending} />
                                                 <div className="error-message">{firstOrDefault(state?.errors?.startDate, '')}</div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td className="pb-1"><label>Start Backtest</label></td>
+                                            <td className="pb-1"><label>{dictionary.TEST_START_BACKTEST}</label></td>
                                             <td className="pb-1">
                                                 <input type="date" name="startDate" className="border border-slate-400 w-full p-1" defaultValue="2024-01-01" disabled={pending} />
                                                 <div className="error-message">{firstOrDefault(state?.errors?.startDate, '')}</div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td className="pb-1"><label>End Backtest</label></td>
+                                            <td className="pb-1"><label>{dictionary.TEST_END_BACKTEST}</label></td>
                                             <td className="pb-1">
                                                 <input type="date" name="endDate" className="border border-slate-400 w-full p-1" defaultValue={formattedDate} disabled={pending} />
                                                 <div className="error-message">{firstOrDefault(state?.errors?.endDate, '')}</div>
@@ -143,51 +139,51 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                             <StrategySettingsFormSMA pending={pending} state={state} />
                                         )}
                                         <tr>
-                                            <td className="pb-1"><label>Take Profit Percent</label></td>
+                                            <td className="pb-1"><label>{dictionary.TEST_TAKE_PROFIT_PERCENT}</label></td>
                                             <td className="pb-1">
                                                 <input type="text" name="takeProfitPercent" className="border border-slate-400 w-full p-1" defaultValue="1" disabled={pending} />
                                                 <div className="error-message">{firstOrDefault(state?.errors?.takeProfitPercent, '')}</div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td className="pb-1"><label>Trailing Stop</label></td>
+                                            <td className="pb-1"><label>{dictionary.TEST_TRAILING_STOP}</label></td>
                                             <td className="pb-1">
                                                 <input type="text" name="trailingStop" className="border border-slate-400 w-full p-1" defaultValue="0" disabled={pending} />
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td className="pb-1"><label>Allow Overnight</label></td>
+                                            <td className="pb-1"><label>{dictionary.TEST_ALLOW_OVERNIGHT}</label></td>
                                             <td className="py-1">
                                                 <CheckboxSlate name="allowOvernight" label="" />
                                             </td>
                                         </tr>
-                                        <tr >
+                                        <tr>
                                             <td colSpan={2}>
                                                 {pending && (
                                                     <div className="p-4 w-full flex justify-center">
-                                                        <div className="text-orange-500">Der Test läuft gerade.... </div>
-                                                        <p>Das kann einige Minuten dauern.</p>
+                                                        <div className="text-orange-500">{dictionary.TEST_RUNNING_TEST}</div>
+                                                        <p>{dictionary.TEST_RUNNING_TEST_MESSAGE}</p>
                                                     </div>
                                                 )}
                                                 <p className="mt-4">
                                                     {formState !== StrategySettingsFormState.Success && (
-                                                        <SubmitButton label="Run Backtest" handleFormState={handleSubmit} />
+                                                        <SubmitButton label={dictionary.TEST_RUN_BACKTEST} handleFormState={handleSubmit} />
                                                     )}
                                                 </p>
                                             </td>
                                         </tr>
-                                    </>)}
+                                    </>
+                                )}
                             </tbody>
                         </table>
                     </form>
 
-
                     {formState === StrategySettingsFormState.Success && (
                         <>
-                            <div className="text-green-500 my-2">Der Test wurde durchgeführt. </div>
+                            <div className="text-green-500 my-2">{dictionary.TEST_TEST_COMPLETED}</div>
                             <div className="flex flex-row gap-2">
-                                <WidgetButton type="button" label="Update Test Result List" method={updateStrategies} />
-                                <WidgetButton type="button" label="Create New Strategy" method={() => { setFormState(StrategySettingsFormState.None) }} />
+                                <WidgetButton type="button" label={dictionary.TEST_UPDATE_TEST_RESULT_LIST} method={updateStrategies} />
+                                <WidgetButton type="button" label={dictionary.TEST_CREATE_NEW_STRATEGY} method={() => { setFormState(StrategySettingsFormState.None) }} />
                             </div>
                         </>
                     )}

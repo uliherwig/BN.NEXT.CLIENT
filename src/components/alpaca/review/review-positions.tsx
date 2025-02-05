@@ -26,7 +26,6 @@ const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
         if (id !== undefined && id !== '') {
             updatePositions(id);
         }
-      
     }, [params, params.strategySettings]);
 
     const updatePositions = async (id: string) => {
@@ -47,17 +46,28 @@ const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
         setSelectedPositions(positionsToChart);
         setDialogOpen(true);
     }
-
+    
     if (!dictionary) {
-        return <div>Loading...</div>;
+        return <div>{"Loading..."}</div>;
     }
 
-    const TABLE_HEAD = ["Side", "Start", "Stop", "Open", "Close", "SL", "TP", "Closed By", "Profit/Loss"];
+    const TABLE_HEAD = [
+        dictionary.DASH_SIDE,
+        dictionary.DASH_START,
+        dictionary.DASH_STOP,
+        dictionary.TEST_OPEN,
+        dictionary.TEST_CLOSE,
+        dictionary.TEST_SL,
+        dictionary.TEST_TP,
+        dictionary.TEST_CLOSED_BY,
+        dictionary.DASH_PROFIT_LOSS
+    ];
+
     return (
         <>
             <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} positions={selectedPositions} />
             <div className="component-container">
-                <div className="text-component-head mb-2">Test Positions {params.strategySettings.name}</div>
+                <div className="text-component-head mb-2">{dictionary.TEST_POSITIONS} {params.strategySettings.name}</div>
                 {loading && (
                     <CircularLoader />
                 )}
@@ -66,7 +76,7 @@ const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
                     <div className="h-[93%] w-full overflow-hidden">
                         <div className="h-full overflow-auto">
                             <table className="min-w-full table-fixed border">
-                                <thead className="bg-slate-700 sticky top-[-2px] z-10" >
+                                <thead className="bg-slate-700 sticky top-[-2px] z-10">
                                     <tr>
                                         {TABLE_HEAD.map((column) => (
                                             <th key={column} className="px-2 py-1 text-center text-white text-xs">
@@ -74,38 +84,26 @@ const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
                                             </th>
                                         ))}
                                         <th className="px-2 py-1 text-center text-white text-xs" colSpan={2}>
-                                            Charts
+                                            {dictionary.TEST_CHARTS}
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className='text-slate-800 text-sm overflow-y' >
+                                <tbody className='text-slate-800 text-sm overflow-y'>
                                     {positions.map((item, index) => (
-                                        <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} >
-                                            <td className="px-2 py-1 text-center">{item.side === 0 ? 'BUY' : 'SELL'}</td>
-                                            <td className=" py-1 text-center">{format(new Date(item.stampOpened), 'dd.MM.yy HH:mm')}</td>
-                                            <td className="ppy-1 text-center">
-                                                {format(new Date(item.stampClosed), 'dd.MM.yy HH:mm')}
-                                            </td>
-                                            <td className=" py-1 text-center">
-                                                {item.priceOpen.toFixed(2)}
-                                            </td>
-                                            <td className=" py-1 text-center">
-                                                {item.priceClose.toFixed(2)}
-                                            </td>
-                                            <td className=" py-1 text-center">
-                                                {item.stopLoss.toFixed(2)}
-                                            </td>
-                                            <td className=" py-1 text-center">
-                                                {item.takeProfit.toFixed(2)}
-                                            </td>
-                                            <td className=" py-1 text-center">
-                                                {item.closeSignal}
-                                            </td>
+                                        <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`}>
+                                            <td className="px-2 py-1 text-center">{item.side === 0 ? dictionary.DASH_BUY : dictionary.DASH_SELL}</td>
+                                            <td className="py-1 text-center">{format(new Date(item.stampOpened), 'dd.MM.yy HH:mm')}</td>
+                                            <td className="py-1 text-center">{format(new Date(item.stampClosed), 'dd.MM.yy HH:mm')}</td>
+                                            <td className="py-1 text-center">{item.priceOpen.toFixed(2)}</td>
+                                            <td className="py-1 text-center">{item.priceClose.toFixed(2)}</td>
+                                            <td className="py-1 text-center">{item.stopLoss.toFixed(2)}</td>
+                                            <td className="py-1 text-center">{item.takeProfit.toFixed(2)}</td>
+                                            <td className="py-1 text-center">{item.closeSignal}</td>
                                             <td className={`py-1 text-center ${item.profitLoss > 0 ? 'text-green-500' : item.profitLoss < 0 ? 'text-red-500' : ''}`}>
                                                 {item.profitLoss.toPrecision(2)}
                                             </td>
                                             <td className="text-center">
-                                                <IconButton aria-label="language" color="primary" onClick={() => createChart(index , 1)}>
+                                                <IconButton aria-label="language" color="primary" onClick={() => createChart(index, 1)}>
                                                     <BarChartIcon className='text-slate-800' />
                                                 </IconButton>
                                             </td>
@@ -116,7 +114,6 @@ const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
                                                     </IconButton>
                                                 </td>
                                             }
-
                                         </tr>
                                     ))}
                                 </tbody>
@@ -124,10 +121,9 @@ const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
                         </div>
                     </div>
                 }
-            </div >
+            </div>
         </>
     );
-
 }
 
 export default ReviewPositions;

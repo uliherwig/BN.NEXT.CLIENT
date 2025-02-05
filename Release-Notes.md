@@ -4,6 +4,11 @@
 
 - chart with real time data
 
+## Version 2025.02.1
+
+- Alpaca Execution
+- Translations
+
 ## Version 2025.01.3
 
 - Alpaca Execution

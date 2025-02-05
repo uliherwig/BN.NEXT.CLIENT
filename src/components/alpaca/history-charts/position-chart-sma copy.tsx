@@ -18,7 +18,7 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
 
     const short: [number, number][] = [];
     const long: [number, number][] = [];
-    const closeData: [number, number][] = [];
+    const ohlc: [number, number, number, number, number][] = [];
 
     const times: number[] = [];
     params.positions.forEach((pos) => {
@@ -67,23 +67,25 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
             const date = new Date(params.data[i].t);
             const ticks = date.getTime();
 
-            closeData.push([
-                ticks,
-                params.data[i].c
+            ohlc.push([
+                ticks, // the date
+                params.data[i].o, // open
+                params.data[i].h, // high
+                params.data[i].l, // low
+                params.data[i].c // close
             ]);
 
-
-            if (closeData.length >= smaParams.LongPeriod) {
-                const shorties = closeData.slice(smaParams.ShortPeriod * -1);
-                const shortAvg = shorties.map(item => item[1]).reduce((a, b) => a + b, 0) / smaParams.ShortPeriod;
+            if (ohlc.length >= smaParams.LongPeriod) {
+                const shorties = ohlc.slice(smaParams.ShortPeriod * -1);
+                const shortAvg = shorties.map(item => item[4]).reduce((a, b) => a + b, 0) / smaParams.ShortPeriod;
 
                 short.push([
                     ticks,
                     shortAvg
                 ]);
 
-                const longies = closeData.slice(smaParams.LongPeriod * -1);
-                const longAvg = longies.map(item => item[1]).reduce((a, b) => a + b, 0) / smaParams.LongPeriod;
+                const longies = ohlc.slice(smaParams.LongPeriod * -1);
+                const longAvg = longies.map(item => item[4]).reduce((a, b) => a + b, 0) / smaParams.LongPeriod;
 
                 long.push([
                     ticks,
@@ -97,10 +99,10 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
             ]);
         }
 
-        await updateSeries(closeData, short, long, volume, groupingUnits, flagsData);
+        await updateSeries(ohlc, short, long, volume, groupingUnits, flagsData);
     }
 
-    const updateSeries = async (closeData: any, short: any, long: any, volume: any, groupingUnits: any, flagsData: any) => {
+    const updateSeries = async (ohlc: any, short: any, long: any, volume: any, groupingUnits: any, flagsData: any) => {
         setChartOptions({
 
             chart: {
@@ -108,7 +110,7 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
                 width: '900'
             },
 
-
+     
             xAxis: {
                 ordinal: true,
 
@@ -119,7 +121,7 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
                     x: -3
                 },
                 title: {
-                    text: 'Chart/Position'
+                    text: 'OHLC'
                 },
                 height: '90%',
                 lineWidth: 2,
@@ -143,38 +145,34 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
             tooltip: {
                 split: true
             },
-            series: [
-                {
-                    id: 'dataseries',
-                    type: 'line',
-                    name: 'SPY',
-                    data: closeData,
-                    dataGrouping: {
-                        units: groupingUnits
-                    }
-                },
-                {
-                    type: 'line',
-                    id: 'short',
-                    name: 'Short Period',
-                    data: short
-                },
-
-                {
-                    type: 'line',
-                    id: 'long',
-                    name: 'Long Period',
-                    data: long
-                },
-                {
-                    type: 'column',
-                    name: 'Volume',
-                    data: volume,
-                    yAxis: 1,
-                    dataGrouping: {
-                        units: groupingUnits
-                    }
-                },
+            series: [{
+                id: 'dataseries',
+                type: 'candlestick',
+                name: 'SPY',
+                data: ohlc,
+                dataGrouping: {
+                    units: groupingUnits
+                }
+            },
+            {
+                id: 'short',
+                name: 'Short Period',
+                data: short
+            },
+            {
+                id: 'long',
+                name: 'Long Period',
+                data: long
+            },
+            {
+                type: 'column',
+                name: 'Volume',
+                data: volume,
+                yAxis: 1,
+                dataGrouping: {
+                    units: groupingUnits
+                }
+            },
 
             ].concat(flagsData)
         });

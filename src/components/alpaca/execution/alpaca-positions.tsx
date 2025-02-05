@@ -7,6 +7,7 @@ import { AccountStatusEnum } from '@/models/alpaca/enums';
 import { PositionModel } from '@/models/strategy/position-model';
 import { SideEnum } from '@/models/strategy/enums';
 import { format } from 'date-fns';
+import { AlpacaPositionModel } from '@/models/alpaca/alpaca-position-model';
 
 
 interface AlpacaPositionsProps {
@@ -17,7 +18,7 @@ const AlpacaPositions: React.FC<AlpacaPositionsProps> = (props) => {
     const dictionary = useDictionary();
 
     const [loading, setLoading] = useState<boolean>(true);
-    const [positions, setPositions] = useState<PositionModel[]>([]);
+    const [positions, setPositions] = useState<AlpacaPositionModel[]>([]);
 
     useEffect(() => {
 
@@ -40,13 +41,11 @@ const AlpacaPositions: React.FC<AlpacaPositionsProps> = (props) => {
         }
     }, [props.alpacaAccountStatus]);
 
-    const TABLE_HEAD = ["Side", "Start", "Stop", "Open", "Close", "SL", "TP", "Closed By", "Profit/Loss"];
+    const TABLE_HEAD = ["Asset", "Price", "Qty", "Market Value", "Cost Basis", "P/L (%)", "P/L ($)"];
 
     if (!dictionary) {
         return <div>Loading...</div>;
     }
-
-
 
     return (
         <div className="component-container">
@@ -70,18 +69,15 @@ const AlpacaPositions: React.FC<AlpacaPositionsProps> = (props) => {
                                 </tr>
                             </thead>
                             <tbody className='text-slate-800 text-sm overflow-y' >
-                                {positions.map((pos, index) => (
-                                    <tr key={index} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} >
-                                        <td className="px-2 py-1 text-left">{SideEnum[pos.side]}</td>
-                                        <td className=" py-1 text-center">{pos.stampOpened ? format(new Date(pos.stampOpened), 'dd.MM.yy HH:mm') : 'N/A'}</td>
-                                        <td className="py-1 text-center">{pos.stampClosed ? format(new Date(pos.stampClosed), 'dd.MM.yy HH:mm') : 'N/A'}</td>
-                                        <td className=" py-1 text-center">{pos.priceOpen}</td>
-                                        <td className=" py-1 text-center">{pos.priceClose}</td>
-                                        <td className="text-center">{pos.stopLoss}</td>
-                                        <td className="text-center">{pos.takeProfit}</td>
-                                        <td className="text-center">{pos.closeSignal}</td>
-                                        <td className="text-center">{pos.profitLoss}</td>
-
+                                {positions.map((position, index) => (
+                                    <tr key={position.symbol} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} >
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.symbol}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.price}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.quantity}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.marketValue}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.costBasis}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.unrealizedProfitLossPercent} %</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.unrealizedProfitLoss} $</td>
                                     </tr>
                                 ))}
                             </tbody>

@@ -18,24 +18,24 @@ const StrategyListSMA: React.FC<StrategyListSMAProps> = ({ strategy }) => {
 
     return (
 
-<div className="flex flex-row gap-2 text-center w-full">
-    <div className="flex-1">
-        <div>StopLossType</div>
-        <div>{StopLossTypeEnum[smaParams.stopLossType]}</div>
-    </div>
-    <div className="flex-1">
-        <div>Short Period</div>
-        <div>{smaParams.shortPeriod}</div>
-    </div>
-    <div className="flex-1">
-        <div>Long Period</div>
-        <div>{smaParams.longPeriod}</div>
-    </div>
-    <div className="flex-1">
-        <div>Threshold</div>
-        <div>{smaParams.intersectionThreshold}</div>
-    </div>
-</div>
+        <div className="flex flex-row gap-2 text-center w-full">
+            <div className="flex-1">
+                <div>{dictionary.TEST_STOP_LOSS_TYPE}</div>
+                <div>{StopLossTypeEnum[smaParams.stopLossType]}</div>
+            </div>
+            <div className="flex-1">
+                <div>{dictionary.TEST_SHORT_PERIOD}</div>
+                <div>{smaParams.shortPeriod}</div>
+            </div>
+            <div className="flex-1">
+                <div>{dictionary.TEST_LONG_PERIOD}</div>
+                <div>{smaParams.longPeriod}</div>
+            </div>
+            <div className="flex-1">
+                <div>{dictionary.TEST_THRESHOLD}</div>
+                <div>{smaParams.intersectionThreshold}</div>
+            </div>
+        </div>
 
     );
 }

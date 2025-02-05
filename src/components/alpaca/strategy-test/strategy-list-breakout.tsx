@@ -13,26 +13,26 @@ const StrategyListBreakout: React.FC<StrategyListBreakoutProps> = ({ strategy })
     const breakoutParams = JSON.parse(strategy.strategyParams) as BreakoutSettings;
 
     if (!dictionary) {
-        return <div>Loading...</div>;
+        return <div>{"Loading..."}</div>;
     }
 
     return (
         <div>
             <div className="flex text-center">
                 <div className="flex-1">
-                    <div className="">Time Frame</div>
-                    <div >{BreakoutPeriodEnum[breakoutParams.breakoutPeriod]}</div>
+                    <div className="">{dictionary.TEST_TIME_FRAME}</div>
+                    <div>{BreakoutPeriodEnum[breakoutParams.breakoutPeriod]}</div>
                 </div>
                 <div className="flex-1">
-                    <div >StopLoss Type</div>
+                    <div>{dictionary.TEST_STOP_LOSS_TYPE}</div>
                     <div>{StopLossTypeEnum[breakoutParams.stopLossType]}</div>
                 </div>
                 {breakoutParams.stopLossType === StopLossTypeEnum.None && (
                     <div className="flex-1">
-                        <div>Stop Loss Percent</div>
+                        <div>{dictionary.TEST_STOP_LOSS_PERCENT}</div>
                         <div>{strategy.stopLossPercent}</div>
                     </div>
-                )}   
+                )}
             </div>
         </div>
     );

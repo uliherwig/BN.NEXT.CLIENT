@@ -16,8 +16,6 @@ interface ReviewTestResultProps {
 }
 
 const ReviewTestResult: React.FC<ReviewTestResultProps> = (params) => {
-
-
     const dictionary = useDictionary();
     const [selectedPosition, setSelectedPosition] = useState<PositionModel>({} as PositionModel);
     const [result, setResult] = useState<TestResult>({} as TestResult);
@@ -26,78 +24,75 @@ const ReviewTestResult: React.FC<ReviewTestResultProps> = (params) => {
     useEffect(() => {
         setLoading(true);
         const id = params.settings.id;
-        if (id !== undefined && id !== '') {    
-            updateResult(id);           
+        if (id !== undefined && id !== '') {
+            updateResult(id);
         }
-         setLoading(false);
+        setLoading(false);
     }, [params, params.settings]);
 
     const updateResult = async (id: string) => {
         const res = await basicFetch<any>(`/api/strategy/test-result?testId=${id}`);
         setResult(res);
     }
- 
 
     if (!dictionary) {
-        return <div>Loading...</div>;
+        return <div>{"Loading..."}</div>;
     }
 
-    const TABLE_HEAD = ["Side", "Start", "Stop", "Signal", "Profit/Loss", "Actions"];
+    const TABLE_HEAD = [
+        dictionary.DASH_SIDE,
+        dictionary.DASH_START,
+        dictionary.DASH_STOP,
+        dictionary.DASH_SIGNAL,
+        dictionary.DASH_PROFIT_LOSS,
+        dictionary.DASH_ACTIONS
+    ];
+
     return (
-        <>    
+        <>
             <div className="component-container">
-                <div className="text-component-head mb-2">Test Result {params.settings.name}</div>
+                <div className="text-component-head mb-2">{dictionary.DASH_TEST_RESULT} {params.settings.name}</div>
                 {loading && (
                     <CircularLoader />
                 )}
-                 {!loading && (
-                <div className="h-[17%] w-full">
+                {!loading && (
+                    <div className="h-[17%] w-full">
+                        {!loading && result.id == undefined && <div className="mt-6 text-slate-800">{dictionary.DASH_NO_TEST_AVAILABLE}</div>}
 
-                    {!loading && result.id == undefined && <div className="mt-6 text-slate-800">Please select a strategy. </div>}
-
-                    {result !== undefined && result !== null && result.id !== undefined && result.id !== '' &&
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td className="px-2 py-1">Asset</td>
-                                    <td className="px-2 py-1">{result.asset}</td>
-                                    <td className="px-2 py-1" colSpan={2}>{format(new Date(result.startDate), 'dd.MM.yy')} - {format(new Date(result.endDate), 'dd.MM.yy')}</td>
-                                </tr>
-                                {/* <tr>
-                                    <td className="px-2 py-1">Start Date</td>
-                                    <td className="px-2 py-1">{format(new Date(result.startDate), 'dd.MM.yy')}</td>
-                                    <td className="px-2 py-1">End Date</td>
-                                    <td className="px-2 py-1">{format(new Date(result.endDate), 'dd.MM.yy')}</td>
-                                </tr> */}
-                                <tr>
-                                    <td className="px-2 py-1">Profit</td>
-                                    <td className="px-2 py-1">{result.totalProfitLoss}</td>
-                                    <td className="px-2 py-1">Number Positions</td>
-                                    <td className="px-2 py-1">{result.numberOfPositions}</td>
-                                </tr>
-                                <tr>
-                                    <td className="px-2 py-1">Profit Buy</td>
-                                    <td className="px-2 py-1">{result.buyProfitLoss}</td>
-                                    <td className="px-2 py-1">Number Buy Positions</td>
-                                    <td className="px-2 py-1">{result.numberOfBuyPositions}</td>
-                                </tr>
-                                <tr>
-                                    <td className="px-2 py-1">Profit Sell</td>
-                                    <td className="px-2 py-1">{result.sellProfitLoss}</td>
-                                    <td className="px-2 py-1">Number Sell Positions</td>
-                                    <td className="px-2 py-1">{result.numberOfSellPositions}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    }
-                </div >
+                        {result !== undefined && result !== null && result.id !== undefined && result.id !== '' &&
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td className="px-2 py-1">{dictionary.DASH_ASSET}</td>
+                                        <td className="px-2 py-1">{result.asset}</td>
+                                        <td className="px-2 py-1" colSpan={2}>{format(new Date(result.startDate), 'dd.MM.yy')} - {format(new Date(result.endDate), 'dd.MM.yy')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-2 py-1">{dictionary.DASH_PROFIT}</td>
+                                        <td className="px-2 py-1">{result.totalProfitLoss}</td>
+                                        <td className="px-2 py-1">{dictionary.DASH_NUMBER_POSITIONS}</td>
+                                        <td className="px-2 py-1">{result.numberOfPositions}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-2 py-1">{dictionary.DASH_PROFIT_BUY}</td>
+                                        <td className="px-2 py-1">{result.buyProfitLoss}</td>
+                                        <td className="px-2 py-1">{dictionary.DASH_NUMBER_BUY_POSITIONS}</td>
+                                        <td className="px-2 py-1">{result.numberOfBuyPositions}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-2 py-1">{dictionary.DASH_PROFIT_SELL}</td>
+                                        <td className="px-2 py-1">{result.sellProfitLoss}</td>
+                                        <td className="px-2 py-1">{dictionary.DASH_NUMBER_SELL_POSITIONS}</td>
+                                        <td className="px-2 py-1">{result.numberOfSellPositions}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                    </div>
                 )}
-      
-            </div >
-          
+            </div>
         </>
     );
-
 }
 
 export default ReviewTestResult;

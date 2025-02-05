@@ -16,8 +16,6 @@ interface TestResultProps {
 }
 
 const TestResults: React.FC<TestResultProps> = (params) => {
-
-
     const dictionary = useDictionary();
     const [positions, setPositions] = useState<PositionModel[]>([]);
     const [selectedPosition, setSelectedPosition] = useState<PositionModel>({} as PositionModel);
@@ -30,9 +28,8 @@ const TestResults: React.FC<TestResultProps> = (params) => {
         if (id !== undefined && id !== '') {
             updatePositions(id);
             updateResult(id);
-           
         }
-         setLoading(false);
+        setLoading(false);
     }, [params, params.strategySettings]);
 
     const updateResult = async (id: string) => {
@@ -58,65 +55,66 @@ const TestResults: React.FC<TestResultProps> = (params) => {
     }
 
     if (!dictionary) {
-        return <div>Loading...</div>;
+        return <div>{"Loading..."}</div>;
     }
 
-    const TABLE_HEAD = ["Side", "Start", "Stop", "Signal", "Profit/Loss", "Actions"];
+    const TABLE_HEAD = [
+        dictionary.DASH_SIDE,
+        dictionary.DASH_START,
+        dictionary.DASH_STOP,
+        dictionary.DASH_SIGNAL,
+        dictionary.DASH_PROFIT_LOSS,
+        dictionary.DASH_ACTIONS
+    ];
+
     return (
         <>
-          <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} positions={[selectedPosition]} />
+            <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} positions={[selectedPosition]} />
             <div className="component-container">
-                <div className="text-component-head mb-2">Test Result {params.strategySettings.name}</div>
+                <div className="text-component-head mb-2">{dictionary.DASH_TEST_RESULT} {params.strategySettings.name}</div>
                 {loading && (
                     <CircularLoader />
                 )}
-                 {!loading && (
-                <div className="h-[17%] w-full">
+                {!loading && (
+                    <div className="h-[17%] w-full">
+                        {!loading && result.id == undefined && <div className="mt-6 text-slate-800">{dictionary.DASH_NO_TEST_AVAILABLE}</div>}
 
-                    {!loading && result.id == undefined && <div className="mt-6 text-slate-800">Es ist kein Test verfügbar. </div>}
-
-                    {result !== undefined && result !== null && result.id !== undefined && result.id !== '' &&
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td className="px-2 py-1">Asset</td>
-                                    <td className="px-2 py-1">{result.asset}</td>
-                                    <td className="px-2 py-1" colSpan={2}>{format(new Date(result.startDate), 'dd.MM.yy')} - {format(new Date(result.endDate), 'dd.MM.yy')}</td>
-                                </tr>
-                                {/* <tr>
-                                    <td className="px-2 py-1">Start Date</td>
-                                    <td className="px-2 py-1">{format(new Date(result.startDate), 'dd.MM.yy')}</td>
-                                    <td className="px-2 py-1">End Date</td>
-                                    <td className="px-2 py-1">{format(new Date(result.endDate), 'dd.MM.yy')}</td>
-                                </tr> */}
-                                <tr>
-                                    <td className="px-2 py-1">Profit</td>
-                                    <td className="px-2 py-1">{result.totalProfitLoss}</td>
-                                    <td className="px-2 py-1">Number Positions</td>
-                                    <td className="px-2 py-1">{result.numberOfPositions}</td>
-                                </tr>
-                                <tr>
-                                    <td className="px-2 py-1">Profit Buy</td>
-                                    <td className="px-2 py-1">{result.buyProfitLoss}</td>
-                                    <td className="px-2 py-1">Number Buy Positions</td>
-                                    <td className="px-2 py-1">{result.numberOfBuyPositions}</td>
-                                </tr>
-                                <tr>
-                                    <td className="px-2 py-1">Profit Sell</td>
-                                    <td className="px-2 py-1">{result.sellProfitLoss}</td>
-                                    <td className="px-2 py-1">Number Sell Positions</td>
-                                    <td className="px-2 py-1">{result.numberOfSellPositions}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    }
-                </div >
+                        {result !== undefined && result !== null && result.id !== undefined && result.id !== '' &&
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td className="px-2 py-1">{dictionary.DASH_ASSET}</td>
+                                        <td className="px-2 py-1">{result.asset}</td>
+                                        <td className="px-2 py-1" colSpan={2}>{format(new Date(result.startDate), 'dd.MM.yy')} - {format(new Date(result.endDate), 'dd.MM.yy')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-2 py-1">{dictionary.DASH_PROFIT}</td>
+                                        <td className="px-2 py-1">{result.totalProfitLoss}</td>
+                                        <td className="px-2 py-1">{dictionary.DASH_NUMBER_POSITIONS}</td>
+                                        <td className="px-2 py-1">{result.numberOfPositions}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-2 py-1">{dictionary.DASH_PROFIT_BUY}</td>
+                                        <td className="px-2 py-1">{result.buyProfitLoss}</td>
+                                        <td className="px-2 py-1">{dictionary.DASH_NUMBER_BUY_POSITIONS}</td>
+                                        <td className="px-2 py-1">{result.numberOfBuyPositions}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-2 py-1">{dictionary.DASH_PROFIT_SELL}</td>
+                                        <td className="px-2 py-1">{result.sellProfitLoss}</td>
+                                        <td className="px-2 py-1">{dictionary.DASH_NUMBER_SELL_POSITIONS}</td>
+                                        <td className="px-2 py-1">{result.numberOfSellPositions}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                    </div>
                 )}
                 {positions.length > 0 &&
                     <div className="h-[78%] w-full overflow-hidden pt-5">
                         <div className="h-full overflow-auto">
                             <table className="min-w-full table-fixed border">
-                                <thead className="bg-slate-700 sticky top-[-2px] z-50" >
+                                <thead className="bg-slate-700 sticky top-[-2px] z-50">
                                     <tr>
                                         {TABLE_HEAD.map((column) => (
                                             <th key={column} className="px-2 py-1 text-center text-white text-xs">
@@ -125,20 +123,14 @@ const TestResults: React.FC<TestResultProps> = (params) => {
                                         ))}
                                     </tr>
                                 </thead>
-                                <tbody className='text-slate-800 text-sm overflow-y' >
+                                <tbody className='text-slate-800 text-sm overflow-y'>
                                     {positions.map((item, index) => (
-                                        <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} >
-                                            <td className="px-2 py-1 text-center">{item.side === 0 ? 'BUY' : 'SELL'}</td>
-                                            <td className=" py-1 text-center">{format(new Date(item.stampOpened), 'dd.MM.yy HH:mm')}</td>
-                                            <td className="ppy-1 text-center">
-                                                {format(new Date(item.stampClosed), 'dd.MM.yy HH:mm')}
-                                            </td>
-                                            <td className=" py-1 text-center">
-                                                {item.closeSignal}
-                                            </td>
-                                            <td className=" py-1 text-center">
-                                                {item.profitLoss.toPrecision(2)}
-                                            </td>
+                                        <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`}>
+                                            <td className="px-2 py-1 text-center">{item.side === 0 ? dictionary.DASH_BUY : dictionary.DASH_SELL}</td>
+                                            <td className="py-1 text-center">{format(new Date(item.stampOpened), 'dd.MM.yy HH:mm')}</td>
+                                            <td className="py-1 text-center">{format(new Date(item.stampClosed), 'dd.MM.yy HH:mm')}</td>
+                                            <td className="py-1 text-center">{item.closeSignal}</td>
+                                            <td className="py-1 text-center">{item.profitLoss.toPrecision(2)}</td>
                                             <td className="text-center">
                                                 <IconButton aria-label="language" color="primary" onClick={() => showPositionAndChart(item)}>
                                                     <BarChartIcon className='text-slate-800' />
@@ -151,11 +143,9 @@ const TestResults: React.FC<TestResultProps> = (params) => {
                         </div>
                     </div>
                 }
-            </div >
-          
+            </div>
         </>
     );
-
 }
 
 export default TestResults;
