@@ -8,7 +8,7 @@ import { basicFetch, basicPost } from '@/app/lib/fetchFunctions';
 import SignInDialog from './signin-modal';
 import { useDictionary } from '@/provider/dictionary-provider';
 
-const AuthenticationMenu = () => {  
+const AuthenticationMenu = () => {
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const menuOpen = Boolean(anchorEl);
@@ -80,21 +80,21 @@ const AuthenticationMenu = () => {
                 }}
 
             >
-                            {status === 'authenticated' ? [
-                        <MenuItem key="myaccount" onClick={handleMenuClose}>
-                            <a className="text-slate-200 hover:text-white" href="/auth/account">{dict.AUTH_myaccount}</a>
-                        </MenuItem>,
-                        <MenuItem key="logout" onClick={() => { handleSignOut(); handleMenuClose(); }}>
-                            {dict.AUTH_logout}
-                        </MenuItem>
-                    ] : [
-                        <MenuItem key="register" onClick={handleMenuClose}>
-                            <a className="text-slate-200 hover:text-white" href="/auth/account">{dict.AUTH_register}</a>
-                        </MenuItem>,
-                        <MenuItem key="login" onClick={() => { setDialogOpen(true); handleMenuClose(); }}>
-                            {dict.AUTH_login}
-                        </MenuItem>
-                    ]}
+                {status === 'authenticated' ? [
+                    <MenuItem key="myaccount" onClick={handleMenuClose}>
+                        <a className="text-slate-200 hover:text-white" href="/auth/account">{dict.AUTH_myaccount}</a>
+                    </MenuItem>,
+                    <MenuItem key="logout" onClick={() => { handleSignOut(); handleMenuClose(); }}>
+                        {dict.AUTH_logout}
+                    </MenuItem>
+                ] : [
+                    <MenuItem key="register" onClick={handleMenuClose}>
+                        <a className="text-slate-200 hover:text-white" href="/auth/account">{dict.AUTH_register}</a>
+                    </MenuItem>,
+                    <MenuItem key="login" onClick={() => { setDialogOpen(true); handleMenuClose(); }}>
+                        {dict.AUTH_login}
+                    </MenuItem>
+                ]}
             </Menu>
             <SignInDialog isOpen={dialogOpen} closeDialog={closeDialog} />
         </div>

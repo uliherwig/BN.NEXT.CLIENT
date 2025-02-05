@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { basicFetch } from '@/app/lib/fetchFunctions';
 import { AlpacaAccountModel } from '@/models/alpaca/alpaca-account-model';
+import { AccountStatusEnum } from '@/models/alpaca/enums';
 
 const MyAccount = () => {
 
@@ -14,7 +15,9 @@ const MyAccount = () => {
             accountNumber: res.accountNumber,
             accruedFees: res.accruedFees,
             buyingPower: res.buyingPower,
-            createdAtUtc: res.createdAtUtc
+            createdAtUtc: res.createdAtUtc,
+            accountStatus: AccountStatusEnum.None,
+            userId: ''
         };
         setAccountData(accData);
     }

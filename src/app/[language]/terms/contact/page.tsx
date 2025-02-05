@@ -10,7 +10,7 @@ export default function Contact() {
         event.preventDefault();
 
         const form = event.currentTarget;
-        const name = form.name.value;
+        const name = form.username.value;
         const message = form.message.value;
 
         // Basic sanitization to avoid JS injection
@@ -45,7 +45,7 @@ export default function Contact() {
                             <input
                                 type="text"
                                 id="name"
-                                name="name"
+                                name="username"
                                 className="mt-1 block w-full px-3 py-2 border border-slate-300"
                                 pattern="[A-Za-z\s]{1,50}"
                                 title="Name should only contain letters and spaces, and be up to 50 characters long."

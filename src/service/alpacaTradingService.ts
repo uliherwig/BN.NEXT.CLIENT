@@ -1,5 +1,6 @@
-import { AlpacaAsset } from "@/models/alpaca/alpaca-asset-model";
+
 import fetchWithCache, { basicFetch, basicPost } from "@/app/lib/fetchFunctions";
+import { AlpacaAssetModel } from "@/models/alpaca/alpaca-asset-model";
 
 export const alpacaTradingService = {
 
@@ -21,7 +22,7 @@ export const alpacaTradingService = {
     }
   },
 
-  async getAssets(): Promise<AlpacaAsset[]> {
+  async getAssets(): Promise<AlpacaAssetModel[]> {
     return await fetchWithCache(`${this.baseURL}/AlpacaTrading/assets`);
   },
 
