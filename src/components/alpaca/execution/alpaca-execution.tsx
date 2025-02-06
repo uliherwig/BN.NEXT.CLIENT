@@ -26,31 +26,6 @@ const AlpacaExec: React.FC = () => {
 
     const [isLoading, setIsLoading] = useState(true);
 
-
-
-
-    // load account data
-    const loadAccountData = async () => {
-        const acc = await basicFetch<AlpacaAccountModel>('/api/alpaca/account');
-        setAccount(acc);
-    }
-
-    // load execution data
-    const loadExecutionData = async () => {
-
-        const exec = await basicFetch<ExecutionModel>('/api/alpaca/execution');
-
-        if (exec.id !== EmptyGuid) {
-            const result = await basicFetch<any>(`/api/strategy?strategyId=${exec.strategyId}`);
-            if (result) {
-                setSelectedStrategy(result);
-                setExecutedStrategy(result);
-            }
-        }
-        setExecution(exec);
-        setIsLoading(false);
-    }
-
     const selectStrategy = async (strategyInfo: StrategyInfo) => {
         const result = await basicFetch<any>(`/api/strategy?strategyId=${strategyInfo.id}`);
         if (result) {
@@ -101,15 +76,31 @@ const AlpacaExec: React.FC = () => {
 
     }
 
-
-
-
-
     useEffect(() => {
+        // load account data
+        const loadAccountData = async () => {
+            const acc = await basicFetch<AlpacaAccountModel>('/api/alpaca/account');
+            setAccount(acc);
+        }
         loadAccountData();
     }, []);
 
     useEffect(() => {
+        // load execution data
+        const loadExecutionData = async () => {
+
+            const exec = await basicFetch<ExecutionModel>('/api/alpaca/execution');
+
+            if (exec.id !== EmptyGuid) {
+                const result = await basicFetch<any>(`/api/strategy?strategyId=${exec.strategyId}`);
+                if (result) {
+                    setSelectedStrategy(result);
+                    setExecutedStrategy(result);
+                }
+            }
+            setExecution(exec);
+            setIsLoading(false);
+        }
         if (alpacaAccount.accountStatus === AccountStatusEnum.AccountLoaded) {
             loadExecutionData();
         }
@@ -121,15 +112,13 @@ const AlpacaExec: React.FC = () => {
         if (selectedStrategy.id !== EmptyGuid) {
             setExecutedStrategy(selectedStrategy);
         }
-    }, [selectedStrategy.id, selectedStrategy.name]);
-
+    }, [selectedStrategy, selectedStrategy.id, selectedStrategy.name]);
 
 
     // handle store account credentials modal
     const [isModalOpen, setIsModalOpen] = useState(false);
     const closeDialog = () => {
         setIsModalOpen(false);
-        loadAccountData();
     }
 
     return (
@@ -183,10 +172,10 @@ const AlpacaExec: React.FC = () => {
                 </div>
 
                 <div className="flex-1">
-                    <AlpacaOrders alpacaAccountStatus={alpacaAccount.accountStatus}  />
+                    <AlpacaOrders alpacaAccountStatus={alpacaAccount.accountStatus} />
                 </div>
                 <div className="flex-1">
-                    <AlpacaPositions alpacaAccountStatus={alpacaAccount.accountStatus}  />
+                    <AlpacaPositions alpacaAccountStatus={alpacaAccount.accountStatus} />
                 </div>
             </div>
             <AlpacaCredentialsModal isOpen={isModalOpen}

@@ -25,8 +25,13 @@ export default function Contact() {
             Nachricht: ${sanitizeInput(message)}
         `;
 
-        window.location.href = `mailto:test@bn-project.de?subject=Contact Form Submission&body=${encodeURIComponent(sanitizedMessage)}`;
+        if (typeof window !== "undefined") {
+            window.location.href = `mailto:test@bn-project.de?subject=Contact Form Submission&body=${encodeURIComponent(sanitizedMessage)}`;
+        }
+
+
     };
+
     if (!dict) {
         return <div>Loading...</div>;
     }

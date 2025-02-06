@@ -8,6 +8,9 @@ import { NextRequest, NextResponse } from "next/server";
 // TODO split this to 2 endpoints
 
 export async function GET(req: NextRequest) {
+    const strategyId = req.nextUrl.searchParams.get('strategyId') as string;     
+    const bookmarked = req.nextUrl.searchParams.get('bookmarked') as string;
+
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
@@ -22,13 +25,11 @@ export async function GET(req: NextRequest) {
         // console.log('session:', session.accessToken);
         // console.log('session:', authOptions.jwt);
 
-        const strategyId = req.nextUrl.searchParams.get('strategyId') as string;     
         if (strategyId) {
             const endpoint = `${process.env.STRATEGY_API_URL}/strategy/${strategyId}`;          
             var data = await basicFetch<StrategySettings>(endpoint, session.accessToken);        
             return NextResponse.json(data);
         } else {           
-            const bookmarked = req.nextUrl.searchParams.get('bookmarked') as string;
             const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings/${userId}?bookmarked=${bookmarked}`;
             var dats = await basicFetch<StrategySettings[]>(endpoint);
             return NextResponse.json(dats);
@@ -78,6 +79,8 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+    const testId = req.nextUrl.searchParams.get('testId') as string;
+
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
@@ -89,7 +92,6 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({ error: ApiError.Unauthorized });
         }
 
-        const testId = req.nextUrl.searchParams.get('testId') as string;
         console.log('testId:', testId);
 
         var endpoint = `${process.env.STRATEGY_API_URL}/strategy/${testId}`;

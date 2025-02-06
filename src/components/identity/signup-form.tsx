@@ -16,7 +16,6 @@ function firstOrDefault<T>(array: T[], defaultValue: T): T {
 
 const SignUpForm = () => {
 
-  // avoid windows errors because use client nor active yet
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
     setIsClient(true);

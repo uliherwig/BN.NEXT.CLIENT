@@ -1,10 +1,10 @@
-import { getDictionary } from '@/app/lib/dictionaries/dictionaries';
+import { getDictionary } from '@/app/lib/dictionaries/dictionary';
 import { LanguageProps } from '@/models/common/language-props';
 import * as React from 'react';
 
 export default async function Disclaimer({ params }: LanguageProps) {
 
-    const dict = await getDictionary(params.language)
+    const dict = getDictionary(params.language)
 
     return (
         <div className="w-full h-full text-slate-800 bg-white pl-[285px] pt-[50px]">

@@ -8,6 +8,8 @@ import { NextRequest, NextResponse } from "next/server";
 // TODO split this to 2 endpoints
 
 export async function GET(req: NextRequest) {
+    const bookmarked = req.nextUrl.searchParams.get('bookmarked') as string;
+
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
@@ -24,7 +26,6 @@ export async function GET(req: NextRequest) {
 
 
 
-        const bookmarked = req.nextUrl.searchParams.get('bookmarked') as string;
         const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings/${userId}?bookmarked=${bookmarked}`;
         var dats = await basicFetch<StrategySettings[]>(endpoint);
         return NextResponse.json(dats);

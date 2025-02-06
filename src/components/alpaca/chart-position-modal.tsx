@@ -25,40 +25,34 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
     const [strategyType, setStrategyType] = useState<StrategyEnum>(StrategyEnum.None);
 
     useEffect(() => {
+        const getChartData = async () => {
+            setLoading(true);
+            let dateOpened = new Date(params.positions[params.positions.length - 1].stampOpened);
+
+            if (params.positions[0].strategyType === StrategyEnum.Breakout) {
+                var breakoutParams = JSON.parse(params.positions[params.positions.length - 1].strategyParams);
+                const prevLowStamp = new Date(breakoutParams.PrevLowStamp);
+                const prevHighStamp = new Date(breakoutParams.PrevHighStamp);
+                dateOpened = (prevLowStamp > prevHighStamp) ? new Date(prevHighStamp) : new Date(prevLowStamp);
+            }
+
+            dateOpened.setDate(dateOpened.getDate() - 1);
+            const dateClosed = new Date(params.positions[0].stampClosed);
+            dateClosed.setDate(dateClosed.getDate() + 1);
+
+            const formattedDateOpened = format(new Date(dateOpened), 'yyyy-MM-dd');
+            const formattedDateClosed = format(new Date(dateClosed), 'yyyy-MM-dd');
+
+            const result = await basicFetch<any>(`/api/alpaca/bars?symbol=${params.positions[0].symbol}&startDate=${formattedDateOpened}&endDate=${formattedDateClosed}&timeFrame=1Min`);
+            setChartData(result);
+            setStrategyType(params.positions[0].strategyType);
+            setLoading(false);
+        }
         if (params.isOpen) {
 
             getChartData();
         }
-    }, [params.isOpen]);
-
-    const getChartData = async () => {
-        setLoading(true);
-
-
-
-        let dateOpened = new Date(params.positions[params.positions.length - 1].stampOpened);
-
-        console.log('params.position:', params.positions[0].strategyType);
-
-        if (params.positions[0].strategyType === StrategyEnum.Breakout) {
-            var breakoutParams = JSON.parse(params.positions[params.positions.length - 1].strategyParams);
-            const prevLowStamp = new Date(breakoutParams.PrevLowStamp);
-            const prevHighStamp = new Date(breakoutParams.PrevHighStamp);
-            dateOpened = (prevLowStamp > prevHighStamp) ? new Date(prevHighStamp) : new Date(prevLowStamp);
-        }
-
-        dateOpened.setDate(dateOpened.getDate() - 1);
-        const dateClosed = new Date(params.positions[0].stampClosed);
-        dateClosed.setDate(dateClosed.getDate() + 1);
-
-        const formattedDateOpened = format(new Date(dateOpened), 'yyyy-MM-dd');
-        const formattedDateClosed = format(new Date(dateClosed), 'yyyy-MM-dd');
-
-        const result = await basicFetch<any>(`/api/alpaca/bars?symbol=${params.positions[0].symbol}&startDate=${formattedDateOpened}&endDate=${formattedDateClosed}&timeFrame=1Min`);
-        setChartData(result);
-        setStrategyType(params.positions[0].strategyType);
-        setLoading(false);
-    }
+    }, [params.isOpen, params.positions]);
 
 
 
@@ -76,7 +70,7 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
                         </IconButton>
                     </div>
                 </DialogTitle>
-                <DialogContent className='flex justify-center items-center'>  
+                <DialogContent className='flex justify-center items-center'>
                     {strategyType === StrategyEnum.Breakout && <>
                         <div className='w-[900px] h-[600px]'> {loading ? <CircularLoader /> : <PositionChartBreakout data={chartData} positions={params.positions} />}</div>
                     </>}

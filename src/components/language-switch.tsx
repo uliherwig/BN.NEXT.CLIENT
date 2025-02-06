@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import Link from 'next/link';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -9,18 +9,23 @@ interface LanguageSwitchProps {
     language: string;
 }
 
-const LanguageSwitch: React.FC<LanguageSwitchProps> = (props) => {  
+const LanguageSwitch: React.FC<LanguageSwitchProps> = (props) => {
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    const [url, setUrl] = useState<string>('');
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
+        if (typeof window !== "undefined") {
+            setUrl(window.location.href);
+        }
     };
 
     const handleClose = () => {
         setAnchorEl(null);
     };
+
     return (
         <div>
             <IconButton aria-label="language" color="primary" onClick={handleClick}>
@@ -47,12 +52,12 @@ const LanguageSwitch: React.FC<LanguageSwitchProps> = (props) => {
                     },
                 }}>
                 <MenuItem id='de' className='w-[100px]' >
-                    <Link href={getURL().replace("en", "de")} className="grid grid-cols-[20px_auto] items-center gap-2" title="Deutsch" >
+                    <Link href={url.replace("en", "de")} className="grid grid-cols-[20px_auto] items-center gap-2" title="Deutsch" >
                         Deutsch
                     </Link>
                 </MenuItem>
                 <MenuItem id='en'>
-                    <Link href={getURL().replace("de", "en")} className="grid grid-cols-[20px_auto] items-center gap-2" title="English">
+                    <Link href={url.replace("de", "en")} className="grid grid-cols-[20px_auto] items-center gap-2" title="English">
                         English
                     </Link>
                 </MenuItem>

@@ -1,12 +1,9 @@
 import * as React from 'react';
 import "@/app/globals.css";
 import KeySecretsForm from '@/components/alpaca/key-secrets-form';
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/app/lib/auth";
-import { getDictionary } from '@/app/lib/dictionaries/dictionaries';
+import { getDictionary } from '@/app/lib/dictionaries/dictionary';
 import { LanguageProps } from '@/models/common/language-props';
 import { AlpacaUserSettings } from '@/models/alpaca/alpaca-user-settings';
-import { AlpacaUserSettingsService } from '@/service/alpaca/user-settings-service';
 import MyAccount from '@/components/alpaca/my-account';
 
 
@@ -19,26 +16,8 @@ export default async function AlpacaSettingsPage({ params }: LanguageProps) {
         symbols: ""
     };
 
-    const dict = await getDictionary(params.language)
-    const session = await getServerSession(authOptions) 
+    const dict = getDictionary(params.language)
 
-    if (session !== null) {
-        if (session.user) {
-            const email = session.user.email ?? "";
-            const result : any = await AlpacaUserSettingsService.getAlpacaUserSettings(email);
-            if (result.status === 404) {
-                userSettings.email = session.user.email ?? "";
-         
-            } else {
-                userSettings = {
-                    email: result.email,
-                    alpacaKey: result.alpacaKey,
-                    alpacaSecret: result.alpacaSecret,
-                    symbols: result.symbols
-                };
-            }          
-        }
-    }
 
     return (
 

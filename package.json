@@ -32,7 +32,7 @@
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "negotiator": "^0.6.3",
-    "next": "14.2.5",
+    "next": "^14.2.23",
     "next-auth": "^4.24.7",
     "next-intl": "^3.19.0",
     "node-cache": "^5.1.2",

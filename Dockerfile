@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Use the official Node.js image as the base image for the runtime
-FROM node:18-alpine AS runner
+FROM node:20-alpine AS runner
 
 # Set the working directory
 WORKDIR /app
@@ -25,8 +25,9 @@ WORKDIR /app
 # Copy the built application from the builder stage
 COPY --from=builder /app ./
 
-# Install only production dependencies
-RUN npm install --production
+# Copy the built application and node_modules from the builder stage
+COPY --from=builder /app ./
+COPY --from=builder /app/node_modules ./node_modules
 
 # Expose the port the app runs on
 EXPOSE 3000

@@ -4,7 +4,7 @@ import "@/app/globals.css";
 const inter = Inter({ subsets: ["latin"] });
 import Header from "@/components/header";
 import { LanguageProps } from "@/models/common/language-props";
-import { getDictionary } from "../lib/dictionaries/dictionaries";
+import { getDictionary } from "../lib/dictionaries/dictionary";
 import SessionProviderWrapper from "@/provider/session-provider-wrapper";
 import { DictionaryProvider } from "@/provider/dictionary-provider";
 import CookieConsent from "@/components/common/cookie-consent";
@@ -19,7 +19,7 @@ export default async function RootLayout({ children, params }: {
   children: React.ReactNode; params: LanguageProps["params"];
 }) {
 
-  const dict = await getDictionary(params.language)
+  const dict = getDictionary(params.language)
 
   return (
     <html lang={params.language}>
@@ -37,7 +37,7 @@ export default async function RootLayout({ children, params }: {
                 {children}
               </main>
               <footer className="bg-slate-700 h-[30px] text-white px-4">
-                <Footer dict={dict}  language={params.language} />
+                <Footer dict={dict} language={params.language} />
               </footer>
               <CookieConsent />
             </SessionProviderWrapper>
