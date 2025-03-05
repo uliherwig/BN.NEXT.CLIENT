@@ -3,12 +3,15 @@
 import { useEffect, useState } from 'react';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { basicFetch, basicPost } from '@/app/lib/fetchFunctions';
 import SignInDialog from './signin-modal';
 import { useDictionary } from '@/provider/dictionary-provider';
 
-const AuthenticationMenu = () => {
+interface AuthMenuProps {
+    language: string;
+}
+const AuthenticationMenu: React.FC<AuthMenuProps> = (props) => {
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const menuOpen = Boolean(anchorEl);
@@ -52,6 +55,7 @@ const AuthenticationMenu = () => {
         };
         testAuth();
     }, []);
+
     const dict = useDictionary();
     if (!dict) {
         return <div>Loading...</div>;
@@ -77,19 +81,18 @@ const AuthenticationMenu = () => {
                         backgroundColor: 'rgb(51 65 85)', // Tailwind's bg-slate-700
                         color: 'rgb(226 232 240)', // Tailwind's text-slate-200
                     },
-                }}
-
-            >
+                }} >
+                <MenuItem key="myaccount" onClick={handleMenuClose}>
+                    <a className="text-slate-200 hover:text-white" href={`/${props.language}/auth/account`}>{dict.AUTH_myaccount}</a>
+                </MenuItem>
                 {status === 'authenticated' ? [
-                    <MenuItem key="myaccount" onClick={handleMenuClose}>
-                        <a className="text-slate-200 hover:text-white" href="/auth/account">{dict.AUTH_myaccount}</a>
-                    </MenuItem>,
+
                     <MenuItem key="logout" onClick={() => { handleSignOut(); handleMenuClose(); }}>
                         {dict.AUTH_logout}
                     </MenuItem>
                 ] : [
                     <MenuItem key="register" onClick={handleMenuClose}>
-                        <a className="text-slate-200 hover:text-white" href="/auth/account">{dict.AUTH_register}</a>
+                        <a className="text-slate-200 hover:text-white" href={`/${props.language}/auth/account?register=true`}>{dict.AUTH_register}</a>
                     </MenuItem>,
                     <MenuItem key="login" onClick={() => { setDialogOpen(true); handleMenuClose(); }}>
                         {dict.AUTH_login}

@@ -1,27 +1,25 @@
 'use client'
 
-import { basicFetch } from "@/app/lib/fetchFunctions";
-import { useSession, signIn, signOut } from "next-auth/react"
-import { useState , useEffect } from 'react';
-import { getToken } from "next-auth/jwt"
+import { useSession, signIn } from "next-auth/react"
+import { useState, useEffect } from 'react';
+import { useDictionary } from "@/provider/dictionary-provider";
+import BnButton from "../common/buttons/bn-button";
 
-const SignInForm = () => {
 
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+
+const SignInForm = ({ language }: { language: string }) => {
 
   const { data: session, status } = useSession()
   const [loading, setLoading] = useState(false);
-  const [testauth, setTestauth] = useState('');
+  const [loginError, setLoginError] = useState('')
 
   useEffect(() => {
-    if (session?.expires === "RefreshAccessTokenError") {
-      signIn(); 
-    }
-  }, [session]);
+    console.log('session:', session);
+    if (session && session.user) {
+      console.log('session.user:', session.user?.name);
 
+    }
+  }, [session, session?.user]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,9 +27,6 @@ const SignInForm = () => {
     const formData = new FormData(event.currentTarget);
     const username = formData.get('username') as string;
     const password = formData.get('password') as string;
-
-    console.log('Sign in form submitted:', { username, password });
-
     const result = await signIn('bnprovider', {
       redirect: false,
       username,
@@ -42,73 +37,45 @@ const SignInForm = () => {
 
     if (result?.error) {
       console.error('Error during sign in:', result.error);
-      // Handle error
+      setLoginError('Login failed. Invalid credentials');
     } else {
-      console.log('Sign in successful:', result); 
+      console.log('Sign in successful:', result);
+      location.reload();
     }
   };
-  const testAuth = async () => {
-    setTestauth('');
-    console.log('testing auth route');
-    console.log('session:', session);
-    const res = await basicFetch<any>(`/api/identity`);  
-    setTestauth(res.message);
+  const dictionary = useDictionary();
+  if (!dictionary) {
+    return <div>Loading...</div>;
   }
+
 
   return (
 
     <>
 
-      <div className="h-full bg-white p-5">
+      <div className="h-full p-5">
         <div className="text-slate-800 text-lg font-bold mb-4">Sign in</div>
-        {isClient  && (
-          
-        
-        <div className="flex flex-row gap-4 w-full">
-          <div className="w-[50%]  border-r border-slate-400">
 
-            <div className="text-slate-800 text-lg mb-4">Sign in with Email or Username</div>
-
-            <form onSubmit={handleSubmit}>
-              <label>Email or Username</label>
-              <input type="text" className='border border-slate-400 w-[250px] p-1' name="username" required   />
-
-
-              <label>Password</label>
-              <input className='border border-slate-400 w-[250px] p-1'
-                type="password"
-                name="password"
-
-                required
-              />
-
-
-
-              <button disabled={loading} type="submit" className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer'>
-                Sign In
-              </button>
-
-
-            </form>
-            <div>
-              Sie haben noch kein Konto? <a href="/auth/signup" className='text-blue-500'>Registrieren</a>
-            </div>
-                     </div>
-          <div className="w-[50%]  border-r border-slate-400">
-            {status === 'authenticated' && (
-              <div>
-                <p>Signed in as {session?.user?.name}</p>
-                <button onClick={() => signOut()} className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer'>Sign Out</button>
-              </div>
-            )}
-           {status}
-            <div>
-              <button onClick={testAuth} className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer'>Test Auth Route</button>
-              <div> {testauth}</div>
-            </div>
+        <form onSubmit={handleSubmit} className='my-2'>
+          <div className='flex flex-col'>
+            <label>Username</label>
+            <input type="text" className='border border-slate-400 w-full p-1' name="username" required onFocus={() => setLoginError('')} />
+            <label>{dictionary.AUTH_password}</label>
+            <input className='border border-slate-400 w-full p-1'
+              type="password"
+              name="password"
+              required />
+            <BnButton type='submit' label={dictionary.AUTH_login} />
           </div>
+        </form>
+
+        <div className='text-red-800'>
+          {loginError}
         </div>
-        )}
+        <div>
+          {dictionary.AUTH_noaccount} <a href={`/${language}/auth/account?register=true`} className='text-blue-500'>{dictionary.AUTH_register}</a>
+        </div>
+
       </div>
 
     </>)

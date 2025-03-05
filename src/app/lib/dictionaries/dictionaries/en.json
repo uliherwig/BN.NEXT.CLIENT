@@ -62,6 +62,7 @@
   "AUTH_welcome": "Welcome",
   "AUTH_myaccount": "My Account",
   "AUTH_noaccount": "Don't have an account yet?",
+  "AUTH_hasaccount": "You have already an account?",
   "AUTH_login": "Sign in",
   "AUTH_logout": "Sign out",
   "AUTH_register": "Sign up",

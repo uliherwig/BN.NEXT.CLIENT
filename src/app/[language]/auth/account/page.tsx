@@ -1,27 +1,27 @@
 import * as React from 'react';
 import "@/app/globals.css";
-import SignUpForm from '@/components/identity/signup-form';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/lib/auth';
+import { getDictionary } from '@/app/lib/dictionaries/dictionary';
+import { LanguageProps } from '@/models/common/language-props';
+import MyAccount from '@/components/alpaca/my-account';
+import MyUserAccount from '@/components/identity/my-user-account';
+import { useSearchParams } from 'next/navigation';
 
-export default async function UserAccount() {
+export default async function UserAccount({ params,  searchParams }: { params: LanguageProps["params"], searchParams: URLSearchParams }) {
 
-  const session = await getServerSession(authOptions)
+ 
+
+  const dict = getDictionary(params.language)
 
   return (
-    <div className="flex bg-slate-100 text-slate-800 content-container w-[50%]">
-      <nav className="w-[240px] p-5 border-r border-slate-500">
-        <h1 className="text-xl  font-bold mb-4">User Account</h1>    
-        Status: <span className="text-green-500">{session?.user?.name}</span>
-      </nav>
-      <main className="h-full w-full content-container">
+    <div className="w-full h-full text-slate-800 bg-white pl-[285px] pt-[50px]">
+      <div className="mx-auto pl-4 border-l border-slate-700 ">
+        <h2 className="text-2xl font-bold mb-4">{dict.AUTH_myaccount}</h2>
 
-        {session == null &&  <SignUpForm /> }
-
-        {session && <div>Logged in as {session?.user?.name}</div>}
-       
-      </main>
+        <div className="bg-slate-100 p-4 overflow-x-auto mb-4 w-[70%]">
+          <MyUserAccount  searchParams={searchParams} language={params.language} />
+        </div>
+        <p className="my-2 font-bold">{dict.DISCLAIMER_NOTE}</p>
+      </div>
     </div>
-
   );
 }

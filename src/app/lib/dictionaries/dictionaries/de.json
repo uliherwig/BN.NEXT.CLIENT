@@ -62,6 +62,7 @@
   "AUTH_welcome": "Willkommen",
   "AUTH_myaccount": "Mein Konto",
   "AUTH_noaccount": "Sie haben noch keinen Konto?",
+  "AUTH_hasaccount": "Sie haben bereits ein Konto?",
   "AUTH_login": "Anmelden",
   "AUTH_logout": "Abmelden",
   "AUTH_register": "Registrieren",

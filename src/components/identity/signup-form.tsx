@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useFormState, useFormStatus } from "react-dom";
 import { register } from "@/app/actions/auth";
 import BNButton from '../common/buttons/bn-button';
+import { useDictionary } from '@/provider/dictionary-provider';
 
 const errorMessageClass = 'text-red-500 text-sm';
 
@@ -14,7 +15,7 @@ function firstOrDefault<T>(array: T[], defaultValue: T): T {
   return array.length > 0 ? array[0] : defaultValue;
 }
 
-const SignUpForm = () => {
+const SignUpForm =  ({ language }: { language: string }) => {
 
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
@@ -28,22 +29,27 @@ const SignUpForm = () => {
     console.log('state:', state);
   }, [state]);
 
+    const dictionary = useDictionary();
+    if (!dictionary) {
+      return <div>Loading...</div>;
+    }
+
   return (
 
     <>
-      <div className="h-full bg-white p-5">
+      <div className="h-full p-5">
 
         <div className="flex flex-row gap-4 w-full justify-center">
 
-          <div className="w-[50%] pr-5  border-r border-slate-400">
-            <div className="text-slate-800 text-lg font-bold mb-4">Sign up</div>
+          <div className="w-full pr-5">
+            <div className="text-slate-800 text-lg font-bold mb-4">{dictionary.AUTH_register}</div>
 
-            {isClient && state.success && (
+            {state.success && (
             
               <div className="text-green-500">Success! You have signed up successfully. Please check your email for a confirmation link.</div>
             )}
 
-            {isClient && (
+            {!state.success &&  (
               <form action={formAction} className='flex flex-col gap-2'>
                 <div>
                   <label>Username</label>
@@ -89,7 +95,11 @@ const SignUpForm = () => {
                 </div>
               </form>
             )}
+                 <div>
+          {dictionary.AUTH_hasaccount} <a href={`/${language}/auth/account`} className='text-blue-500'>{dictionary.AUTH_login}</a>
+        </div>
           </div>
+     
         </div>
       </div>
 

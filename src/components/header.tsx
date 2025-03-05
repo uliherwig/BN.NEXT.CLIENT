@@ -41,7 +41,7 @@ const Header: React.FC<HeaderProps> =  (params) => {
         {dict.HEADER_Blogs}
       </Link>
     </div>
-    <AuthenticationMenu />
+    <AuthenticationMenu  language = {language} />
     <LanguageSwitch language = {language} />
   </div>
   );
