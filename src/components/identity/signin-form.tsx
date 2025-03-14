@@ -5,13 +5,12 @@ import { useState, useEffect } from 'react';
 import { useDictionary } from "@/provider/dictionary-provider";
 import BnButton from "../common/buttons/bn-button";
 
-
-
 const SignInForm = ({ language }: { language: string }) => {
 
   const { data: session, status } = useSession()
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState('')
+  
 
   useEffect(() => {
     console.log('session:', session);
@@ -27,6 +26,8 @@ const SignInForm = ({ language }: { language: string }) => {
     const formData = new FormData(event.currentTarget);
     const username = formData.get('username') as string;
     const password = formData.get('password') as string;
+
+    
     const result = await signIn('bnprovider', {
       redirect: false,
       username,

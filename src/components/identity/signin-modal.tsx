@@ -80,7 +80,7 @@ const SignInDialog = ({  isOpen, closeDialog }: { isOpen: boolean , closeDialog 
                         {loginError}
                     </div>
                     <div>
-                        {dictionary.AUTH_noaccount} <a href="/auth/account" className='text-blue-500'>{dictionary.AUTH_register}</a>
+                        {dictionary.AUTH_noaccount} <a href="/auth/account?register=true" className='text-blue-500'>{dictionary.AUTH_register}</a>
                     </div>
                 </DialogContent>
             </Dialog>

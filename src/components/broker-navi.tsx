@@ -4,13 +4,13 @@ import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 import { useDictionary } from "@/provider/dictionary-provider";
+import { useSession } from "next-auth/react";
 
 interface BrokerNaviProps {
     language: string;
@@ -18,8 +18,14 @@ interface BrokerNaviProps {
 const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
     const [expanded, setExpanded] = useState(true);
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+    const { data: session, status } = useSession();
     const pathname = usePathname();
     const dictionary = useDictionary();
+
+    useEffect(() => {
+        if (session && session.user) {
+        }
+    }, [session]);
 
     const toggleMenu = () => {
         setExpanded(!expanded);
@@ -28,6 +34,7 @@ const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
     const linkClasses = 'grid grid-cols-[26px_auto] items-center text-gray-700 hover:text-gray-900';
     const activeLinkClasses = 'grid grid-cols-[26px_auto] items-center text-slate-50  bg-slate-700';
     const hoveredLinkClasses = 'grid grid-cols-[26px_auto] items-center text-slate-900  bg-slate-300';
+    const brokersLink = `/${props.language}/brokers`;
 
     const getLinkClasses = (path: string) => {
         const match = pathname.substring(3, pathname.length);
@@ -59,7 +66,7 @@ const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
             <ul>
                 <li>
                     <Link
-                        href={`/${props.language}/brokers`}
+                        href={brokersLink}
                         className='grid grid-cols-[30px_auto] items-center text-slate-700 hover:text-gray-900'
                         title={dictionary.NAVI_BROKER}
                     >
@@ -79,7 +86,7 @@ const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
                     <ul className="p-1 px-2 border-t border-b border-slate-800" style={{ display: expanded ? 'block' : 'none' }}>
                         <li className="my-2">
                             <Link
-                                href={`/${props.language}/brokers/alpaca/dashboard`}
+                                href={status === 'authenticated' ? `/${props.language}/brokers/alpaca/dashboard` : brokersLink}
                                 className={getLinkClasses('/brokers/alpaca/dashboard')}
                                 title={dictionary.NAVI_DASHBOARD}
                                 onMouseOver={() => setHoveredLink('/brokers/alpaca/dashboard')}
@@ -91,7 +98,7 @@ const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
                         </li>
                         <li className="my-2">
                             <Link
-                                href={`/${props.language}/brokers/alpaca/strategy-test`}
+                                href={status === 'authenticated' ? `/${props.language}/brokers/alpaca/strategy-test` : brokersLink}
                                 className={getLinkClasses('/brokers/alpaca/strategy-test')}
                                 title={dictionary.NAVI_STRATEGY_TESTS}
                                 onMouseOver={() => setHoveredLink('/brokers/alpaca/strategy-test')}
@@ -103,7 +110,7 @@ const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
                         </li>
                         <li className="my-2">
                             <Link
-                                href={`/${props.language}/brokers/alpaca/review`}
+                                href={status === 'authenticated' ? `/${props.language}/brokers/alpaca/review` : brokersLink}
                                 className={getLinkClasses('/brokers/alpaca/review')}
                                 title={dictionary.NAVI_REVIEW}
                                 onMouseOver={() => setHoveredLink('/brokers/alpaca/review')}
@@ -115,7 +122,7 @@ const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
                         </li>
                         <li className="my-2">
                             <Link
-                                href={`/${props.language}/brokers/alpaca/execution`}
+                                href={status === 'authenticated' ? `/${props.language}/brokers/alpaca/execution` : brokersLink}
                                 className={getLinkClasses('/brokers/alpaca/execution')}
                                 title={dictionary.NAVI_EXECUTION}
                                 onMouseOver={() => setHoveredLink('/brokers/alpaca/execution')}
@@ -129,6 +136,8 @@ const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
                     </ul>
                 </li>
             </ul>
+            {status === 'authenticated' ? <div className="my-5"></div> :
+                <div className="my-5 text-red-500 text-sm">You have to be authenticated to use the broker features</div>}
         </div>
     );
 }

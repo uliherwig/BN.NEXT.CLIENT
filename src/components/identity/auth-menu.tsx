@@ -40,7 +40,13 @@ const AuthenticationMenu: React.FC<AuthMenuProps> = (props) => {
     const handleSignOut = async () => {
         try {
             const result = await basicPost('/api/identity/signout', {});
-            await signOut();
+
+            const options = {
+              callbackUrl: '/auth/account',
+              redirect: false,
+            };
+      
+           await signOut(options);
         } catch (error) {
             console.error('Error during sign out:', error);
         }
@@ -53,7 +59,7 @@ const AuthenticationMenu: React.FC<AuthMenuProps> = (props) => {
                 await signOut();
             }
         };
-        testAuth();
+        //testAuth();
     }, []);
 
     const dict = useDictionary();

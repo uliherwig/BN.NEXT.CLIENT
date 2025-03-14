@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { StrategyInfo } from "@/models/strategy/strategy-info";
 
 export async function GET(req: NextRequest) {
-    try {
+
         const session = await getServerSession(authOptions);
         if (!session) {
           return NextResponse.json({ error: ApiError.Unauthorized });
@@ -25,8 +25,5 @@ export async function GET(req: NextRequest) {
         var data = await basicFetch<StrategyInfo[]>(endpoint);
 
         return NextResponse.json(data);
-    } catch (error) {
-        console.log('error:', error);
-        return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
-    }
+
 }

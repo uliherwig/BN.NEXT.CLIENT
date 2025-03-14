@@ -34,14 +34,9 @@ const AlpacaCredentialsModal: React.FC<AlpacaCredentialsModalProps> = (params) =
 
 
     useEffect(() => {
-
         if (!params.isOpen) {
             return;
         }
-
-        // if (params.isOpen && params.isUpdate) {
-        //     loadAlpacaCredentials();
-        // }
 
         if (state.success) {
             setPending(false)
@@ -53,16 +48,6 @@ const AlpacaCredentialsModal: React.FC<AlpacaCredentialsModalProps> = (params) =
 
 
     }, [state, params, params.isOpen, params.isUpdate]);
-
-    const loadAlpacaCredentials = async () => {
-        const res = await basicFetch<any>(`/api/alpaca/get-credentials`);
-        if (res.error) {
-            console.log('Account data:', res.error);
-        } else {
-            setAlpacaKey(res.alpacaKey);
-            setAlpacaSecret(res.alpacaSecret);
-        }
-    }
     
     const handleSubmit = (e: any) => {      
         setPending(e)

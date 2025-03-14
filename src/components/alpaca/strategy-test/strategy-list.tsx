@@ -11,7 +11,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+ import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/components/common/loader";
 import StrategyListBreakout from "./strategy-list-breakout";
 import StrategyListSMA from "./strategy-list-sma";
@@ -29,6 +29,8 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
     const [strategies, setStrategies] = useState<StrategySettings[]>([]);
     const [selectedStrategy, setSelectedStrategy] = useState<StrategySettings>({} as StrategySettings);
     const [loading, setLoading] = useState<boolean>(true);
+    toast.error('Welcome to the dashboard!');
+
 
     useEffect(() => {
         updateTests();

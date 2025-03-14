@@ -6,10 +6,10 @@ export const basicFetch = async<returnType>(endpoint: string, token: string = ''
             'Content-Type': 'application/json'
         }
     });
-    if (!res.ok) {
-        console.log('Error fetching data:', res.statusText + ' ' + endpoint);
-        throw new Error(`Error fetching data: ${res.statusText}`);
-    }
+    // if (!res.ok) {
+    //     console.log('Error fetching data:', res.statusText + ' ' + endpoint);
+    //     throw new Error(`Error fetching data: ${res.statusText}`);
+    // }
     return await res.json();
 }
 

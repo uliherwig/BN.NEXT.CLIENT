@@ -18,10 +18,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    if (token.error === 'RefreshAccessTokenError') {
-      IdentityService.signOut(req);
-      return NextResponse.json({ error: 'RefreshAccessTokenError' });
-    }
+
 
     return NextResponse.json(data);
   } catch (error) {

@@ -1,5 +1,3 @@
-import BrokerNavi from "@/components/broker-navi";
-import "@/app/globals.css";
 import { LanguageProps } from "@/models/common/language-props";
 
 export default async function BrokerLayout({

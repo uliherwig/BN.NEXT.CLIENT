@@ -1,5 +1,4 @@
 import * as React from 'react';
-import "@/app/globals.css";
 import KeySecretsForm from '@/components/alpaca/key-secrets-form';
 import { getDictionary } from '@/app/lib/dictionaries/dictionary';
 import { LanguageProps } from '@/models/common/language-props';

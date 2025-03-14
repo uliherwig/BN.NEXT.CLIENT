@@ -20,14 +20,14 @@ export async function GET(req: NextRequest) {
         if (!userId) {
             return NextResponse.json({ error: ApiError.Unauthorized });
         }
-        console.log('session:', session);
+        // console.log('session:', session);
         console.log('session accessToken :', session.accessToken);
         console.log('session jwt:', authOptions.jwt);
 
 
 
         const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings/${userId}?bookmarked=${bookmarked}`;
-        var dats = await basicFetch<StrategySettings[]>(endpoint);
+        var dats = await basicFetch<StrategySettings[]>(endpoint, session.accessToken);
         return NextResponse.json(dats);
 
 

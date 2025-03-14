@@ -87,6 +87,7 @@
   "AUTH_successUserRegistered": "Benutzer erfolgreich registriert",
   "AUTH_successUserLoggedIn": "Benutzer erfolgreich angemeldet",
   "AUTH_successUserLoggedOut": "Benutzer erfolgreich abgemeldet",
+  "AUTH_subhead": "Bitte loggen Sie sich ein oder registrieren Sie sich, um fortzufahren.",
   "BROKERS_title": "Broker",
   "BROKERS_description": "Wählen Sie einen Broker zum Verbinden aus",
   "BROKERS_backtest": "Backtest",

@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import { ApiError } from '@/models/common/api-error';
 
 export async function GET(req: NextRequest) {
-  try {
+
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
     const userId = session.user?.id;
     if (!userId) {
-      return NextResponse.json({ error: 'User ID not found' }, { status: 400 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const endpoint = `${process.env.ALPACA_API_URL}/usersettings/${userId}`;
@@ -33,8 +33,5 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: ApiError.InternalServerError }, { status: 500 });
     }
 
-  } catch (error) {
-    console.error('Error fetching account data:', error);
-    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
-  }
+
 }

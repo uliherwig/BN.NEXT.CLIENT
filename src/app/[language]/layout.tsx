@@ -9,6 +9,8 @@ import SessionProviderWrapper from "@/provider/session-provider-wrapper";
 import { DictionaryProvider } from "@/provider/dictionary-provider";
 import CookieConsent from "@/components/common/cookie-consent";
 import Footer from "@/components/footer";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../lib/auth";
 
 // prerender static pages for each language
 export async function generateStaticParams() {
@@ -20,7 +22,7 @@ export default async function RootLayout({ children, params }: {
 }) {
 
   const dict = getDictionary(params.language)
-
+  const session = await getServerSession(authOptions);
   return (
     <html lang={params.language}>
       <head>
@@ -29,7 +31,7 @@ export default async function RootLayout({ children, params }: {
       <body className="bg-black flex justify-center items-center h-full overflow-hidden">
         <div className=" max-w-[1920px] w-full h-full">
           <DictionaryProvider dictionary={dict}>
-            <SessionProviderWrapper>
+            <SessionProviderWrapper session={session}>
               <header className="bg-bn-dark">
                 <Header dict={dict} language={params.language} />
               </header>

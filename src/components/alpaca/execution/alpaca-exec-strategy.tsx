@@ -1,14 +1,9 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { alpacaExecutionAction } from "@/app/actions/alpaca";
-
 import { useDictionary } from '@/provider/dictionary-provider';
 import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/components/common/loader";
 import { StrategySettings } from '@/models/strategy/strategy-settings';
-import WidgetButton from '@/components/common/buttons/widget-button';
-import { useFormState } from 'react-dom';
-import SubmitButton from '@/components/common/buttons/submit-button';
 import { AccountStatusEnum } from '@/models/alpaca/enums';
 import { ExecutionModel } from '@/models/strategy/execution-model';
 import { StrategyEnum } from '@/models/strategy/enums';
@@ -24,12 +19,6 @@ const AlpacaExecStrategy: React.FC<AlpacaExecStrategyProps> = ({ alpacaAccountSt
     const dictionary = useDictionary();
 
     const [loading, setLoading] = useState<boolean>(true);
-
-
-
-
-
-
 
 
     useEffect(() => {

@@ -1,155 +1,185 @@
-'use client'
+'use client';
 
-import { basicFetch } from "@/app/lib/fetchFunctions";
-import { useSession, signIn, signOut } from "next-auth/react"
+import { basicFetch, basicPost } from "@/app/lib/fetchFunctions";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useState, useEffect } from 'react';
 import { useDictionary } from "@/provider/dictionary-provider";
 import CircularLoader from "../common/loader";
 import SignInForm from "./signin-form";
 import SignUpForm from "./signup-form";
+import { UserAccount } from "@/models/identity/user-account";
+import { format } from 'date-fns';
+import WidgetButton from "../common/buttons/widget-button";
+import DeleteAccountModal from "./delete-account-modal";
+import router from "next/router";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchParams, language: string }) => {
-
-  const dict = useDictionary();
+  const dictionary = useDictionary();
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<UserAccount | null>(null);
 
-
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
   const [header, setHeader] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
 
-  let isRegister: boolean = false
+
+  let isRegister: boolean = false;
 
   const queryStr = JSON.parse(JSON.stringify(searchParams));
   if (queryStr && queryStr.register) {
     isRegister = queryStr.register;
   }
 
+  const handleSignOut = async () => {
+   
+      const result = await basicPost('/api/identity/signout', {});
+      const options = {
+        callbackUrl: '/auth/account',
+        redirect: false,
+      };
+     await signOut(options);
+   
+  };
+  const fetchUserAccount = async () => {
+    const endpoint = `/api/identity/user-account`;
+
+    var response = await fetch(endpoint);
+    console.log('response:', response);
+    if (response.ok) {
+      var userAccount = await response.json();
+      setUser(userAccount);
+    } else {
+      console.log('Error fetching user account:', response.statusText);
+      toast.error('Error fetching user account');
+      await signOut();
+
+    }
+  };
+
   useEffect(() => {
-
-
-
     switch (status) {
       case 'loading':
         setHeader('');
         break;
       case 'authenticated':
-        setHeader(`Willkommen ${session?.user?.name}`);
+        setHeader(`${dictionary?.AUTH_welcome} ${session?.user?.name}`);
+ 
+
+        fetchUserAccount();
         setIsLoading(false);
-
         break;
-
       case 'unauthenticated':
         setHeader(`Willkommen`);
-        setIsLoading(false);
+        fetchUserAccount();
 
+        setIsLoading(false);
         break;
     }
-
-
 
     if (session?.expires === "RefreshAccessTokenError") {
       signIn();
     }
-  }, [session, status]);
+  }, [session, status, dictionary]);
 
+  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  //   const formData = new FormData(event.currentTarget);
+  //   const username = formData.get('username') as string;
+  //   const password = formData.get('password') as string;
 
-    const formData = new FormData(event.currentTarget);
-    const username = formData.get('username') as string;
-    const password = formData.get('password') as string;
+  //   console.log('Sign in form submitted:', { username, password });
 
-    console.log('Sign in form submitted:', { username, password });
+  //   const result = await signIn('bnprovider', {
+  //     redirect: false,
+  //     username,
+  //     password,
+  //   });
 
-    const result = await signIn('bnprovider', {
-      redirect: false,
-      username,
-      password,
-    });
+  //   console.log('Sign in result:', result);
 
-    console.log('Sign in result:', result);
+  //   if (result?.error) {
+  //     console.error('Error during sign in:', result.error);
+  //     // Handle error
+  //   } else {
+  //     console.log('Sign in successful:', result);
+  //   }
+  // };
 
-    if (result?.error) {
-      console.error('Error during sign in:', result.error);
-      // Handle error
-    } else {
-      console.log('Sign in successful:', result);
-    }
-  };
-
-
-  // const testAuth = async () => {
-  //   setTestauth('');
-  //   console.log('testing auth route');
-  //   console.log('session:', session);
-  //   const res = await basicFetch<any>(`/api/identity`);
-  //   setTestauth(res.message);
-  // }
-
-  // registrieren
-  // einloggen
-  // ausloggen
-  // account löschen
+  if (!dictionary) {
+    return <div>Loading...</div>;
+  }
 
   return (
-
-    <>
-
-
-      <div className="h-full  p-5">
-
-
-        {isLoading && (
-
-          <CircularLoader />
-        )}
+    <div className="h-full">
+      <ToastContainer position="bottom-right"
+        autoClose={2500}
+        hideProgressBar={true}
+        closeOnClick
+        theme="colored" />
+      {isLoading ? (
+        <div className="p-10"><CircularLoader /></div>
+      ) : (
         <div className="flex flex-row gap-4 w-full">
-
           {status === 'authenticated' && (
-            <div>Löschen + Ausloggen</div>
+            <div>
+              <h3>{header}</h3>
+              <div className="grid grid-cols-2 gap-2 my-4">
+
+                <div>UserName:</div>
+                <div className='font-bold'>{user?.username}</div>
+
+                <div>Email:</div>
+                <div>{user?.email}</div>
+
+                <div>First Name:</div>
+                <div>{user?.firstName}</div>
+
+                <div>Last Name:</div>
+                <div>{user?.lastName}</div>
+
+                <div>Created At:</div>
+                <div> {user?.createdAt ? format(user.createdAt, 'dd.MM.yy HH:mm') : ''}</div>
+              </div>
+
+              <WidgetButton type='button' label={dictionary.AUTH_logout} method={handleSignOut} />
+
+              <div className="mt-4 font-light">
+                Klicken Sie <a className="font-normal underline text-red-800" href="#" onClick={() => setDialogOpen(true)}>hier</a> um Ihr Benutzerkonto inklusive aller damit verbundenen Daten zu löschen.
+              </div>
+
+              <DeleteAccountModal isOpen={dialogOpen} closeDialog={closeDialog} />
+            </div>
+
           )}
+
           {!isRegister && status === 'unauthenticated' && (
             <>
- 
-              <div className="w-[50%]"><SignInForm language={language} /></div>
-             <div className="w-[50%] pt-5">
-
-                Bitte loggen Sie sich ein oder registrieren Sie sich, um fortzufahren.
+              <div className="w-[50%]">
+                {dictionary.AUTH_subhead}
+                <SignInForm language={language} />
               </div>
+              <div className="w-[50%] pt-5"></div>
             </>
-
           )}
           {isRegister && status === 'unauthenticated' && (
             <>
- 
               <div className="w-[50%]">
-              Bitte loggen Sie sich ein oder registrieren Sie sich, um fortzufahren.
+                Bitte loggen Sie sich ein oder registrieren Sie sich, um fortzufahren.
                 <SignUpForm language={language} />
-                </div>
-             <div className="w-[50%] pt-5">
-
-         
               </div>
+              <div className="w-[50%] pt-5"></div>
             </>
-
           )}
-          {/* <div className="w-[50%]  border-r border-slate-400">
-            {status === 'authenticated' && (
-              <div>
-                <p>Signed in as {session?.user?.name}</p>
-                <button onClick={() => signOut()} className='border border-slate-400 w-[250px] mt-4 bg-slate-600 text-slate-50 p-1 cursor-pointer'>Sign Out</button>
-              </div>
-            )}
-            {status}
-
-          </div> */}
         </div>
-
-      </div>
-
-    </>)
-
+      )}
+    </div>
+  );
 }
 
 export default MyUserAccount;

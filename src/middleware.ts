@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server'
 import { match } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
 import { getSession } from 'next-auth/react';
+import { getToken } from 'next-auth/jwt';
 
 let headers = { 'accept-language': 'en,en;q=0.5' }
 let languages = new Negotiator({ headers }).languages()
@@ -17,10 +18,29 @@ export async function middleware(request: NextRequest) {
 
   const url = new URL(request.url) 
 
-  // let API and action routes unchanged   
+  //  API and action routes  
   if(url.pathname.startsWith('/api') || url.pathname.startsWith('/action')) {
-    return
+
+    console.log('MIDDLEWARE API or action route:', url.pathname);
+ 
+
+    // const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+
+    // if (!token) {
+    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // }
+    // request.headers.set('Authorization', `Bearer ${token.accessToken}`);
+    return;
   } 
+
+  console.log('MIDDLEWARE NO API / ACTION:', url.pathname);
+  // const token = await getToken({ request, secret: process.env.NEXTAUTH_SECRET });
+
+  // if (!token) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = '/login'; // Redirect to login page
+  //   return NextResponse.redirect(url);
+  // }
 
   // set language
   const pathnameHasLocale = locales.some(

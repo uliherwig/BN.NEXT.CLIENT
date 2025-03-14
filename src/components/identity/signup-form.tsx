@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useFormState, useFormStatus } from "react-dom";
 import { register } from "@/app/actions/auth";
-import BNButton from '../common/buttons/bn-button';
+import BnButton from "../common/buttons/bn-button";
 import { useDictionary } from '@/provider/dictionary-provider';
 
 const errorMessageClass = 'text-red-500 text-sm';
@@ -15,12 +15,12 @@ function firstOrDefault<T>(array: T[], defaultValue: T): T {
   return array.length > 0 ? array[0] : defaultValue;
 }
 
-const SignUpForm =  ({ language }: { language: string }) => {
+const SignUpForm = ({ language }: { language: string }) => {
 
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  // const [isClient, setIsClient] = useState(false);
+  // useEffect(() => {
+  //   setIsClient(true);
+  // }, []);
 
 
   const [state, formAction] = useFormState<any, FormData>(register, { message: '', success: false, errors: {} });
@@ -29,10 +29,10 @@ const SignUpForm =  ({ language }: { language: string }) => {
     console.log('state:', state);
   }, [state]);
 
-    const dictionary = useDictionary();
-    if (!dictionary) {
-      return <div>Loading...</div>;
-    }
+  const dictionary = useDictionary();
+  if (!dictionary) {
+    return <div>Loading...</div>;
+  }
 
   return (
 
@@ -45,11 +45,11 @@ const SignUpForm =  ({ language }: { language: string }) => {
             <div className="text-slate-800 text-lg font-bold mb-4">{dictionary.AUTH_register}</div>
 
             {state.success && (
-            
+
               <div className="text-green-500">Success! You have signed up successfully. Please check your email for a confirmation link.</div>
             )}
 
-            {!state.success &&  (
+            {!state.success && (
               <form action={formAction} className='flex flex-col gap-2'>
                 <div>
                   <label>Username</label>
@@ -91,15 +91,15 @@ const SignUpForm =  ({ language }: { language: string }) => {
                     <div className={errorMessageClass}>Fehler: <span className={errorMessageClass}> {state.errorMessage}</span></div>}
 
 
-                  <BNButton type="submit" label="Sign Up" />
+                  <BnButton type="submit" label="Sign Up" />
                 </div>
               </form>
             )}
-                 <div>
-          {dictionary.AUTH_hasaccount} <a href={`/${language}/auth/account`} className='text-blue-500'>{dictionary.AUTH_login}</a>
-        </div>
+            <div>
+              <a href={`/${language}/auth/account`} className='text-blue-500'>{dictionary.AUTH_login}</a>
+            </div>
           </div>
-     
+
         </div>
       </div>
 

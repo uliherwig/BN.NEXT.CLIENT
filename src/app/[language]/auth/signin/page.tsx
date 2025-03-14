@@ -1,6 +1,4 @@
 import * as React from 'react';
-import "@/app/globals.css";
-import SignInForm from '@/components/identity/signin-form';
 
 export default function UserAccount() {
 
@@ -11,7 +9,7 @@ export default function UserAccount() {
         Status: <span className="text-green-500">Active</span>
       </nav>
       <main className="h-full w-full content-container">
-        <SignInForm />
+    
       </main>
     </div>
 

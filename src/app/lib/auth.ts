@@ -1,5 +1,4 @@
 
-
 import { jwtDecode } from "jwt-decode";
 import NextAuth, { User } from "next-auth";
 import { NextAuthOptions } from 'next-auth';
@@ -18,6 +17,8 @@ const BnProvider = CredentialsProvider({
   },
 
   async authorize(credentials) {
+
+    // console.log('authorize:', credentials);
 
     const res = await fetch(`${process.env.IDENTITY_API_URL}/Account/sign-in`, {
       method: "POST",
@@ -95,6 +96,13 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
 
     async signIn({ user, account, profile, email, credentials }) {
+
+      // console.log('signIn:', user);
+      // console.log('signIn:', account);
+      // console.log('signIn:', profile);  
+      // console.log('signIn:', email);
+      // console.log('signIn:', credentials);
+
       if (user) {
         return true
       }

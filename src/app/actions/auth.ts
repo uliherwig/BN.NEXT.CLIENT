@@ -1,4 +1,6 @@
 'use server'
+import { authOptions } from '@/app/lib/auth';
+import { getServerSession } from 'next-auth';
 
 import { z } from 'zod';
 
@@ -6,7 +8,7 @@ const schemaRegister = z.object({
     username: z.string()
         .min(3)
         .max(10)
-        .regex(/^[a-zA-Z]+$/, "Username must contain only alphabetic characters"),
+        .regex(/^[a-zA-Z0-9]+$/, "Username must contain only alphabetic characters"),
     email: z.string().email(),
     password: z.string()
     .min(6, { message: "Password must be at least 6 characters long" })
@@ -25,9 +27,7 @@ const schemaRegister = z.object({
   });
 
 
-export async function register(prevState: any, formData: FormData) {
-
- 
+export async function register(prevState: any, formData: FormData) { 
 
     const validatedFields = schemaRegister.safeParse({
         username: formData.get('username'),
@@ -71,5 +71,36 @@ export async function register(prevState: any, formData: FormData) {
             }
         }
         return result;
+    } 
+}
+export async function deleteAccount(prevState: any, formData: FormData) {
+
+
+    console.log('deleteAccount start');      
+    const session = await getServerSession(authOptions)
+    if (!session || !session.user) {
+        return {
+            errors: { session: ['Session is not available'] },
+        };
     }
+
+    const response = await fetch(`${process.env.IDENTITY_API_URL}/Account/`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.accessToken}`,
+        },
+    });
+    const result: any = await response.json();
+
+    console.log('deleteAccount result:', result);
+
+    if (!result.success && result.errors) {
+        const jsonObject = JSON.parse(result.errors);
+
+        if (jsonObject.errorMessage) {
+            result.errorMessage = jsonObject.errorMessage;
+        }
+    }
+    return result;
 }

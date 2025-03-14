@@ -10,10 +10,12 @@ import { AccountStatusEnum } from "@/models/alpaca/enums";
 import { ExecutionModel } from "@/models/strategy/execution-model";
 import { AlpacaAccountModel } from "@/models/alpaca/alpaca-account-model";
 import WidgetButton from "@/components/common/buttons/widget-button";
-import AlpacaCredentialsModal from "../credentials-modal";
+import AlpacaCredentialsModal from "../alpaca-credentials-modal";
 import CircularLoader from "@/components/common/loader";
 import AlpacaPositions from "./alpaca-positions";
 import AlpacaOrders from "./alpaca-orders";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EmptyGuid = '00000000-0000-0000-0000-000000000000'
 
@@ -50,6 +52,7 @@ const AlpacaExec: React.FC = () => {
             console.log('AlpacaExec   ', data);
             setExecution(data);
         } else {
+            toast.error('Server Error');
             console.log('AlpacaExec   ', { error: 'Server Error' }, { status: 500 });
         }
         setIsLoading(false);

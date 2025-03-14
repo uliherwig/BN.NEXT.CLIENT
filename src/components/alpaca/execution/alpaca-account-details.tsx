@@ -4,7 +4,7 @@ import { AlpacaAccountModel } from '@/models/alpaca/alpaca-account-model';
 import CircularLoader from '../../common/loader';
 import { format } from 'date-fns';
 import { formatUSD } from '@/utilities';
-import AlpacaCredentialsModal from '../credentials-modal';
+import AlpacaCredentialsModal from '../alpaca-credentials-modal';
 import WidgetButton from '../../common/buttons/widget-button';
 import { AccountStatusEnum } from '@/models/alpaca/enums';
 import { useDictionary } from '@/provider/dictionary-provider';

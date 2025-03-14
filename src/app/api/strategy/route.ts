@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
             return NextResponse.json(data);
         } else {           
             const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings/${userId}?bookmarked=${bookmarked}`;
-            var dats = await basicFetch<StrategySettings[]>(endpoint);
+            var dats = await basicFetch<StrategySettings[]>(endpoint, session.accessToken);
             return NextResponse.json(dats);
         }        
 
@@ -91,8 +91,6 @@ export async function DELETE(req: NextRequest) {
         if (!userId) {
             return NextResponse.json({ error: ApiError.Unauthorized });
         }
-
-        console.log('testId:', testId);
 
         var endpoint = `${process.env.STRATEGY_API_URL}/strategy/${testId}`;
 

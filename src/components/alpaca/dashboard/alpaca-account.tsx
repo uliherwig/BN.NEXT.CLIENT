@@ -3,62 +3,67 @@ import { useEffect, useState } from 'react';
 import { basicFetch } from '@/app/lib/fetchFunctions';
 import { AlpacaAccountModel } from '@/models/alpaca/alpaca-account-model';
 import CircularLoader from '../../common/loader';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 import { formatUSD } from '@/utilities';
-import AlpacaCredentialsModal from '../credentials-modal';
+import AlpacaCredentialsModal from '../alpaca-credentials-modal';
 import WidgetButton from '../../common/buttons/widget-button';
 import { useDictionary } from '@/provider/dictionary-provider';
 
 enum AccountStatus {
     None,
-    Loading,
     NoCredentials,
     WrongCredentials,
     AccountLoaded
 }
 
-const AlpacaAccount = () => {
-    
+interface AlpacaAccountProps {
+    updateAlpacaAccount: Function;
+}
+
+const AlpacaAccount : React.FC<AlpacaAccountProps> = ({ updateAlpacaAccount }) => {
+
     const dictionary = useDictionary();
+    
     const [accountData, setAccountData] = useState<AlpacaAccountModel | null>(null);
     const [accountStatus, setAccountStatus] = useState<AccountStatus>(AccountStatus.None);
+    const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [buttonLabel, setButtonLabel] = useState('Strore Alpaca Credentials');
 
-    const closeDialog = () => {
+    const closeDialog = async () => {
         setIsModalOpen(false);
+        await loadAccountData();
+    }
+
+    const loadAccountData = async () => {
+
+        const account = await basicFetch<AlpacaAccountModel>(`/api/alpaca/account`);
+        switch (account.accountStatus) {
+            case 0:
+            case 1:
+                setAccountStatus(AccountStatus.None);
+                break;
+            case 2:
+                setAccountStatus(AccountStatus.NoCredentials);
+                break;
+            case 3:
+                setAccountStatus(AccountStatus.WrongCredentials);
+                break;
+            case 4:
+                setAccountStatus(AccountStatus.AccountLoaded);
+                setAccountData(account);
+                updateAlpacaAccount(account);
+                break;
+            default:
+                break;
+        }
+        setLoading(false);
+        return;
     }
 
     useEffect(() => {
-        const loadAccountData = async () => {
-            setAccountStatus(AccountStatus.Loading);
-            const res = await basicFetch<any>(`/api/alpaca/account`);
-
-            console.log('Account data:', res.error);
-            if (res.error) {
-                if (res.error === 'NoCredentials') {
-                    setAccountStatus(AccountStatus.NoCredentials);
-                } else if (res.error === 'WrongCredentials') {
-                    setAccountStatus(AccountStatus.WrongCredentials);
-                } else {
-                    setAccountStatus(AccountStatus.None);
-                }
-            } else {
-                var accData: AlpacaAccountModel = {
-                    userId: res.userId,
-                    accountStatus: res.accountStatus,
-                    accountId: res.accountId,
-                    accountNumber: res.accountNumber,
-                    accruedFees: res.accruedFees,
-                    buyingPower: res.buyingPower,
-                    createdAtUtc: res.createdAtUtc
-                };
-                setAccountData(accData);
-                setAccountStatus(AccountStatus.AccountLoaded);
-            }
-            console.log('Account Status:', accountStatus);
-        }
         loadAccountData();
-    }, [accountStatus]);
+    }, []);
 
     if (!dictionary) {
         return <div>{"Loading..."}</div>;
@@ -69,58 +74,50 @@ const AlpacaAccount = () => {
             <div className="component-container">
                 <div className="component-head">{dictionary.DASH_ALPACA_TEST_ACCOUNT}</div>
                 <div className="w-full h-[68%] ">
-                    {accountStatus === AccountStatus.Loading && (
-                        <CircularLoader />
-                    )}
+                    {loading ? (
+                        <div className="p-10"><CircularLoader /></div>
+                    ) : (
+                        <>
 
-                    {accountStatus === AccountStatus.NoCredentials && (
-                        <table className='w-full'>
-                            <tbody>
-                                <tr>
-                                    <td colSpan={2} className='pb-4'>
-                                        {dictionary.DASH_NO_CREDENTIALS_MESSAGE}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    )}
-                    {accountStatus === AccountStatus.WrongCredentials && (
-                        <table className='w-full'>
-                            <tbody>
-                                <tr>
-                                    <td colSpan={2} className='pb-4'>
-                                        {dictionary.DASH_WRONG_CREDENTIALS_MESSAGE}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    )}
+                            {(accountStatus === AccountStatus.NoCredentials || accountStatus === AccountStatus.None) && (
+                                <div className='w-full pb-4'>
+                                    {dictionary.DASH_NO_CREDENTIALS_MESSAGE}
+                                </div>
+                            )}
 
-                    {accountStatus === AccountStatus.AccountLoaded && accountData && (
-                        <table className='w-full'>
-                            <tbody>
-                                <tr>
-                                    <td>{dictionary.DASH_ACCOUNT_ID}</td>
-                                    <td>{accountData.accountId}</td>
-                                </tr>
-                                <tr>
-                                    <td>{dictionary.DASH_ACCOUNT_NUMBER}</td>
-                                    <td>{accountData.accountNumber}</td>
-                                </tr>
-                                <tr>
-                                    <td>{dictionary.DASH_ACCRUED_FEES}</td>
-                                    <td>{accountData.accruedFees}</td>
-                                </tr>
-                                <tr>
-                                    <td>{dictionary.DASH_BUYING_POWER}</td>
-                                    <td>{formatUSD.format(accountData.buyingPower)}</td>
-                                </tr>
-                                <tr>
-                                    <td>{dictionary.DASH_CREATED_AT}</td>
-                                    <td>{format(new Date(accountData.createdAtUtc), 'yyyy-MM-dd')}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            {accountStatus === AccountStatus.WrongCredentials && (
+                                <div className='w-full pb-4'>
+                                    {dictionary.DASH_WRONG_CREDENTIALS_MESSAGE}
+                                </div>
+                            )}
+
+                            {accountStatus === AccountStatus.AccountLoaded && accountData && (
+                                <table className='w-full'>
+                                    <tbody>
+                                        <tr>
+                                            <td>{dictionary.DASH_ACCOUNT_ID}</td>
+                                            <td>{accountData.accountId}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{dictionary.DASH_ACCOUNT_NUMBER}</td>
+                                            <td>{accountData.accountNumber}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{dictionary.DASH_ACCRUED_FEES}</td>
+                                            <td>{accountData.accruedFees}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{dictionary.DASH_BUYING_POWER}</td>
+                                            <td>{formatUSD.format(accountData.buyingPower)}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{dictionary.DASH_CREATED_AT}</td>
+                                            <td>{format(new Date(accountData.createdAtUtc), 'yyyy-MM-dd')}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            )}
+                        </>
                     )}
                 </div>
                 <div className="float-right">
