@@ -6,7 +6,6 @@
 
 ## Version 2025.03.1
 
-- Cleanup Code
 - Auth functions test
 - Account Signin, Signout, Register, Delete
 
