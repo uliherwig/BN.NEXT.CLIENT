@@ -29,7 +29,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
     const [strategies, setStrategies] = useState<StrategySettings[]>([]);
     const [selectedStrategy, setSelectedStrategy] = useState<StrategySettings>({} as StrategySettings);
     const [loading, setLoading] = useState<boolean>(true);
-    toast.error('Welcome to the dashboard!');
+
 
 
     useEffect(() => {

@@ -9,16 +9,7 @@ const SignInForm = ({ language }: { language: string }) => {
 
   const { data: session, status } = useSession()
   const [loading, setLoading] = useState(false);
-  const [loginError, setLoginError] = useState('')
-  
-
-  useEffect(() => {
-    console.log('session:', session);
-    if (session && session.user) {
-      console.log('session.user:', session.user?.name);
-
-    }
-  }, [session, session?.user]);
+  const [loginError, setLoginError] = useState('') 
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -34,13 +25,11 @@ const SignInForm = ({ language }: { language: string }) => {
       password,
     });
 
-    console.log('Sign in result:', result);
 
     if (result?.error) {
       console.error('Error during sign in:', result.error);
       setLoginError('Login failed. Invalid credentials');
     } else {
-      console.log('Sign in successful:', result);
       location.reload();
     }
   };

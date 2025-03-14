@@ -1,29 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Dialog, DialogContent, DialogContentText, DialogTitle, IconButton } from '@mui/material';
-import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { signIn, useSession } from 'next-auth/react';
 import BnButton from '../common/buttons/bn-button';
-import fetchService, { basicFetch } from '@/app/lib/fetchFunctions';
-import test from 'node:test';
 import { useDictionary } from '@/provider/dictionary-provider';
 
-const SignInDialog = ({  isOpen, closeDialog }: { isOpen: boolean , closeDialog : Function }) => {
-
- 
+const SignInDialog = ({  isOpen, closeDialog }: { isOpen: boolean , closeDialog : Function }) => { 
 
     const { data: session, status } = useSession()
     const [loading, setLoading] = useState(false);
     const [loginError, setLoginError] = useState('')
 
-    useEffect(() => {
-        console.log('session:', session);
-        if (session && session.user) {
-            console.log('session.user:', session.user?.name);
-           
-        }
-    }, [session, session?.user]);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -37,13 +25,10 @@ const SignInDialog = ({  isOpen, closeDialog }: { isOpen: boolean , closeDialog 
             password,
         });
 
-        console.log('Sign in result:', result);
-
         if (result?.error) {
             console.error('Error during sign in:', result.error);
             setLoginError('Login failed. Invalid credentials');
         } else {
-            console.log('Sign in successful:', result);
             location.reload();
             closeDialog(false);
         }

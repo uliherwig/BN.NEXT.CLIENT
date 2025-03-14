@@ -56,7 +56,12 @@ const AuthenticationMenu: React.FC<AuthMenuProps> = (props) => {
         const testAuth = async () => {
             const res = await basicFetch<any>(`/api/identity`);
             if (res.error && res.error === 'RefreshAccessTokenError') {
-                await signOut();
+                const options = {
+                    callbackUrl: '/auth/account',
+                    redirect: false,
+                  };
+            
+                 await signOut(options);
             }
         };
         //testAuth();
@@ -107,9 +112,6 @@ const AuthenticationMenu: React.FC<AuthMenuProps> = (props) => {
             </Menu>
             <SignInDialog isOpen={dialogOpen} closeDialog={closeDialog} />
         </div>
-
-
-
     );
 };
 

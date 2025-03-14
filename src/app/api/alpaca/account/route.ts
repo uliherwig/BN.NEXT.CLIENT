@@ -4,6 +4,8 @@ import { getServerSession } from 'next-auth';
 import { cacheService } from '@/service/cache-service';
 
 export async function GET(req: NextRequest) {
+
+  console.log('API ALPACA ACCOUNT GET:', req.headers);
  
     const session = await getServerSession(authOptions);
     if (!session) {
@@ -30,7 +32,7 @@ export async function GET(req: NextRequest) {
         cacheService.set(cacheKey, data);
       return NextResponse.json(data);
     } else {
-      return NextResponse.json({ error: 'Server Error' }, { status: 500 });
+      return NextResponse.json({ error: res.statusText }, { status: res.status });
     }
  
 }

@@ -74,9 +74,7 @@ export async function register(prevState: any, formData: FormData) {
     } 
 }
 export async function deleteAccount(prevState: any, formData: FormData) {
-
-
-    console.log('deleteAccount start');      
+  
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
         return {
@@ -92,8 +90,6 @@ export async function deleteAccount(prevState: any, formData: FormData) {
         },
     });
     const result: any = await response.json();
-
-    console.log('deleteAccount result:', result);
 
     if (!result.success && result.errors) {
         const jsonObject = JSON.parse(result.errors);

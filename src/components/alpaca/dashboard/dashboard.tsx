@@ -2,13 +2,13 @@
 import { useEffect, useState } from "react";
 import { StrategySettings } from "@/models/strategy/strategy-settings";
 import AlpacaPositions from "./alpaca-positions";
-import StrategyExecution from "./strategy-execution";
 import StrategyList from "../strategy-test/strategy-list";
 import TestResults from "../strategy-test/test-results";
 import AlpacaAccount from "./alpaca-account";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { AlpacaAccountModel } from "@/models/alpaca/alpaca-account-model";
+import  { AuthServices }  from "@/service/auth-service";
 import { toast } from "react-toastify";
 
 const Dashboard: React.FC = () => {
@@ -28,17 +28,13 @@ const Dashboard: React.FC = () => {
     }
 
     useEffect(() => {
-        if (status !== 'authenticated') {
-            redirect('/brokers');
-        }
-
-      
-    }, [session, status]);
+        AuthServices.handleAuthStatus(status); // Use the service function
+      }, [status]);
 
     return (
         <>
             <div className="content-container">
-                
+
                 <div className="w-1/3">
                     <StrategyList showResult={updateComponents} hasUpdate={false} showBookmarked={true} />
                 </div>
@@ -60,3 +56,5 @@ const Dashboard: React.FC = () => {
     )
 }
 export default Dashboard;
+
+

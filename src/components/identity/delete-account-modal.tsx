@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { Dialog, DialogContent, DialogContentText, DialogTitle, IconButton } from '@mui/material';
+import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { signOut, useSession } from 'next-auth/react';
-import fetchService, { basicFetch, basicPost } from '@/app/lib/fetchFunctions';
+import { basicPost } from '@/app/lib/fetchFunctions';
 import { useDictionary } from '@/provider/dictionary-provider';
 import CancelButton from '../common/buttons/cancel-button';
 import SubmitButton from '../common/buttons/submit-button';
@@ -19,14 +19,6 @@ const DeleteAccountModal = ({ isOpen, closeDialog }: { isOpen: boolean, closeDia
 
     const [state, deleteAction] = useFormState<any, FormData>(deleteAccount, { message: '', success: false, errors: {} });
     const [pending, setPending] = useState<boolean>(false);
-
-    useEffect(() => {
-        console.log('session:', session);
-        if (session && session.user) {
-            console.log('session.user:', session.user?.name);
-
-        }
-    }, [session, session?.user]);
 
 
     useEffect(() => {

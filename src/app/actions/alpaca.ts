@@ -46,6 +46,7 @@ export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData
             method,
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.accessToken}`,
             },
         };
         options.body = JSON.stringify(json);
@@ -61,8 +62,6 @@ export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData
 
 
 export async function createAlpacaBacktest(prevState: any, formData: FormData) {
-
-    console.log('createAlpacaBacktest  formData:', formData);
 
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
@@ -113,8 +112,6 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         allowOvernight: formData.get('allowOvernight') === 'on',
     });
 
-    console.log('validatedFields:', validatedFields.success);
-
     if (!validatedFields.success) {
         return {
             success: false,
@@ -149,6 +146,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             body: JSON.stringify(payload),
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.accessToken}`
             },
         });
 
@@ -184,6 +182,7 @@ export async function alpacaExecutionAction(prevState: any, formData: FormData) 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.accessToken}`,
         },
     });
 

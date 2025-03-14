@@ -26,6 +26,7 @@ const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
         if (id !== undefined && id !== '') {
             updatePositions(id);
         }
+        setLoading(false);
     }, [params, params.strategySettings]);
 
     const updatePositions = async (id: string) => {

@@ -9,8 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     const bookmarked = req.nextUrl.searchParams.get('bookmarked') as string;
-
-    try {
+  
         const session = await getServerSession(authOptions);
         if (!session) {
             return NextResponse.json({ error: ApiError.Unauthorized });
@@ -21,21 +20,26 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: ApiError.Unauthorized });
         }
         // console.log('session:', session);
-        console.log('session accessToken :', session.accessToken);
-        console.log('session jwt:', authOptions.jwt);
-
-
+        // console.log('session accessToken :', session.accessToken);
+        // console.log('session jwt:', authOptions.jwt);
 
         const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings/${userId}?bookmarked=${bookmarked}`;
-        var dats = await basicFetch<StrategySettings[]>(endpoint, session.accessToken);
-        return NextResponse.json(dats);
-
-
-
-    } catch (error) {
-        console.log('error:', error);
-        return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
-    }
+        const res = await fetch(endpoint, {
+            method: 'GET',
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${session.accessToken}`,
+            }
+          });
+        
+          if (res.ok) {
+            const data = await res.json();
+        
+            return NextResponse.json(data);
+          } else {
+            return NextResponse.json({ error: res.statusText }, { status: res.status });
+          }
+   
 }
 
 export async function PUT(req: NextRequest) {
@@ -61,16 +65,13 @@ export async function PUT(req: NextRequest) {
             body: JSON.stringify(json)
         };
 
-
         const res = await fetch(endpoint, options);
-
         const success = await res.json();
 
         const result = { message: '', success: success, errors: {} }
         return NextResponse.json(result);
 
     } catch (error) {
-        console.log('error:', error);
         return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
     }
 }
@@ -87,12 +88,9 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({ error: ApiError.Unauthorized });
         }
 
-        const testId = req.nextUrl.searchParams.get('testId') as string;
-        console.log('testId:', testId);
-
+        const testId = req.nextUrl.searchParams.get('testId') as string; 
         var endpoint = `${process.env.STRATEGY_API_URL}/strategy/${testId}`;
-
-        console.log('endpoint:', endpoint);
+    
         const options: RequestInit = {
             method: 'DELETE',
             headers: {
@@ -107,8 +105,7 @@ export async function DELETE(req: NextRequest) {
         const result = { message: message, success: success, errors: {} }
         return NextResponse.json(result);
 
-    } catch (error) {
-        console.log('error:', error);
+    } catch (error) {        
         return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
     }
 }

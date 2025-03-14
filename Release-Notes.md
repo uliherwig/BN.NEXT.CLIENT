@@ -4,6 +4,12 @@
 
 - chart with real time data
 
+## Version 2025.03.1
+
+- Cleanup Code
+- Auth functions test
+- Account Signin, Signout, Register, Delete
+
 ## Version 2025.02.2
 
 - Cleanup Code

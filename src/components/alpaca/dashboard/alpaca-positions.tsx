@@ -4,10 +4,8 @@ import { useDictionary } from '@/provider/dictionary-provider';
 import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/components/common/loader";
 import { AccountStatusEnum } from '@/models/alpaca/enums';
-import { PositionModel } from '@/models/strategy/position-model';
-import { SideEnum } from '@/models/strategy/enums';
-import { format } from 'date-fns';
 import { AlpacaPositionModel } from '@/models/alpaca/alpaca-position-model';
+import { set } from 'date-fns';
 
 
 interface AlpacaPositionsProps {
@@ -22,16 +20,16 @@ const AlpacaPositions: React.FC<AlpacaPositionsProps> = (props) => {
 
     useEffect(() => {
 
+        if (props.alpacaAccountStatus === undefined) {
+            setLoading(false);
+        } else {
 
-        if (props.alpacaAccountStatus) {
             if (props.alpacaAccountStatus === AccountStatusEnum.AccountLoaded) {
 
                 const fetchPositions = async () => {
                     const res = await fetch('/api/alpaca/positions');
                     const data = await res.json();
                     setPositions(data);
-
-                    console.log(data);
                     setLoading(false);
                 }
                 fetchPositions();
@@ -54,7 +52,7 @@ const AlpacaPositions: React.FC<AlpacaPositionsProps> = (props) => {
                 {loading && (
                     <CircularLoader />
                 )}
-                {!loading && (
+                {!loading && positions.length > 0 && (
                     <div className="h-full overflow-auto">
                         {/* example table */}
 
@@ -72,13 +70,13 @@ const AlpacaPositions: React.FC<AlpacaPositionsProps> = (props) => {
                                 {positions.map((position, index) => (
                                     <tr key={position.symbol} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} >
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.symbol}</td>
-                               
+
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.quantity}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.marketValue}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.costBasis}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.unrealizedProfitLossPercent.toFixed(2)} %</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{position.unrealizedProfitLoss.toFixed(2)} $</td>
-                                   
+
                                     </tr>
                                 ))}
                             </tbody>

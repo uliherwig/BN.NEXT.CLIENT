@@ -72,7 +72,7 @@ async function refreshAccessToken(token: any) {
 
     return token
   } catch (error) {
-    //console.log('error refreshing token:', error);
+    console.log('error refreshing token:', error);
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -164,15 +164,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
 
-  // jwt: {
-  //   secret: process.env.NEXTAUTH_SECRET,
-  // },
-  pages: {
-    signIn: "/auth/signin", // Custom sign-in page
-    signOut: '/auth/signout',
-    error: "/auth/error", // Error page
 
-  },
 
   debug: process.env.NODE_ENV === "development",
 };

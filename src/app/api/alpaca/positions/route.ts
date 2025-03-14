@@ -10,16 +10,22 @@ export async function GET(req: NextRequest) {
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    const cacheKey = `orders_${session.user?.id}`;
-    const cachedData = cacheService.get<any>(cacheKey);
 
-    if (cachedData) {
-      return NextResponse.json(cachedData);
-    }
     const endpoint = `${process.env.ALPACA_API_URL}/AlpacaTrading/positions?userId=${session.user?.id}`;
-
-    const data = await basicFetch(endpoint);
-    cacheService.set(cacheKey, data);
-    return NextResponse.json(data);
+    const res = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${session.accessToken}`,
+      }
+    });
+  
+    if (res.ok) {
+      const data = await res.json();
+      return NextResponse.json(data);
+    } else {
+      return NextResponse.json({ error: res.statusText }, { status: res.status });
+  
+    }
 
 }

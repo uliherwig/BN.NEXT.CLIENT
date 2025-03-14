@@ -14,6 +14,7 @@ import DeleteAccountModal from "./delete-account-modal";
 import router from "next/router";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { redirect } from "next/dist/server/api-utils";
 
 const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchParams, language: string }) => {
   const dictionary = useDictionary();
@@ -28,62 +29,60 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
   };
 
 
-  let isRegister: boolean = false;
+  let isRegister, isRedirect: boolean = false;
 
   const queryStr = JSON.parse(JSON.stringify(searchParams));
   if (queryStr && queryStr.register) {
     isRegister = queryStr.register;
   }
+  if (queryStr && queryStr.redirect) {
+    isRedirect = queryStr.redirect;
+  }
 
   const handleSignOut = async () => {
-   
-      const result = await basicPost('/api/identity/signout', {});
-      const options = {
-        callbackUrl: '/auth/account',
-        redirect: false,
-      };
-     await signOut(options);
-   
-  };
-  const fetchUserAccount = async () => {
-    const endpoint = `/api/identity/user-account`;
 
-    var response = await fetch(endpoint);
-    console.log('response:', response);
-    if (response.ok) {
-      var userAccount = await response.json();
-      setUser(userAccount);
-    } else {
-      console.log('Error fetching user account:', response.statusText);
-      toast.error('Error fetching user account');
-      await signOut();
+    const result = await basicPost('/api/identity/signout', {});
+    const options = {
+      callbackUrl: '/auth/account',
+      redirect: false,
+    };
+    await signOut(options);
 
-    }
   };
+
 
   useEffect(() => {
     switch (status) {
-      case 'loading':
-        setHeader('');
-        break;
+
       case 'authenticated':
         setHeader(`${dictionary?.AUTH_welcome} ${session?.user?.name}`);
- 
+        const fetchUserAccount = async () => {
+          const endpoint = `/api/identity/user-account`;
+
+          var response = await fetch(endpoint);
+          console.log('response:', response);
+          if (response.ok) {
+            var userAccount = await response.json();
+            setUser(userAccount);
+          } else {
+            toast.error('Error fetching user account');
+            await handleSignOut();
+
+          }
+        };
 
         fetchUserAccount();
         setIsLoading(false);
         break;
       case 'unauthenticated':
-        setHeader(`Willkommen`);
-        fetchUserAccount();
+
+
 
         setIsLoading(false);
         break;
     }
 
-    if (session?.expires === "RefreshAccessTokenError") {
-      signIn();
-    }
+
   }, [session, status, dictionary]);
 
   // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

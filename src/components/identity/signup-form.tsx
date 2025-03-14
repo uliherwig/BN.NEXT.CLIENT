@@ -17,17 +17,7 @@ function firstOrDefault<T>(array: T[], defaultValue: T): T {
 
 const SignUpForm = ({ language }: { language: string }) => {
 
-  // const [isClient, setIsClient] = useState(false);
-  // useEffect(() => {
-  //   setIsClient(true);
-  // }, []);
-
-
   const [state, formAction] = useFormState<any, FormData>(register, { message: '', success: false, errors: {} });
-
-  useEffect(() => {
-    console.log('state:', state);
-  }, [state]);
 
   const dictionary = useDictionary();
   if (!dictionary) {
@@ -38,14 +28,10 @@ const SignUpForm = ({ language }: { language: string }) => {
 
     <>
       <div className="h-full p-5">
-
         <div className="flex flex-row gap-4 w-full justify-center">
-
           <div className="w-full pr-5">
             <div className="text-slate-800 text-lg font-bold mb-4">{dictionary.AUTH_register}</div>
-
             {state.success && (
-
               <div className="text-green-500">Success! You have signed up successfully. Please check your email for a confirmation link.</div>
             )}
 
@@ -99,10 +85,8 @@ const SignUpForm = ({ language }: { language: string }) => {
               <a href={`/${language}/auth/account`} className='text-blue-500'>{dictionary.AUTH_login}</a>
             </div>
           </div>
-
         </div>
       </div>
-
     </>)
 
 }
