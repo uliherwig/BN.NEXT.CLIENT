@@ -11,11 +11,9 @@ import { UserAccount } from "@/models/identity/user-account";
 import { format } from 'date-fns';
 import WidgetButton from "../common/buttons/widget-button";
 import DeleteAccountModal from "./delete-account-modal";
-import router from "next/router";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { redirect } from "next/dist/server/api-utils";
-import BNButton from "../common/buttons/bn-button";
+
 
 const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchParams, language: string }) => {
   const dictionary = useDictionary();
@@ -51,20 +49,20 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
 
   };
 
-  // const sendTestMail = async () => {
-  //   const endpoint = `/api/identity/testmail`;
-  //   const res = await fetch(endpoint, {
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     }
-  //   });
-  //   if (res.ok) {
-  //     toast.success('Testmail sent');
-  //   }
-  //   else {
-  //     toast.error('Error sending testmail');
-  //   }
-  // }
+  const sendTestMail = async () => {
+    const endpoint = `/api/identity/test-call`;
+    const res = await fetch(endpoint, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (res.ok) {
+      toast.success('Testmail sent');
+    }
+    else {
+      toast.error('Error sending testmail');
+    }
+  }
 
 
   useEffect(() => {
@@ -190,9 +188,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
           )}
         </div>
       )}
-      {/* <WidgetButton type='button' label="Send Test Mail" method={sendTestMail} /> */}
-
-
+      <WidgetButton type='button' label="Send Test Mail" method={sendTestMail} />
     </div>
   );
 }
