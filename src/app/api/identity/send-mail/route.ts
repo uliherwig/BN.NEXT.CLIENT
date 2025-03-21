@@ -3,11 +3,6 @@ import { getToken } from 'next-auth/jwt';
 
 export async function GET(req: NextRequest) { 
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  if (!token) {
-    return NextResponse.json('No token found');
-  }
-
   const endpoint = `${process.env.IDENTITY_API_URL}/account/my-account`;
 
   const options: RequestInit = {
