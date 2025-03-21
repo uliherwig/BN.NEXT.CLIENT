@@ -53,8 +53,12 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
 
   const sendTestMail = async () => {
     const endpoint = `/api/identity/send-mail`;
-    var response = await fetch(endpoint);
-    if (response.ok) {
+    const res = await fetch(endpoint, {
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  });
+    if (res.ok) {
       toast.success('Testmail sent');
     }
     else {
