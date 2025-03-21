@@ -4,14 +4,11 @@ import { basicFetch } from '@/app/lib/fetchFunctions';
 
 // API route handler
 export async function GET(req: NextRequest) {
-  const symbol = req.nextUrl.searchParams.get('symbol') as string;
-  const startDate = req.nextUrl.searchParams.get('startDate') as string;
-  const endDate = req.nextUrl.searchParams.get('endDate') as string;
-  const timeFrame = req.nextUrl.searchParams.get('timeFrame') as string;
 
   try {
-    const url = `${process.env.ALPACA_API_URL}/AlpacaTest/historical-bars/${symbol}?startDate=${startDate}&endDate=${endDate}`
-    const data = await basicFetch<any[]>(url);
+    const endpoint = `${process.env.IDENTITY_API_URL}/account/test-call?email=testuser@mail.local`;
+
+    const data = await basicFetch<any>(endpoint);
     return NextResponse.json(data);
   } catch (error) {
 
