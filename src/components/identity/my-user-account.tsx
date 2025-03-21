@@ -51,20 +51,20 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
 
   };
 
-  const sendTestMail = async () => {
-    const endpoint = `/api/identity/testmail`;
-    const res = await fetch(endpoint, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if (res.ok) {
-      toast.success('Testmail sent');
-    }
-    else {
-      toast.error('Error sending testmail');
-    }
-  }
+  // const sendTestMail = async () => {
+  //   const endpoint = `/api/identity/testmail`;
+  //   const res = await fetch(endpoint, {
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     }
+  //   });
+  //   if (res.ok) {
+  //     toast.success('Testmail sent');
+  //   }
+  //   else {
+  //     toast.error('Error sending testmail');
+  //   }
+  // }
 
 
   useEffect(() => {
@@ -190,7 +190,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
           )}
         </div>
       )}
-      <WidgetButton type='button' label="Send Test Mail" method={sendTestMail} />
+      {/* <WidgetButton type='button' label="Send Test Mail" method={sendTestMail} /> */}
 
 
     </div>
