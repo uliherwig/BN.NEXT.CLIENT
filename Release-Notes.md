@@ -4,6 +4,10 @@
 
 - chart with real time data
 
+## Version 2025.03.2
+
+- Confirmation Url for registration
+
 ## Version 2025.03.1
 
 - Auth functions test
