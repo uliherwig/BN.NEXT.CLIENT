@@ -15,6 +15,7 @@ import router from "next/router";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { redirect } from "next/dist/server/api-utils";
+import BNButton from "../common/buttons/bn-button";
 
 const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchParams, language: string }) => {
   const dictionary = useDictionary();
@@ -50,6 +51,17 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
 
   };
 
+  const sendTestMail = async () => {
+    const endpoint = `/api/identity/send-mail`;
+    var response = await fetch(endpoint);
+    if (response.ok) {
+      toast.success('Testmail sent');
+    }
+    else {
+      toast.error('Error sending testmail');
+    } 
+  }
+
 
   useEffect(() => {
     switch (status) {
@@ -75,9 +87,6 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
         setIsLoading(false);
         break;
       case 'unauthenticated':
-
-
-
         setIsLoading(false);
         break;
     }
@@ -177,6 +186,9 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
           )}
         </div>
       )}
+        <WidgetButton type='button' label="Send Test Mail" method={sendTestMail} />
+
+
     </div>
   );
 }

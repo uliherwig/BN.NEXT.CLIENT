@@ -3,17 +3,12 @@ import { getToken } from 'next-auth/jwt';
 
 export async function GET(req: NextRequest) { 
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  if (!token) {
-    return NextResponse.json('No token found');
-  }
 
-  const endpoint = `${process.env.IDENTITY_API_URL}/account/my-account`;
+  const endpoint = `${process.env.IDENTITY_API_URL}/account/send-testmail?email=kc-admin@mail.local`;
 
   const options: RequestInit = {
     method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token.accessToken}`,
+    headers: {    
       'Content-Type': 'application/json',
     },
   };
