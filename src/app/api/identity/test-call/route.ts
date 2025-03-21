@@ -1,32 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
-
-export async function GET(req: NextRequest) { 
-
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  if (!token) {
-    return NextResponse.json('No token found');
-  }
-
-  const endpoint = `${process.env.IDENTITY_API_URL}/account/my-account`;
-
-  const options: RequestInit = {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token.accessToken}`,
-      'Content-Type': 'application/json',
-    },
-  };
-
-  const res = await fetch(endpoint, options);
+import { basicFetch } from '@/app/lib/fetchFunctions';
 
 
-  if (res.ok) {
-    const data = await res.json();
+// API route handler
+export async function GET(req: NextRequest) {
+  const symbol = req.nextUrl.searchParams.get('symbol') as string;
+  const startDate = req.nextUrl.searchParams.get('startDate') as string;
+  const endDate = req.nextUrl.searchParams.get('endDate') as string;
+  const timeFrame = req.nextUrl.searchParams.get('timeFrame') as string;
+
+  try {
+    const url = `${process.env.ALPACA_API_URL}/AlpacaTest/historical-bars/${symbol}?startDate=${startDate}&endDate=${endDate}`
+    const data = await basicFetch<any[]>(url);
     return NextResponse.json(data);
-  } else {
+  } catch (error) {
 
-    return NextResponse.json({ error: res.statusText }, { status: res.status });
-
+    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
   }
 }
