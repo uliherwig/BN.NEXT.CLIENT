@@ -55,15 +55,15 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
     const endpoint = `/api/identity/send-mail`;
     const res = await fetch(endpoint, {
       headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       }
-  });
+    });
     if (res.ok) {
       toast.success('Testmail sent');
     }
     else {
       toast.error('Error sending testmail');
-    } 
+    }
   }
 
 
@@ -190,7 +190,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
           )}
         </div>
       )}
-        <WidgetButton type='button' label="Send Test Mail" method={sendTestMail} />
+      {/* <WidgetButton type='button' label="Send Test Mail" method={sendTestMail} /> */}
 
 
     </div>
