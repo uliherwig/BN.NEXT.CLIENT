@@ -52,7 +52,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
   };
 
   const sendTestMail = async () => {
-    const endpoint = `/api/identity/send-mail`;
+    const endpoint = `/api/identity/testmail`;
     const res = await fetch(endpoint, {
       headers: {
         'Content-Type': 'application/json'
