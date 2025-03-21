@@ -190,7 +190,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
           )}
         </div>
       )}
-      {/* <WidgetButton type='button' label="Send Test Mail" method={sendTestMail} /> */}
+      <WidgetButton type='button' label="Send Test Mail" method={sendTestMail} />
 
 
     </div>
