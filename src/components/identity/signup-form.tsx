@@ -16,9 +16,7 @@ function firstOrDefault<T>(array: T[], defaultValue: T): T {
 }
 
 const SignUpForm = ({ language }: { language: string }) => {
-
   const [state, formAction] = useFormState<any, FormData>(register, { message: '', success: false, errors: {} });
-
   const dictionary = useDictionary();
   if (!dictionary) {
     return <div>Loading...</div>;
@@ -75,8 +73,6 @@ const SignUpForm = ({ language }: { language: string }) => {
 
                   {state.errorMessage &&
                     <div className={errorMessageClass}>Fehler: <span className={errorMessageClass}> {state.errorMessage}</span></div>}
-
-
                   <BnButton type="submit" label="Sign Up" />
                 </div>
               </form>
@@ -88,7 +84,6 @@ const SignUpForm = ({ language }: { language: string }) => {
         </div>
       </div>
     </>)
-
 }
 
 export default SignUpForm;

@@ -7,9 +7,8 @@ import BnButton from "../common/buttons/bn-button";
 
 const SignInForm = ({ language }: { language: string }) => {
 
-  const { data: session, status } = useSession()
-  const [loading, setLoading] = useState(false);
-  const [loginError, setLoginError] = useState('') 
+
+  const [loginError, setLoginError] = useState('')
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -18,20 +17,16 @@ const SignInForm = ({ language }: { language: string }) => {
     const username = formData.get('username') as string;
     const password = formData.get('password') as string;
 
-    
+
     const result = await signIn('bnprovider', {
       redirect: false,
       username,
       password,
     });
 
-
     if (result?.error) {
-      console.error('Error during sign in:', result.error);
       setLoginError('Login failed. Invalid credentials');
-    } else {
-      location.reload();
-    }
+    } 
   };
   const dictionary = useDictionary();
   if (!dictionary) {

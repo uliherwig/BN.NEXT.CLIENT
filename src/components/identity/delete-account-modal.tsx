@@ -26,7 +26,7 @@ const DeleteAccountModal = ({ isOpen, closeDialog }: { isOpen: boolean, closeDia
             return;
         }
         const signOutUser = async () => {
-            const result = await basicPost('/api/identity/signout', {});
+            const result = await basicPost('/api/identity', {});
 
             const options = {
                 callbackUrl: '/auth/account',
@@ -42,6 +42,7 @@ const DeleteAccountModal = ({ isOpen, closeDialog }: { isOpen: boolean, closeDia
         }
         if (state.errors) {
             setPending(false)
+            setLoginError(state.errors.message);
         }
 
 

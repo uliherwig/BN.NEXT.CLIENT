@@ -2,7 +2,7 @@ import { authOptions } from "@/app/lib/auth";
 import { basicFetch } from "@/app/lib/fetchFunctions";
 import { StrategySettings } from "@/models/strategy/strategy-settings";
 import { getServerSession } from "next-auth";
-import { ApiError } from "@/models/common/api-error";
+import { ErrorCode } from "@/models/common/error-code";
 import { NextRequest, NextResponse } from "next/server";
 
 // TODO split this to 2 endpoints
@@ -12,12 +12,12 @@ export async function GET(req: NextRequest) {
   
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.json({ error: ApiError.Unauthorized });
+            return NextResponse.json({ error: ErrorCode.Unauthorized });
         }
 
         const userId = session.user?.id;
         if (!userId) {
-            return NextResponse.json({ error: ApiError.Unauthorized });
+            return NextResponse.json({ error: ErrorCode.Unauthorized });
         }
         // console.log('session:', session);
         // console.log('session accessToken :', session.accessToken);
@@ -46,12 +46,12 @@ export async function PUT(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.json({ error: ApiError.Unauthorized });
+            return NextResponse.json({ error: ErrorCode.Unauthorized });
         }
 
         const userId = session.user?.id;
         if (!userId) {
-            return NextResponse.json({ error: ApiError.Unauthorized });
+            return NextResponse.json({ error: ErrorCode.Unauthorized });
         }
 
         const json = await req.json();
@@ -80,12 +80,12 @@ export async function DELETE(req: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
-            return NextResponse.json({ error: ApiError.Unauthorized });
+            return NextResponse.json({ error: ErrorCode.Unauthorized });
         }
 
         const userId = session.user?.id;
         if (!userId) {
-            return NextResponse.json({ error: ApiError.Unauthorized });
+            return NextResponse.json({ error: ErrorCode.Unauthorized });
         }
 
         const testId = req.nextUrl.searchParams.get('testId') as string; 

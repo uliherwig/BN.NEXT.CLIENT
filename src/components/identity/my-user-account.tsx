@@ -39,8 +39,9 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
   }
 
   const handleSignOut = async () => {
+   
 
-    const result = await basicPost('/api/identity/signout', {});
+    const result = await basicPost('/api/identity', {});
     const options = {
       callbackUrl: '/auth/account',
       redirect: false,
@@ -49,39 +50,20 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
 
   };
 
-  const sendTestMail = async () => {
-    const endpoint = `/api/identity/test-call`;
-    const res = await fetch(endpoint, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if (res.ok) {
-      toast.success('Testmail sent');
-    }
-    else {
-      toast.error('Error sending testmail');
-    }
-  }
-
-
   useEffect(() => {
     switch (status) {
 
       case 'authenticated':
         setHeader(`${dictionary?.AUTH_welcome} ${session?.user?.name}`);
         const fetchUserAccount = async () => {
-          const endpoint = `/api/identity/user-account`;
 
-          var response = await fetch(endpoint);
-          console.log('response:', response);
+          var response = await fetch('/api/identity');
           if (response.ok) {
             var userAccount = await response.json();
             setUser(userAccount);
           } else {
             toast.error('Error fetching user account');
             await handleSignOut();
-
           }
         };
 
@@ -126,7 +108,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
   }
 
   return (
-    <div className="h-full">
+    <div className="h-[90%] max-w-[600px]">
       <ToastContainer position="bottom-right"
         autoClose={2500}
         hideProgressBar={true}
@@ -170,25 +152,25 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
 
           {!isRegister && status === 'unauthenticated' && (
             <>
-              <div className="w-[50%]">
+              <div className="w-[80%] overflow-hidden">
                 {dictionary.AUTH_subhead}
                 <SignInForm language={language} />
               </div>
-              <div className="w-[50%] pt-5"></div>
+          
             </>
           )}
           {isRegister && status === 'unauthenticated' && (
             <>
-              <div className="w-[50%]">
+              <div className="w-[80%] overflow-hidden">
                 Bitte loggen Sie sich ein oder registrieren Sie sich, um fortzufahren.
                 <SignUpForm language={language} />
               </div>
-              <div className="w-[50%] pt-5"></div>
+           
             </>
           )}
         </div>
       )}
-      <WidgetButton type='button' label="Send Test Mail" method={sendTestMail} />
+    
     </div>
   );
 }

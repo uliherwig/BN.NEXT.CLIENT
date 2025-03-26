@@ -18,8 +18,6 @@ const BnProvider = CredentialsProvider({
 
   async authorize(credentials) {
 
-    // console.log('authorize:', credentials);
-
     const res = await fetch(`${process.env.IDENTITY_API_URL}/Account/sign-in`, {
       method: "POST",
       headers: {
@@ -28,13 +26,16 @@ const BnProvider = CredentialsProvider({
       body: JSON.stringify(credentials),
     });
 
-    var result = await res.json();
+    var result = await res.json();  
+
+    console.log('authorize:', result);
+
     const user: User = await result.jwtToken;
 
     if (user) {
-      console.log('authorize:', user.name);
       return user;
     }
+
     return null;
   }
 })
@@ -56,8 +57,6 @@ async function refreshAccessToken(token: any) {
       method: "POST",
       body: JSON.stringify(params),
     })
-
-
 
     if (!response.ok) {
       signOut()

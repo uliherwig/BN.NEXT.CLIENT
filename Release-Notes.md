@@ -4,6 +4,11 @@
 
 - chart with real time data
 
+## Version 2025.03.3
+
+- email confirmation feature added
+- registration process finalized
+
 ## Version 2025.03.2
 
 - Confirmation Url for registration

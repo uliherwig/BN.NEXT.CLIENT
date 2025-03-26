@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authOptions } from '@/app/lib/auth';
 import { getServerSession } from 'next-auth';
-import { ApiError } from '@/models/common/api-error';
+import { ErrorCode } from '@/models/common/error-code';
 
 export async function GET(req: NextRequest) {
 
@@ -20,8 +20,8 @@ export async function GET(req: NextRequest) {
 
     if (res.status === 404) {
       const result = await res.json();   
-      if (result.message === ApiError.NotFound) {
-        return NextResponse.json({ error: ApiError.NotFound }, { status: 404 });
+      if (result.message === ErrorCode.NotFound) {
+        return NextResponse.json({ error: ErrorCode.NotFound }, { status: 404 });
       }
     }
 
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
 
       return NextResponse.json(data);
     } else {
-      return NextResponse.json({ error: ApiError.InternalServerError }, { status: 500 });
+      return NextResponse.json({ error: ErrorCode.InternalServerError }, { status: 500 });
     }
 
 

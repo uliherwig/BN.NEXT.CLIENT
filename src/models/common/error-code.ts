@@ -1,6 +1,7 @@
-export enum ApiError {
+export enum ErrorCode {
     None,
     NotFound,
+    EmailNotVerified,
     BadRequest,
     InternalServerError,
     Unauthorized

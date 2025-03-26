@@ -39,7 +39,7 @@ const AuthenticationMenu: React.FC<AuthMenuProps> = (props) => {
 
     const handleSignOut = async () => {
         try {
-            const result = await basicPost('/api/identity/signout', {});
+            const result = await basicPost('/api/identity', {});
 
             const options = {
               callbackUrl: '/auth/account',

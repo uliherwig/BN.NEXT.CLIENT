@@ -1,18 +1,18 @@
 import { authOptions } from "@/app/lib/auth";
 import { getServerSession } from "next-auth";
-import { ApiError } from "@/models/common/api-error";
+import { ErrorCode } from "@/models/common/error-code";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
 
   const session = await getServerSession(authOptions);
   if (!session) {
-    return NextResponse.json({ error: ApiError.Unauthorized });
+    return NextResponse.json({ error: ErrorCode.Unauthorized });
   }
 
   const userId = session.user?.id;
   if (!userId) {
-    return NextResponse.json({ error: ApiError.Unauthorized });
+    return NextResponse.json({ error: ErrorCode.Unauthorized });
   }
   const { searchParams } = new URL(req.nextUrl);
   const strategyType = searchParams.get('strategyType');
