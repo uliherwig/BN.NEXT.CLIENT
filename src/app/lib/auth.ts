@@ -61,14 +61,18 @@ async function refreshAccessToken(token: any) {
     if (!response.ok) {
       signOut()
     }
+
+    console.log('response:', response);
     const refreshedTokens = await response.json()
+
+    console.log('refreshedTokens:', refreshedTokens);
     token = {
       ...token,
       accessToken: refreshedTokens.accessToken,
       refreshToken: refreshedTokens.refreshToken,
       expiresAt: Date.now() + refreshedTokens.expiresIn * 1000,
     }
-
+console.log('refreshed token:', token);
     return token
   } catch (error) {
     console.log('error refreshing token:', error);

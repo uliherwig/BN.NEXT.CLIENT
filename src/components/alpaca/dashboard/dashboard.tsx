@@ -6,7 +6,6 @@ import StrategyList from "../strategy-test/strategy-list";
 import TestResults from "../strategy-test/test-results";
 import AlpacaAccount from "./alpaca-account";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { AlpacaAccountModel } from "@/models/alpaca/alpaca-account-model";
 import  { AuthServices }  from "@/service/auth-service";
 import { toast } from "react-toastify";

@@ -3,7 +3,6 @@ import { use, useEffect, useState } from "react";
 import { StrategySettings } from "@/models/strategy/strategy-settings";
 import AlpacaAccountDetails from "./alpaca-account-details";
 import AlpacaExecStrategy from "./alpaca-exec-strategy";
-import StrategySelector from "../review/strategy-selector";
 import { basicFetch } from "@/app/lib/fetchFunctions";
 import { StrategyInfo } from "@/models/strategy/strategy-info";
 import { AccountStatusEnum } from "@/models/alpaca/enums";
@@ -16,25 +15,28 @@ import AlpacaPositions from "./alpaca-positions";
 import AlpacaOrders from "./alpaca-orders";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AlpacaRates from "./alpaca-rates";
+import { EmptyGuid } from "@/utilities";
 
-const EmptyGuid = '00000000-0000-0000-0000-000000000000'
+
 
 const AlpacaExec: React.FC = () => {
 
     const [alpacaAccount, setAccount] = useState<AlpacaAccountModel>({} as AlpacaAccountModel);
-    const [execution, setExecution] = useState<ExecutionModel>({} as ExecutionModel);
+    const [execution, setExecution] = useState<ExecutionModel>({ id: EmptyGuid } as ExecutionModel);
     const [selectedStrategy, setSelectedStrategy] = useState<StrategySettings>({} as StrategySettings);
-    const [executedStrategy, setExecutedStrategy] = useState<StrategySettings>({} as StrategySettings);
+    // const [executedStrategy, setExecutedStrategy] = useState<StrategySettings>({} as StrategySettings);
 
     const [isLoading, setIsLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState<'orders' | 'positions'>('orders');
 
     const selectStrategy = async (strategyInfo: StrategyInfo) => {
         const result = await basicFetch<any>(`/api/strategy?strategyId=${strategyInfo.id}`);
         if (result) {
             setSelectedStrategy(result);
-            if (execution.id === EmptyGuid) {
-                setExecutedStrategy(result);
-            }
+            // if (execution.id === EmptyGuid) {
+            //     setExecutedStrategy(result);
+            // }
         }
     }
 
@@ -62,15 +64,14 @@ const AlpacaExec: React.FC = () => {
         setIsLoading(true);
 
         const res = await fetch(`/api/alpaca/execution`, {
-            method: 'DELETE',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
         });
 
         if (res.ok) {
-            let exec = {} as ExecutionModel;
-            exec.id = EmptyGuid;
+            let exec = { id: EmptyGuid } as ExecutionModel;
             setExecution(exec);
         } else {
             console.log('AlpacaExec   ', { error: 'Server Error' }, { status: 500 });
@@ -94,28 +95,36 @@ const AlpacaExec: React.FC = () => {
 
             const exec = await basicFetch<ExecutionModel>('/api/alpaca/execution');
 
+            console.log('AlpacaExec   ', exec);
+
             if (exec.id !== EmptyGuid) {
                 const result = await basicFetch<any>(`/api/strategy?strategyId=${exec.strategyId}`);
                 if (result) {
                     setSelectedStrategy(result);
-                    setExecutedStrategy(result);
+                    // setExecutedStrategy(result);
+                    setExecution(exec);
                 }
             }
-            setExecution(exec);
+
             setIsLoading(false);
         }
         if (alpacaAccount.accountStatus === AccountStatusEnum.AccountLoaded) {
             loadExecutionData();
+        } else {
+            setIsLoading(false);
         }
+
+        console.log('alpacaAccount   ', alpacaAccount);
+        console.log('AlpacaExec   ', execution);
     }, [alpacaAccount]);
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (selectedStrategy.id !== EmptyGuid) {
-            setExecutedStrategy(selectedStrategy);
-        }
-    }, [selectedStrategy, selectedStrategy.id, selectedStrategy.name]);
+    //     if (selectedStrategy.id !== EmptyGuid) {
+    //         setExecutedStrategy(selectedStrategy);
+    //     }
+    // }, [selectedStrategy, selectedStrategy.id, selectedStrategy.name]);
 
 
     // handle store account credentials modal
@@ -139,12 +148,11 @@ const AlpacaExec: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div><StrategySelector selectStrategy={selectStrategy} /></div>
                     <div>
                         <div className="component-container">
 
                             <div className="min-h-[200px]">
-                                <AlpacaExecStrategy alpacaAccountStatus={alpacaAccount.accountStatus} strategy={executedStrategy} alpacaExecution={execution} />
+                                <AlpacaExecStrategy strategy={selectedStrategy} alpacaExecution={execution} selectStrategy={selectStrategy} />
 
                             </div>
                             {alpacaAccount.accountStatus === AccountStatusEnum.AccountLoaded && execution.id === EmptyGuid && (
@@ -160,25 +168,49 @@ const AlpacaExec: React.FC = () => {
 
                         </div>
                     </div>
+                    <div className="component-container">
+                        <AlpacaRates asset={execution.id !== EmptyGuid ? selectedStrategy.asset : ""} />
 
+                    </div>
                     <div className="component-container">
                         {isLoading && (
                             <CircularLoader />
                         )}
                         {!isLoading && alpacaAccount.accountStatus === AccountStatusEnum.AccountLoaded && execution.id !== EmptyGuid && (
                             <div className="font-bold text-red-500">
-                                Aktuell wird die Strategie {executedStrategy.name} auf dem Alpaca Testkonto ausgeführt.
+                                Aktuell wird die Strategie {selectedStrategy.name} auf dem Alpaca Testkonto ausgeführt.
                             </div>
                         )}
 
                     </div>
+
+
+
                 </div>
 
-                <div className="flex-1">
-                    <AlpacaOrders alpacaAccountStatus={alpacaAccount.accountStatus} />
-                </div>
-                <div className="flex-1">
-                    <AlpacaPositions alpacaAccountStatus={alpacaAccount.accountStatus} />
+                <div className="flex flex-col w-2/3 h-full">
+                    <div className="h-12 flex bg-white">
+                        <button
+                            className={`px-4 py-2 border-b-2 ${activeTab === 'orders' ? 'border-slate-500 text-slate-500' : 'border-transparent text-gray-500'}`}
+                            onClick={() => setActiveTab('orders')}
+                        >
+                            Orders
+                        </button>
+                        <button
+                            className={`px-4 py-2 border-b-2 ${activeTab === 'positions' ? 'border-slate-500 text-slate-500' : 'border-transparent text-gray-500'}`}
+                            onClick={() => setActiveTab('positions')}
+                        >
+                            Positions
+                        </button>
+                    </div>
+                    <div className="flex-grow h-full overflow-hidden">
+                        {activeTab === 'orders' && (
+                            <AlpacaOrders alpacaAccountStatus={alpacaAccount.accountStatus} />
+                        )}
+                        {activeTab === 'positions' && (
+                            <AlpacaPositions alpacaAccountStatus={alpacaAccount.accountStatus} />
+                        )}
+                    </div>
                 </div>
             </div>
             <AlpacaCredentialsModal isOpen={isModalOpen}

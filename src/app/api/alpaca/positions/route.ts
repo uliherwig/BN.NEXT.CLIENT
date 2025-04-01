@@ -2,30 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { basicFetch } from '@/app/lib/fetchFunctions';
 import { authOptions } from '@/app/lib/auth';
 import { getServerSession } from 'next-auth';
-import { cacheService } from '@/service/cache-service';
+import { ErrorCode } from '@/models/common/error-code';
+import { AlpacaPositionModel } from '@/models/alpaca/alpaca-position-model';
 
 export async function GET(req: NextRequest) {
- 
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
 
-    const endpoint = `${process.env.ALPACA_API_URL}/AlpacaTrading/positions?userId=${session.user?.id}`;
-    const res = await fetch(endpoint, {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${session.accessToken}`,
-      }
-    });
-  
-    if (res.ok) {
-      const data = await res.json();
-      return NextResponse.json(data);
-    } else {
-      return NextResponse.json({ error: res.statusText }, { status: res.status });
-  
-    }
-
+      const session = await getServerSession(authOptions);
+      if (!session) {
+        return NextResponse.json({ error: ErrorCode.Unauthorized });
+      }  
+      const endpoint = `${process.env.ALPACA_API_URL}/AlpacaTrading/positions`;
+      var dats = await basicFetch<AlpacaPositionModel[]>(endpoint, session.accessToken);
+      return NextResponse.json(dats); 
 }

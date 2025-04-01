@@ -1,6 +1,6 @@
 'use client';
 
-import { basicFetch, basicPost } from "@/app/lib/fetchFunctions";
+import { basicPost } from "@/app/lib/fetchFunctions";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState, useEffect } from 'react';
 import { useDictionary } from "@/provider/dictionary-provider";

@@ -1,20 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { basicFetch } from '@/app/lib/fetchFunctions';
+import { authOptions } from '@/app/lib/auth';
+import { ErrorCode } from '@/models/common/error-code';
+import { getServerSession } from 'next-auth';
 
 
 // API route handler
 export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: ErrorCode.Unauthorized });
+  }
+
   const symbol = req.nextUrl.searchParams.get('symbol') as string;
   const startDate = req.nextUrl.searchParams.get('startDate') as string;
   const endDate = req.nextUrl.searchParams.get('endDate') as string;
   const timeFrame = req.nextUrl.searchParams.get('timeFrame') as string;
 
-  try {
-    const url = `${process.env.ALPACA_API_URL}/AlpacaTest/historical-bars/${symbol}?startDate=${startDate}&endDate=${endDate}`
-    const data = await basicFetch<any[]>(url);
-    return NextResponse.json(data);
-  } catch (error) {
+  const endpoint = `${process.env.ALPACA_API_URL}/AlpacaTest/historical-bars/${symbol}?startDate=${startDate}&endDate=${endDate}`
+  var dats = await basicFetch<any[]>(endpoint, session.accessToken);
+  return NextResponse.json(dats);
 
-    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
-  }
 }

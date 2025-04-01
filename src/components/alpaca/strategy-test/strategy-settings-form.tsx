@@ -58,6 +58,8 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
 
     const getAssets = async () => {
         const assets = await basicFetch<any>(`/api/alpaca/assets`);
+
+        console.log('ASSETS', assets);
         setAssets(assets);
     }
 

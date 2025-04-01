@@ -7,32 +7,64 @@ import { StrategySettings } from '@/models/strategy/strategy-settings';
 import { AccountStatusEnum } from '@/models/alpaca/enums';
 import { ExecutionModel } from '@/models/strategy/execution-model';
 import { StrategyEnum } from '@/models/strategy/enums';
+import { Autocomplete, TextField } from '@mui/material';
+import { StrategyInfo } from '@/models/strategy/strategy-info';
+import { basicFetch } from '@/app/lib/fetchFunctions';
+import { EmptyGuid } from '@/utilities';
 
 interface AlpacaExecStrategyProps {
     strategy: StrategySettings,
-    alpacaAccountStatus: AccountStatusEnum,
     alpacaExecution: ExecutionModel
+    selectStrategy: Function
 }
 
-const AlpacaExecStrategy: React.FC<AlpacaExecStrategyProps> = ({ alpacaAccountStatus, strategy, alpacaExecution }) => {
+const AlpacaExecStrategy: React.FC<AlpacaExecStrategyProps> = ({ strategy, alpacaExecution, selectStrategy }) => {
 
     const dictionary = useDictionary();
-
     const [loading, setLoading] = useState<boolean>(true);
+    const [strategyName, setStrategyName] = useState("None");
+    const [strategyFilter, setStrategyFilter] = useState(StrategyEnum.None);
+    const [strategyInfos, setStrategyInfos] = useState<StrategyInfo[]>([]);
 
-
+    const selectStrategyInfo = async (info: StrategyInfo) => {
+        setStrategyName(info.label);
+        selectStrategy(info)
+    }
+    const loadStrategyInfos = async (filter: number) => {
+        const strategyInfos = await basicFetch<StrategyInfo[]>(`/api/strategy/infos?strategyType=${filter}`);
+        setStrategyInfos(strategyInfos);
+        selectStrategyInfo(strategyInfos[0]);
+        setLoading(false);
+    }
     useEffect(() => {
+        loadStrategyInfos(0);
         setLoading(false);
     }, []);
-
-
 
     if (!dictionary) {
         return <div>Loading...</div>;
     }
     return (
         <>
-            <div className="text-component-head mb-2">Alpaca Execution</div>
+            <div className="text-component-head mb-2 flex flex-row">
+                <div className='w-[50%]'>Alpaca Execution</div>
+                <div className='pt-2'>
+                    <Autocomplete
+                        disabled={alpacaExecution.id !== EmptyGuid}
+                        options={strategyInfos}
+                        size="small"
+                        sx={{ width: 200 }}
+                        onChange={(event, newValue) => {
+                            if (newValue) {
+                                selectStrategyInfo(newValue);
+                            }
+                        }}
+                        renderInput={(params) => <TextField {...params} label="Select Strategy" />}
+                    />
+                </div>
+            </div>
+
+
             <div className="w-full overflow-hidden">
                 {loading && (
                     <CircularLoader />
@@ -69,7 +101,6 @@ const AlpacaExecStrategy: React.FC<AlpacaExecStrategyProps> = ({ alpacaAccountSt
                             <div>Overnight:</div>
                             <div>{strategy.allowOvernight ? 'Yes' : 'No'}</div>
                         </div>
-
                     </>
                 )}
             </div>

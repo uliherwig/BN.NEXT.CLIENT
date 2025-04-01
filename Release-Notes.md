@@ -4,6 +4,12 @@
 
 - chart with real time data
 
+## Version 2025.04.1
+
+- Execution refactored
+- Alpaca rate component
+- Ratefeed via SignalR 
+
 ## Version 2025.03.3
 
 - email confirmation feature added

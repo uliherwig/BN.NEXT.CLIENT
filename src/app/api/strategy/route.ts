@@ -5,39 +5,19 @@ import { getServerSession } from "next-auth";
 import { ErrorCode } from "@/models/common/error-code";
 import { NextRequest, NextResponse } from "next/server";
 
-// TODO split this to 2 endpoints
-
+// get strategy by id
 export async function GET(req: NextRequest) {
     const strategyId = req.nextUrl.searchParams.get('strategyId') as string;
-    const bookmarked = req.nextUrl.searchParams.get('bookmarked') as string;
-
-
     const session = await getServerSession(authOptions);
     if (!session) {
         return NextResponse.json({ error: ErrorCode.Unauthorized });
     }
-
-    const userId = session.user?.id;
-    if (!userId) {
-        return NextResponse.json({ error: ErrorCode.Unauthorized });
-    }
-    // console.log('session:', session);
-    // console.log('session:', session.accessToken);
-    // console.log('session:', authOptions.jwt);
-
-    if (strategyId) {
-        const endpoint = `${process.env.STRATEGY_API_URL}/strategy/${strategyId}`;
-        var data = await basicFetch<StrategySettings>(endpoint, session.accessToken);
-        return NextResponse.json(data);
-    } else {
-        const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings/${userId}?bookmarked=${bookmarked}`;
-        var dats = await basicFetch<StrategySettings[]>(endpoint, session.accessToken);
-        return NextResponse.json(dats);
-    }
-
-
+    const endpoint = `${process.env.STRATEGY_API_URL}/strategy/${strategyId}`;
+    var dats = await basicFetch<StrategySettings>(endpoint, session.accessToken);
+    return NextResponse.json(dats);
 }
 
+// update strategy 
 export async function PUT(req: NextRequest) {
 
     const session = await getServerSession(authOptions);
@@ -74,8 +54,9 @@ export async function PUT(req: NextRequest) {
 
 }
 
+// delete strategy by id
 export async function DELETE(req: NextRequest) {
-    const testId = req.nextUrl.searchParams.get('testId') as string;
+    const strategyId = req.nextUrl.searchParams.get('testId') as string;
 
 
     const session = await getServerSession(authOptions);
@@ -88,7 +69,7 @@ export async function DELETE(req: NextRequest) {
         return NextResponse.json({ error: ErrorCode.Unauthorized });
     }
 
-    var endpoint = `${process.env.STRATEGY_API_URL}/strategy/${testId}`;
+    var endpoint = `${process.env.STRATEGY_API_URL}/strategy/${strategyId}`;
 
     const options: RequestInit = {
         method: 'DELETE',

@@ -77,7 +77,7 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ selectStrategy }) =
                             renderInput={(params) => <TextField {...params} label="Select Strategy" />}
                         /></div>
                     <div className='flex-1'>
-                        <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
+                        {/* <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                             <InputLabel id="demo-select-small-label">Select Strategy Type</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
@@ -90,7 +90,7 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ selectStrategy }) =
                                 <MenuItem value={StrategyEnum.Breakout}>Breakout</MenuItem>
                                 <MenuItem value={StrategyEnum.SMA}>SMA</MenuItem>
                             </Select>
-                        </FormControl>
+                        </FormControl> */}
                     </div>
                 </div>
             )}

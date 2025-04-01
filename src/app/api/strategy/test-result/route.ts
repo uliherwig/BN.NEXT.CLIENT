@@ -1,15 +1,17 @@
+import { authOptions } from "@/app/lib/auth";
 import { basicFetch } from "@/app/lib/fetchFunctions";
+import { ErrorCode } from "@/models/common/error-code";
 import { TestResult } from "@/models/strategy/test-result";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-    const testId = req.nextUrl.searchParams.get('testId') as string;
-    try {
-        const endpoint = `${process.env.STRATEGY_API_URL}/strategy/results/${testId}`;
-        var data = await basicFetch<TestResult>(endpoint);
-        return NextResponse.json(data);
-    } catch (error) {
-        console.log('error:', error);
-        return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return NextResponse.json({ error: ErrorCode.Unauthorized });
     }
+    const testId = req.nextUrl.searchParams.get('testId') as string;
+    const endpoint = `${process.env.STRATEGY_API_URL}/strategy/results/${testId}`;
+    var dats = await basicFetch<TestResult>(endpoint, session.accessToken);
+    return NextResponse.json(dats);
 }

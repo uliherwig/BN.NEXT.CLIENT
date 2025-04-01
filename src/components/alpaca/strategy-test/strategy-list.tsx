@@ -33,11 +33,13 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
 
 
     useEffect(() => {
-        updateTests();
+        updateStrategies();
     }, [hasUpdate]);
 
-    const updateTests = async () => {
+    const updateStrategies = async () => {
         const strats = await basicFetch<StrategySettings[]>(`/api/strategy/list?bookmarked=${showBookmarked}`);
+
+      
         setStrategies(strats);
         const latestStrategy = firstOrDefault(strats, {} as StrategySettings);
         if (latestStrategy) {
@@ -69,7 +71,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
         } else {
             toast.error(dictionary.DASH_BOOKMARK_FAILURE);
         }
-        updateTests();
+        updateStrategies();
     }
 
     const deleteStrategy = async (id: string) => {
@@ -87,16 +89,13 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
         } else {
             toast.error(dictionary.DASH_DELETE_FAILURE);
         }
-        updateTests();
+        updateStrategies();
     }
 
     const displayDetails = (strategy: StrategySettings) => {
         setSelectedStrategy(strategy);
         showResult(strategy);
     }
-
-
-
 
     const TABLE_HEAD = [
         dictionary.DASH_TYPE,
@@ -115,7 +114,8 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
                 )}
                 {!loading && (
                     <div className="h-full overflow-auto">
-                        {strategies.length === 0 && <div className="mt-5 text-slate-800">{dictionary.DASH_NO_TESTS_AVAILABLE}</div>}
+
+                        {strategies.length < 1 && <div className="mt-5 text-slate-800">{dictionary.DASH_NO_TESTS_AVAILABLE}</div>}
 
                         {strategies.length > 0 &&
                             <table className="min-w-full table-fixed border">

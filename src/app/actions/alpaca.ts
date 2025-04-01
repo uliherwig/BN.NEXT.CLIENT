@@ -70,9 +70,18 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         };
     }
 
+    console.log('FORM DATA', session);
+
     const isStrategyNameAvailable = async (name: string): Promise<boolean> => {
-        const url = `${process.env.STRATEGY_API_URL}/Strategy/${name}/${session.user.id}`;
-        const res = await fetch(url);
+        const url = `${process.env.STRATEGY_API_URL}/strategy/exists/${name}`;
+        const res = await fetch(url,{
+            method: 'GET',   
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.accessToken}`
+            },
+        });
+        console.log('RES', res);
         const data = await res.json();
         return !data;
     };
@@ -151,6 +160,8 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         });
 
         let success = false;
+
+        console.log('RESPONSE', response);
 
         if (response.ok) {
             success = await response.json();

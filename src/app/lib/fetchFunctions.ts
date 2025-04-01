@@ -1,3 +1,5 @@
+import { signOut } from "next-auth/react";
+
 export const basicFetch = async<returnType>(endpoint: string, token: string = ''): Promise<returnType> => {
 
     const res = await fetch(endpoint, {
@@ -6,10 +8,14 @@ export const basicFetch = async<returnType>(endpoint: string, token: string = ''
             'Content-Type': 'application/json'
         }
     });
-    // if (!res.ok) {
-    //     console.log('Error fetching data:', res.statusText + ' ' + endpoint);
-    //     throw new Error(`Error fetching data: ${res.statusText}`);
-    // }
+    if (res.status === 401) {
+        signOut();
+        throw new Error('Unauthorized');
+    }
+    if (res.status !== 200) {
+        signOut();
+        throw new Error(`Error fetching data: ${res.statusText}`);
+    }
     return await res.json();
 }
 
