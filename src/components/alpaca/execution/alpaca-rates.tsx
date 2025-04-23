@@ -52,7 +52,7 @@ const AlpacaRates: React.FC<AlpacaRatesProps> = ({ asset }) => {
                 connection.off("ReceiveQuote");
             }
         };
-    }, [connection]);
+    }, []);
 
     const registerRateFeed = async () => {
         if (connection && userId !== "") {
