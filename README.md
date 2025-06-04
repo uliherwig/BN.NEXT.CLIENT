@@ -5,8 +5,6 @@ UI for testing of trading strategies
 
 An alpaca paper account is used for testing
 
-# Content
-
 ## dashboard
 
 ## trader

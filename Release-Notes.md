@@ -4,6 +4,10 @@
 
 - chart with real time data
 
+## Version 2025.06.1
+
+- fix auth
+
 ## Version 2025.04.1
 
 - Execution refactored

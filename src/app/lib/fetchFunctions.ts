@@ -2,12 +2,17 @@ import { signOut } from "next-auth/react";
 
 export const basicFetch = async<returnType>(endpoint: string, token: string = ''): Promise<returnType> => {
 
+    console.log('basicFetch', endpoint, token);
+
     const res = await fetch(endpoint, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         }
     });
+
+    
+    console.log('basicFetch', endpoint, res.status, token);
     if (res.status === 401) {
         signOut();
         throw new Error('Unauthorized');
