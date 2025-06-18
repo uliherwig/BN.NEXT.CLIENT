@@ -6,7 +6,8 @@
 
 ## Version 2025.06.1
 
-- fix auth
+- refactoring: auth
+- api route optimize strategy
 
 ## Version 2025.04.1
 

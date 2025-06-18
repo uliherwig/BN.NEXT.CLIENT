@@ -23,14 +23,8 @@ const AlpacaAccountDetails: React.FC<AlpacaAccountDetailsProps> = ({ alpacaAccou
     useEffect(() => {
  
             setIsLoading(false);
-
-            console.log('AlpacaAccountDetails', alpacaAccount);
       
     }, [alpacaAccount]);
-
-
-
-
 
     if (!dictionary) {
         return <div>Loading...</div>;

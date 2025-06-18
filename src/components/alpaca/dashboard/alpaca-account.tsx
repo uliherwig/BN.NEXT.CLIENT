@@ -37,7 +37,7 @@ const AlpacaAccount : React.FC<AlpacaAccountProps> = ({ updateAlpacaAccount }) =
 
     const loadAccountData = async () => {
 
-        const account = await basicFetch<AlpacaAccountModel>(`/api/alpaca/account`);
+        const account = await basicFetch<AlpacaAccountModel>(`/api/alpaca/account`);   
         switch (account.accountStatus) {
             case 0:
             case 1:

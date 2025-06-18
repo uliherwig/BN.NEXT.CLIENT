@@ -34,6 +34,7 @@ const AlpacaReview: React.FC = () => {
             <div className="w-2/3 bg-blue-200">
                 <ReviewPositions strategySettings={strategy} />
             </div>
+
         </div>
     );
 

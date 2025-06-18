@@ -36,7 +36,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "src/app/blogs/page.mdx"  ],
+, "src/app/blogs/page.mdx", "public/service-worker.js"  ],
   "exclude": [
     "node_modules"
   ]

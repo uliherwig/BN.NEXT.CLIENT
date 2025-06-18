@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { basicFetch } from '@/app/lib/fetchFunctions';
+import { authorizedFetch } from '@/app/lib/fetchFunctions';
 import { authOptions } from '@/app/lib/auth';
 import { getServerSession } from 'next-auth';
 import { ErrorCode } from '@/models/common/error-code';
@@ -12,6 +12,6 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: ErrorCode.Unauthorized });
       }  
       const endpoint = `${process.env.ALPACA_API_URL}/AlpacaTrading/positions`;
-      var dats = await basicFetch<AlpacaPositionModel[]>(endpoint, session.accessToken);
+      var dats = await authorizedFetch<AlpacaPositionModel[]>(endpoint, session.accessToken);
       return NextResponse.json(dats); 
 }

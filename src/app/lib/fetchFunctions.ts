@@ -1,8 +1,23 @@
 import { signOut } from "next-auth/react";
 
-export const basicFetch = async<returnType>(endpoint: string, token: string = ''): Promise<returnType> => {
+export const basicFetch = async<returnType>(endpoint: string): Promise<returnType> => {
+    const res = await fetch(endpoint, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });  
+    return await res.json();
+}
 
-    console.log('basicFetch', endpoint, token);
+export const authorizedFetch = async<returnType>(endpoint: string, token: string | undefined): Promise<returnType> => {
+
+    // console.log('authorizedFetch', endpoint, token);
+
+    if(!token) {
+        console.error('No token provided for authorizedFetch'); 
+        signOut();
+        throw new Error('No token provided');
+    }
 
     const res = await fetch(endpoint, {
         headers: {
@@ -11,16 +26,16 @@ export const basicFetch = async<returnType>(endpoint: string, token: string = ''
         }
     });
 
-    
-    console.log('basicFetch', endpoint, res.status, token);
-    if (res.status === 401) {
-        signOut();
-        throw new Error('Unauthorized');
-    }
-    if (res.status !== 200) {
-        signOut();
-        throw new Error(`Error fetching data: ${res.statusText}`);
-    }
+
+    // Not needed - is handled by compoonent
+    // if (res.status === 401) {
+    //     signOut();
+    //     throw new Error('Unauthorized');
+    // }
+    // if (res.status !== 200) {
+    //     signOut();
+    //     throw new Error(`Error fetching data: ${res.statusText}`);
+    // }
     return await res.json();
 }
 

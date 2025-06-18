@@ -2,10 +2,7 @@
 import { jwtDecode } from "jwt-decode";
 import NextAuth, { User } from "next-auth";
 import { NextAuthOptions } from 'next-auth';
-import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { signOut } from "next-auth/react";
-
 
 const BnProvider = CredentialsProvider({
   name: "BnProvider",
@@ -26,10 +23,7 @@ const BnProvider = CredentialsProvider({
       body: JSON.stringify(credentials),
     });
 
-    var result = await res.json();  
-
-    console.log('authorize:', result);
-
+    var result = await res.json();
     const user: User = await result.jwtToken;
 
     if (user) {
@@ -42,7 +36,7 @@ const BnProvider = CredentialsProvider({
 
 async function refreshAccessToken(token: any) {
 
-  //console.log('refreshing token ====================================');
+  // console.log('refreshing token ====================================');
   try {
     const url = `${process.env.IDENTITY_API_URL}/Account/refresh-token`
 
@@ -58,24 +52,37 @@ async function refreshAccessToken(token: any) {
       body: JSON.stringify(params),
     })
 
-    if (!response.ok) {
-      signOut()
-    }
 
-    console.log('response:', response);
     const refreshedTokens = await response.json()
 
-    console.log('refreshedTokens:', refreshedTokens);
+    // console.log('refreshedTokens:', refreshedTokens);
+
+    // console.log('refreshedTokens.statusCode:', response, response.status);
+
     token = {
       ...token,
       accessToken: refreshedTokens.accessToken,
       refreshToken: refreshedTokens.refreshToken,
       expiresAt: Date.now() + refreshedTokens.expiresIn * 1000,
     }
-console.log('refreshed token:', token);
+
+    // console.log('refreshed token:', token);
+
+    if (response.status !== 200) {
+
+      token = {
+        ...token,
+        accessToken: undefined,
+        refreshToken: undefined,
+        expiresAt: 0,
+        error: "RefreshAccessTokenError",
+      }
+
+    }
     return token
+
   } catch (error) {
-    console.log('error refreshing token:', error);
+    // console.log('error refreshing token:', error);
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -90,6 +97,7 @@ export const authOptions: NextAuthOptions = {
     BnProvider,
   ],
 
+
   session: {
     // jwt: true,
     strategy: "jwt",
@@ -100,11 +108,11 @@ export const authOptions: NextAuthOptions = {
 
     async signIn({ user, account, profile, email, credentials }) {
 
-      // console.log('signIn:', user);
-      // console.log('signIn:', account);
-      // console.log('signIn:', profile);  
-      // console.log('signIn:', email);
-      // console.log('signIn:', credentials);
+      // // console.log('signIn:', user);
+      // // console.log('signIn:', account);
+      // // console.log('signIn:', profile);  
+      // // console.log('signIn:', email);
+      // // console.log('signIn:', credentials);
 
       if (user) {
         return true
@@ -113,11 +121,14 @@ export const authOptions: NextAuthOptions = {
     },
 
     async redirect({ url, baseUrl }) {
+      // console.log('redirect url:', baseUrl)
       return baseUrl
     },
 
     async jwt({ token, user }) {
       if (user) {
+        // console.log('jwt user:', user);
+        // console.log('token:', token);
 
         token.name = user.name;
         token.accessToken = user.accessToken
@@ -126,11 +137,13 @@ export const authOptions: NextAuthOptions = {
         // token.role = "Unknown" // the user role is in token 
 
         const expiresAt: number = token.expiresAt as number;
+        // console.log('jwt token expires at:', expiresAt);
 
         if (Date.now() < expiresAt) {
           return token
         }
-        return refreshAccessToken(token)
+        token = await refreshAccessToken(token)
+        return token
       }
 
       if (token) {
@@ -138,19 +151,21 @@ export const authOptions: NextAuthOptions = {
         if (Date.now() < expiresAt) {
           return token
         }
-        return refreshAccessToken(token)
+        token = await refreshAccessToken(token)
+        return token
       }
     },
 
     async session({ session, token, user }) {
 
       const decoded: any = token.accessToken ? jwtDecode(token.accessToken) : null;
+      // console.log('session decoded:', decoded);
 
-      if (token && session.user) {
+      if (token.accessToken && session.user) {
 
         session.user.username = decoded.preferred_username;
         session.user.email = decoded.email;
-        session.user.id = decoded.sub;    
+        session.user.id = decoded.sub;
         session.user.name = decoded.name;
         // session.user.role = decoded.role;
         session.accessToken = token.accessToken;

@@ -5,7 +5,7 @@ import StrategySettingsForm from "./strategy-settings-form";
 import StrategyList from "./strategy-list";
 import { StrategySettings } from "@/models/strategy/strategy-settings";
 
-const Backtests = () => {
+const StrategyTest = () => {
     const [backtest, setBacktest] = useState<StrategySettings>({} as StrategySettings);
     const [hasUpdate, setHasUpdate] = useState<boolean>(false);
 
@@ -32,4 +32,4 @@ const Backtests = () => {
         </>
     )
 }
-export default Backtests;
+export default StrategyTest;

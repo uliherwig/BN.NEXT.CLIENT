@@ -39,7 +39,6 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
   }
 
   const handleSignOut = async () => {
-   
 
     const result = await basicPost('/api/identity', {});
     const options = {
@@ -49,8 +48,11 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
     await signOut(options);
 
   };
+  console.log("UserAccount Page", searchParams);
+  const sessionexpired = searchParams['info'] === 'expired';
 
   useEffect(() => {
+
     switch (status) {
 
       case 'authenticated':
@@ -78,30 +80,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
 
   }, [session, status, dictionary]);
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
 
-  //   const formData = new FormData(event.currentTarget);
-  //   const username = formData.get('username') as string;
-  //   const password = formData.get('password') as string;
-
-  //   console.log('Sign in form submitted:', { username, password });
-
-  //   const result = await signIn('bnprovider', {
-  //     redirect: false,
-  //     username,
-  //     password,
-  //   });
-
-  //   console.log('Sign in result:', result);
-
-  //   if (result?.error) {
-  //     console.error('Error during sign in:', result.error);
-  //     // Handle error
-  //   } else {
-  //     console.log('Sign in successful:', result);
-  //   }
-  // };
 
   if (!dictionary) {
     return <div>Loading...</div>;
@@ -153,10 +132,16 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
           {!isRegister && status === 'unauthenticated' && (
             <>
               <div className="w-[80%] overflow-hidden">
-                {dictionary.AUTH_subhead}
+                {sessionexpired && (
+                  <p className="text-red-500 w-[70%]">Session expired..  please login again.</p>
+                )}
+
+                {!sessionexpired && (
+                  <p>{dictionary.AUTH_subhead}</p>
+                )}
+
                 <SignInForm language={language} />
               </div>
-          
             </>
           )}
           {isRegister && status === 'unauthenticated' && (
@@ -165,12 +150,12 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
                 Bitte loggen Sie sich ein oder registrieren Sie sich, um fortzufahren.
                 <SignUpForm language={language} />
               </div>
-           
+
             </>
           )}
         </div>
       )}
-    
+
     </div>
   );
 }

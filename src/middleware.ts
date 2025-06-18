@@ -15,13 +15,16 @@ function getLocale(request: NextRequest) { return match(new Negotiator({ headers
 export async function middleware(request: NextRequest) {
 
   const url = new URL(request.url) 
+  // console.log('MIDDLEWARE  API / ACTION:', url.pathname);  
 
   //  API and action routes  
-  if(url.pathname.startsWith('/api') || url.pathname.startsWith('/action')) {  
+  if(url.pathname.startsWith('/api') || url.pathname.startsWith('/action')  || url.pathname.endsWith('/service-worker.js')) {  
+
+    // console.log('MIDDLEWARE API / ACTION:', url.pathname);
     return;
   } 
 
-  console.log('MIDDLEWARE NO API / ACTION:', url.pathname);  
+  console.log('MIDDLEWARE PATH:', url.pathname);  
 
   // set language
   const pathnameHasLocale = locales.some(

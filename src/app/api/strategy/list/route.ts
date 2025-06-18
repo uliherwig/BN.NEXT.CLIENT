@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/lib/auth";
-import { basicFetch } from "@/app/lib/fetchFunctions";
+import { authorizedFetch } from "@/app/lib/fetchFunctions";
 import { StrategySettings } from "@/models/strategy/strategy-settings";
 import { getServerSession } from "next-auth";
 import { ErrorCode } from "@/models/common/error-code";
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     }
 
     const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings?bookmarked=${bookmarked}`;
-    var dats = await basicFetch<StrategySettings[]>(endpoint, session.accessToken);
+    var dats = await authorizedFetch<StrategySettings[]>(endpoint, session.accessToken);
     return NextResponse.json(dats);
 }
 

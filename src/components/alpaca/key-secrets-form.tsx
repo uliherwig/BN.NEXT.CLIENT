@@ -1,12 +1,8 @@
 "use client";
 import { useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
 
-import { basicFetch } from '@/app/lib/fetchFunctions';
-import { AlpacaAccountModel } from '@/models/alpaca/alpaca-account-model';
 import BNButton from '@/components/common/buttons/bn-button';
-import { errors } from 'jose';
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { addOrUpdateKeyAndSecret } from "@/app/actions/alpaca";
 import { AlpacaUserSettings } from '@/models/alpaca/alpaca-user-settings';
 

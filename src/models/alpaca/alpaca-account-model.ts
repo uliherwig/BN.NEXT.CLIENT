@@ -9,4 +9,5 @@ export interface AlpacaAccountModel  {
     accruedFees: number
     buyingPower: number
     createdAtUtc: Date
+    error:string | null
 }

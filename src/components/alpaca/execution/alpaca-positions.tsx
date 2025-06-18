@@ -4,9 +4,6 @@ import { useDictionary } from '@/provider/dictionary-provider';
 import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/components/common/loader";
 import { AccountStatusEnum } from '@/models/alpaca/enums';
-import { PositionModel } from '@/models/strategy/position-model';
-import { SideEnum } from '@/models/strategy/enums';
-import { format } from 'date-fns';
 import { AlpacaPositionModel } from '@/models/alpaca/alpaca-position-model';
 
 

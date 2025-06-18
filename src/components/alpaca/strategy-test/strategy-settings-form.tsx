@@ -14,6 +14,7 @@ import { AlpacaAssetModel } from "@/models/alpaca/alpaca-asset-model";
 import CircularLoader from "@/components/common/loader";
 import StrategySettingsFormBreakout from "./strategy-settings-form-breakout";
 import StrategySettingsFormSMA from "./strategy-settings-form-sma";
+import OptimizerModal from "./optimizer-modal";
 
 enum StrategySettingsFormState {
     None,
@@ -40,6 +41,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
     const [stopLossType, setStopLossType] = useState<string>('0');
     const today = new Date()
     const formattedDate = format(today, 'yyyy-MM-dd');
+ 
 
     useEffect(() => {
         getAssets();
@@ -50,7 +52,6 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
     }, [formState]);
 
     useEffect(() => {
-        console.log('state:', state);
         if (state.success) {
             setFormState(StrategySettingsFormState.Success);
         }
@@ -58,15 +59,19 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
 
     const getAssets = async () => {
         const assets = await basicFetch<any>(`/api/alpaca/assets`);
-
-        console.log('ASSETS', assets);
         setAssets(assets);
     }
 
     const handleSubmit = (e: boolean) => {
         setPending(e);
-        console.log('pending:', pending);
     }
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const closeDialog = () => {
+        setIsModalOpen(false);
+    }
+
+   
 
     if (!dictionary) {
         return <div>{"Loading..."}</div>;
@@ -74,6 +79,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
 
 
     return (
+        <>
         <div className="component-container overflow-hidden">
             <div className="text-component-head">{dictionary.TEST_CREATE_NEW_STRATEGY}</div>
             <div className="h-full w-full overflow-hidden">
@@ -169,7 +175,13 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                                 )}
                                                 <p className="mt-4">
                                                     {formState !== StrategySettingsFormState.Success && (
-                                                        <SubmitButton label={dictionary.TEST_RUN_BACKTEST} handleFormState={handleSubmit} />
+                                                        <>
+                                                            <SubmitButton label={dictionary.TEST_RUN_BACKTEST} handleFormState={handleSubmit} />
+                                                            <div className="flex flex-row gap-2 mt-2">
+                                                                <WidgetButton  type="button" label="Optimiere Parameter" method={() => setIsModalOpen(true)} />
+                                                            </div>
+                                                            
+                                                        </>
                                                     )}
                                                 </p>
                                             </td>
@@ -192,6 +204,8 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                 </div>
             </div>
         </div>
+        <OptimizerModal  isOpen={isModalOpen} closeDialog={closeDialog} />
+        </>
     );
 };
 

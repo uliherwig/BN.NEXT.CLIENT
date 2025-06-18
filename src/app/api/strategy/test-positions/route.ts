@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/lib/auth";
-import { basicFetch } from "@/app/lib/fetchFunctions";
+import { authorizedFetch } from "@/app/lib/fetchFunctions";
 import { ErrorCode } from "@/models/common/error-code";
 import { PositionModel } from "@/models/strategy/position-model";
 import { getServerSession } from "next-auth";
@@ -14,6 +14,6 @@ export async function GET(req: NextRequest) {
         const testId = req.nextUrl.searchParams.get('testId') as string;
         const endpoint = `${process.env.STRATEGY_API_URL}/strategy/positions/${testId}`;
 
-        var dats = await basicFetch<PositionModel>(endpoint, session.accessToken);
+        var dats = await authorizedFetch<PositionModel>(endpoint, session.accessToken);
         return NextResponse.json(dats);
 }

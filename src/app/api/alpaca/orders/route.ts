@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { authOptions } from '@/app/lib/auth';
 import { getServerSession } from 'next-auth';
 import { AlpacaOrderModel } from '@/models/alpaca/alpaca-order-model';
-import { basicFetch } from '@/app/lib/fetchFunctions';
+import { authorizedFetch } from '@/app/lib/fetchFunctions';
 import { ErrorCode } from '@/models/common/error-code';
 
 export async function GET(req: NextRequest) {
@@ -12,6 +12,6 @@ export async function GET(req: NextRequest) {
   }
   const endpoint = `${process.env.ALPACA_API_URL}/AlpacaTrading/orders?orderStatusFilter=2`;
 
-  var dats = await basicFetch<AlpacaOrderModel>(endpoint, session.accessToken);
+  var dats = await authorizedFetch<AlpacaOrderModel>(endpoint, session.accessToken);
   return NextResponse.json(dats);
 }

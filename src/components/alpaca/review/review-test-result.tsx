@@ -1,14 +1,11 @@
 "use client";
 import { basicFetch } from "@/app/lib/fetchFunctions";
 import { StrategySettings } from "@/models/strategy/strategy-settings";
-import { IconButton } from "@mui/material";
 import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
 import { PositionModel } from "@/models/strategy/position-model";
 import { format } from 'date-fns';
-import ChartPositionModal from "../chart-position-modal";
 import CircularLoader from "@/components/common/loader";
-import BarChartIcon from '@mui/icons-material/BarChart';
 import { TestResult } from "@/models/strategy/test-result";
 
 interface ReviewTestResultProps {

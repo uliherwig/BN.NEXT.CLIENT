@@ -1,22 +1,16 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { StrategySettings } from "@/models/strategy/strategy-settings";
 import AlpacaPositions from "./alpaca-positions";
 import StrategyList from "../strategy-test/strategy-list";
 import TestResults from "../strategy-test/test-results";
 import AlpacaAccount from "./alpaca-account";
-import { useSession } from "next-auth/react";
 import { AlpacaAccountModel } from "@/models/alpaca/alpaca-account-model";
-import  { AuthServices }  from "@/service/auth-service";
-import { toast } from "react-toastify";
 
 const Dashboard: React.FC = () => {
 
-    const { data: session, status } = useSession();
-
     const [strategySettings, setStrategySettings] = useState<StrategySettings>({} as StrategySettings);
     const [alpacaAccount, setAlpacaAccount] = useState<AlpacaAccountModel>({} as AlpacaAccountModel);
-
 
     const updateComponents = (e: StrategySettings) => {
         setStrategySettings(e);
@@ -25,10 +19,6 @@ const Dashboard: React.FC = () => {
     const updateAlpacaAccount = (e: AlpacaAccountModel) => {
         setAlpacaAccount(e);
     }
-
-    useEffect(() => {
-        AuthServices.handleAuthStatus(status); // Use the service function
-      }, [status]);
 
     return (
         <>
@@ -51,6 +41,7 @@ const Dashboard: React.FC = () => {
 
                 </div>
             </div>
+           
         </>
     )
 }

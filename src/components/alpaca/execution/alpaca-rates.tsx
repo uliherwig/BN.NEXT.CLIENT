@@ -30,8 +30,8 @@ const AlpacaRates: React.FC<AlpacaRatesProps> = ({ asset }) => {
 
     useEffect(() => {
         const connect = new HubConnectionBuilder()
-            //.withUrl(`${process.env.ALPACA_HUB}`)
-            .withUrl("http://localhost:5130/alpacahub")
+            .withUrl(`${process.env.ALPACA_API_URL}/alpacahub`)
+            //.withUrl("http://localhost:5130/alpacahub")
             .withAutomaticReconnect()
             .configureLogging(LogLevel.Information)
             .build();

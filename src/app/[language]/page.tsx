@@ -1,6 +1,5 @@
 import { LanguageProps } from "@/models/common/language-props";
 import { getDictionary } from "../lib/dictionaries/dictionary";
-import { toast } from "react-toastify";
 
 
 export default async function Page({ params }: LanguageProps) {

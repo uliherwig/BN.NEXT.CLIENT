@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { basicFetch } from '@/app/lib/fetchFunctions';
+import { authorizedFetch } from '@/app/lib/fetchFunctions';
 import { authOptions } from '@/app/lib/auth';
 import { ErrorCode } from '@/models/common/error-code';
 import { getServerSession } from 'next-auth';
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
   const timeFrame = req.nextUrl.searchParams.get('timeFrame') as string;
 
   const endpoint = `${process.env.ALPACA_API_URL}/AlpacaTest/historical-bars/${symbol}?startDate=${startDate}&endDate=${endDate}`
-  var dats = await basicFetch<any[]>(endpoint, session.accessToken);
+  var dats = await authorizedFetch<any[]>(endpoint, session.accessToken);
   return NextResponse.json(dats);
 
 }

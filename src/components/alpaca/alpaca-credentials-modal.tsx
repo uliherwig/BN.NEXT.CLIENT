@@ -1,16 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogContentText, DialogTitle, IconButton } from '@mui/material';
-import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
-import { signIn, signOut, useSession } from 'next-auth/react';
 
 import { addOrUpdateKeyAndSecret } from '@/app/actions/alpaca';
 import { firstOrDefault } from '@/utilities';
 import { useFormState } from 'react-dom';
-import BNButton from '../common/buttons/bn-button';
 import CloseIcon from '@mui/icons-material/Close';
-import { basicFetch } from '@/app/lib/fetchFunctions';
 import { useDictionary } from '@/provider/dictionary-provider';
 import SubmitButton from '@/components/common/buttons/submit-button';
 import CancelButton from '../common/buttons/cancel-button';
