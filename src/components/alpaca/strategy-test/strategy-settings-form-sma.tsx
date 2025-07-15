@@ -49,7 +49,7 @@ const StrategySettingsFormSMA: React.FC<StrategySettingsFormSMAProps> = ({ pendi
                 <td className="pb-1">
                     <select name="stopLossStrategy" className="border border-slate-400 w-full p-1" title="Time Frame"
                         defaultValue="0" onChange={(e) => { setStopLossType(e.target.value) }} disabled={pending}>
-                        <option value={StopLossTypeEnum.SMANextCrossing}>Next MA intersection</option>
+                        <option value={StopLossTypeEnum.SMAIntersection}>Next MA intersection</option>
                         <option value={StopLossTypeEnum.None}>Custom limits</option>
                     </select>
                 </td>
@@ -61,6 +61,19 @@ const StrategySettingsFormSMA: React.FC<StrategySettingsFormSMAProps> = ({ pendi
                         <td className="pb-1">
                             <input type="text" name="stopLossPercent" className="border border-slate-400 w-full p-1" defaultValue="1" disabled={pending} />
                             <div className="error-message">{firstOrDefault(state?.errors?.stopLossPercent, '')}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="pb-1"><label>{dictionary.TEST_TAKE_PROFIT_PERCENT}</label></td>
+                        <td className="pb-1">
+                            <input type="text" name="takeProfitPercent" className="border border-slate-400 w-full p-1" defaultValue="1" disabled={pending} />
+                            <div className="error-message">{firstOrDefault(state?.errors?.takeProfitPercent, '')}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="pb-1"><label>{dictionary.TEST_TRAILING_STOP}</label></td>
+                        <td className="pb-1">
+                            <input type="text" name="trailingStop" className="border border-slate-400 w-full p-1" defaultValue="0" disabled={pending} />
                         </td>
                     </tr>
                 </>

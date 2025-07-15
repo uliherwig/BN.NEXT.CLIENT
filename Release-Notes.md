@@ -4,16 +4,17 @@
 
 - chart with real time data
 
-## Version 2025.06.1
+## Version 2025.07.1
 
 - refactoring: auth
 - api route optimize strategy
+- optimize function added to strategy form
 
 ## Version 2025.04.1
 
 - Execution refactored
 - Alpaca rate component
-- Ratefeed via SignalR 
+- Ratefeed via SignalR
 
 ## Version 2025.03.3
 

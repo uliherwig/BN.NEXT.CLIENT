@@ -36,7 +36,7 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
                 dateOpened = (prevLowStamp > prevHighStamp) ? new Date(prevHighStamp) : new Date(prevLowStamp);
             }
 
-            dateOpened.setDate(dateOpened.getDate() - 1);
+            dateOpened.setDate(dateOpened.getDate() - 2);
             const dateClosed = new Date(params.positions[0].stampClosed);
             dateClosed.setDate(dateClosed.getDate() + 1);
 

@@ -10,9 +10,11 @@ const StrategyTest = () => {
     const [hasUpdate, setHasUpdate] = useState<boolean>(false);
 
     const showResult = (e: StrategySettings) => {
+        console.log("showResult", e);
         setBacktest(e)
     }
     const updateStrategies = (e: boolean) => {
+        console.log("updateStrategies", e);
         setHasUpdate(!hasUpdate);
     }
 

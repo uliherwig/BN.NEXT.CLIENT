@@ -61,7 +61,7 @@ export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData
 }
 
 
-export async function createAlpacaBacktest(prevState: any, formData: FormData) {
+export async function runStrategy(prevState: any, formData: FormData) {
 
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
@@ -70,18 +70,18 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
         };
     }
 
-    console.log('FORM DATA', session);
+    // console.log('FORM DATA', session);
 
     const isStrategyNameAvailable = async (name: string): Promise<boolean> => {
         const url = `${process.env.STRATEGY_API_URL}/strategy/exists/${name}`;
-        const res = await fetch(url,{
-            method: 'GET',   
+        const res = await fetch(url, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${session.accessToken}`
             },
         });
-        console.log('RES', res);
+        // console.log('RES', res);
         const data = await res.json();
         return !data;
     };
@@ -98,7 +98,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             }),
 
         symbol: z.string(),
-        takeProfitPercent: z.number().min(1).max(25),
+        //takeProfitPercent: z.number().min(1).max(25),
         // stopLossPercent: z.number().min(0.001).max(0.5),
         startDate: z.date().min(new Date(2024, 0, 0), 'Start date may not be before 2024').max(new Date(), 'Start date may not be after today'),
         endDate: z.date().min(new Date(2024, 0, 0), 'End date may not be before 2024').max(new Date(), 'End date may not be after today'),
@@ -112,7 +112,7 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
     const validatedFields = await backtestSchemaRegister.safeParseAsync({
         name: formData.get('name'),
         symbol: formData.get('symbol'),
-        takeProfitPercent: parseFloat(formData.get('takeProfitPercent') as string),
+        // takeProfitPercent: parseFloat(formData.get('takeProfitPercent') as string),
         // stopLossPercent: parseFloat(formData.get('stopLossPercent') as string),
         startDate: startDate,
         endDate: endDate,
@@ -138,19 +138,31 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             "name": formData.get('name') as string,
             "asset": formData.get('symbol') as string,
             "quantity": parseFloat(formData.get('quantity') as string),
-            "takeProfitPercent": parseFloat(formData.get('takeProfitPercent') as string),
-            "stopLossPercent": 0.0,
+            "takeProfitPercent": parseFloat(formData.get('takeProfitPercent') as string)|| 0.0,
+            "stopLossPercent": parseFloat(formData.get('takeProfitPercent') as string) || 0.0,
             "startDate": startDate.toISOString(),
             "endDate": endDate.toISOString(),
             "strategyType": parseInt(formData.get('strategy') as string),
-            "trailingStop": parseFloat(formData.get('trailingStop') as string),
+            "trailingStop": parseFloat(formData.get('trailingStop') as string) || 0.0,
             "allowOvernight": formData.get('allowOvernight') === 'on',
             "bookmarked": false,
             "testStamp": new Date().toISOString(),
             "strategyParams": strategyParams,
         };
 
-        const response = await fetch(`${process.env.ALPACA_API_URL}/AlpacaTest/run-test`, {
+        const strategyAction = formData.get('strategyAction') as string;
+        console.log('STRATEGY ACTION', strategyAction);
+
+        const endpoint = (strategyAction === '1') ?
+            `${process.env.ALPACA_API_URL}/AlpacaTest/run-test` :
+            `${process.env.ALPACA_API_URL}/AlpacaTest/optimize`;
+
+        console.log('ENDPOINT', startDate.toISOString());
+        console.log('PAYLOAD', payload);   
+        
+      
+
+        const response = await fetch(endpoint, {
             method: 'POST',
             body: JSON.stringify(payload),
             headers: {
@@ -159,15 +171,14 @@ export async function createAlpacaBacktest(prevState: any, formData: FormData) {
             },
         });
 
-        let success = false;
+        let result: any = { message: '', success: false, errors: {} }
 
         console.log('RESPONSE', response);
 
         if (response.ok) {
-            success = await response.json();
-        }
+            result = { message: '', success: true, errors: {} }
+        } 
 
-        const result: any = { message: '', success: success, errors: {} }
         return result;
     }
 

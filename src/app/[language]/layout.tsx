@@ -11,7 +11,6 @@ import CookieConsent from "@/components/common/cookie-consent";
 import Footer from "@/components/footer";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/auth";
-import ServiceWorkerProvider from "@/provider/serviceworker-provider";
 
 // prerender static pages for each language
 export async function generateStaticParams() {
@@ -33,18 +32,16 @@ export default async function RootLayout({ children, params }: {
         <div className=" max-w-[1920px] w-full h-full">
           <DictionaryProvider dictionary={dict}>
             <SessionProviderWrapper session={session}>
-              <ServiceWorkerProvider>
-                <header className="bg-bn-dark">
-                  <Header dict={dict} language={params.language} />
-                </header>
-                <main className="h-content bg-slate-100">
-                  {children}
-                </main>
-                <footer className="bg-slate-700 h-[30px] text-white px-4">
-                  <Footer dict={dict} language={params.language} />
-                </footer>
-                <CookieConsent />
-              </ServiceWorkerProvider>
+              <header className="bg-bn-dark">
+                <Header dict={dict} language={params.language} />
+              </header>
+              <main className="h-content bg-slate-100">
+                {children}
+              </main>
+              <footer className="bg-slate-700 h-[30px] text-white px-4">
+                <Footer dict={dict} language={params.language} />
+              </footer>
+              <CookieConsent />
             </SessionProviderWrapper>
           </DictionaryProvider>
         </div>

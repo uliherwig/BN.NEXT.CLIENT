@@ -11,12 +11,11 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from 'react-toastify';
- import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/components/common/loader";
 import StrategyListBreakout from "./strategy-list-breakout";
 import StrategyListSMA from "./strategy-list-sma";
 import React from "react";
-
 interface StrategyListProps {
     showResult: any;
     hasUpdate: boolean;
@@ -30,8 +29,6 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
     const [selectedStrategy, setSelectedStrategy] = useState<StrategySettings>({} as StrategySettings);
     const [loading, setLoading] = useState<boolean>(true);
 
-
-
     useEffect(() => {
         updateStrategies();
     }, [hasUpdate]);
@@ -39,7 +36,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
     const updateStrategies = async () => {
         const strats = await basicFetch<StrategySettings[]>(`/api/strategy/list?bookmarked=${showBookmarked}`);
 
-      
+
         setStrategies(strats);
         const latestStrategy = firstOrDefault(strats, {} as StrategySettings);
         if (latestStrategy) {
@@ -93,6 +90,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
     }
 
     const displayDetails = (strategy: StrategySettings) => {
+
         setSelectedStrategy(strategy);
         showResult(strategy);
     }
@@ -100,7 +98,8 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
     const TABLE_HEAD = [
         dictionary.DASH_TYPE,
         dictionary.DASH_ASSET,
-        dictionary.DASH_TP_PERCENT,
+        dictionary.TEST_SL,
+        dictionary.TEST_TP,
         dictionary.DASH_TRAILING_STOP_PERCENT,
         dictionary.DASH_OVERNIGHT
     ];
@@ -143,6 +142,8 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
                                                     {StrategyEnum[item.strategyType]}
                                                 </td>
                                                 <td className="py-1 text-center">{item.asset}</td>
+                                                <td className="py-1 text-center">{item.stopLossPercent}</td>
+
                                                 <td className="py-1 text-center">{item.takeProfitPercent}</td>
                                                 <td className="py-1 text-center">{item.trailingStop === 0 ? dictionary.DASH_NO : item.trailingStop}</td>
                                                 <td className="py-1 text-center">{item.allowOvernight ? dictionary.COMMON_YES : dictionary.COMMON_NO}</td>

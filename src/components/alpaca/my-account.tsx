@@ -17,7 +17,8 @@ const MyAccount = () => {
             buyingPower: res.buyingPower,
             createdAtUtc: res.createdAtUtc,
             accountStatus: AccountStatusEnum.None,
-            userId: ''
+            userId: '',
+            error: null
         };
         setAccountData(accData);
     }

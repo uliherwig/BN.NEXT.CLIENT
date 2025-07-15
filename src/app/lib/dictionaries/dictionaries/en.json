@@ -181,7 +181,7 @@
   "TEST_END_DATE": "End Date",
   "TEST_TEST_STAMP": "Test Stamp",
   "TEST_TIME_FRAME": "Time Frame",
-  "TEST_STOP_LOSS_TYPE": "StopLoss Type",
+  "TEST_STOP_LOSS_TYPE": "Pos. Stop",
   "TEST_STOP_LOSS_PERCENT": "Stop Loss Percent",
   "TEST_SHORT_PERIOD": "Short Period",
   "TEST_LONG_PERIOD": "Long Period",

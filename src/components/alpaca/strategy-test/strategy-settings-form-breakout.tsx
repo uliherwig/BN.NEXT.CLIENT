@@ -42,11 +42,24 @@ const StrategySettingsFormBreakout: React.FC<StrategySettingsBreakoutProps> = ({
             </tr>
             {stopLossType === StopLossTypeEnum.None.toString() && (
                 <>
-                    <tr>
+             <tr>
                         <td className="pb-1"><label>Stop Loss Percent</label></td>
                         <td className="pb-1">
-                            <input type="text" name="stopLossPercent" className="border border-slate-400 w-full p-1" defaultValue="0.01" disabled={pending} />
+                            <input type="text" name="stopLossPercent" className="border border-slate-400 w-full p-1" defaultValue="1" disabled={pending} />
                             <div className="error-message">{firstOrDefault(state?.errors?.stopLossPercent, '')}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="pb-1"><label>{dictionary.TEST_TAKE_PROFIT_PERCENT}</label></td>
+                        <td className="pb-1">
+                            <input type="text" name="takeProfitPercent" className="border border-slate-400 w-full p-1" defaultValue="1" disabled={pending} />
+                            <div className="error-message">{firstOrDefault(state?.errors?.takeProfitPercent, '')}</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className="pb-1"><label>{dictionary.TEST_TRAILING_STOP}</label></td>
+                        <td className="pb-1">
+                            <input type="text" name="trailingStop" className="border border-slate-400 w-full p-1" defaultValue="0" disabled={pending} />
                         </td>
                     </tr>
 

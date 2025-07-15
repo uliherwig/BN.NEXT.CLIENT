@@ -16,13 +16,20 @@ export enum BreakoutPeriodEnum {
 }
 
 export enum SideEnum {
-  Buy,
+  Buy = 0,
   Sell
 }
 
 export enum StopLossTypeEnum {
   None,
   Breakout,
-  SMANextCrossing,
+  SMAIntersection,
+}
+
+export enum StrategyActionEnum {
+  None,
+  Backtest,
+  Optimization,
+  Execution,
 }
 

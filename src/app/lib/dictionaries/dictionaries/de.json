@@ -182,7 +182,7 @@
   "TEST_END_DATE": "Enddatum",
   "TEST_TEST_STAMP": "Test Zeitpunkt",
   "TEST_TIME_FRAME": "Zeitrahmen",
-  "TEST_STOP_LOSS_TYPE": "StopLoss-Typ",
+  "TEST_STOP_LOSS_TYPE": "Pos. Stop",
   "TEST_SHORT_PERIOD": "Kurze Periode",
   "TEST_LONG_PERIOD": "Lange Periode",
   "TEST_THRESHOLD": "Schwellenwert"

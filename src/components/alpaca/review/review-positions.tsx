@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import ChartPositionModal from "../chart-position-modal";
 import CircularLoader from "@/components/common/loader";
 import BarChartIcon from '@mui/icons-material/BarChart';
+import { SideEnum } from "@/models/strategy/enums";
 
 interface ReviewPositionsProps {
     strategySettings: StrategySettings;
@@ -92,7 +93,7 @@ const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
                                 <tbody className='text-slate-800 text-sm overflow-y'>
                                     {positions.map((item, index) => (
                                         <tr key={item.id} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`}>
-                                            <td className="px-2 py-1 text-center">{item.side === 0 ? dictionary.DASH_BUY : dictionary.DASH_SELL}</td>
+                                            <td className="px-2 py-1 text-center">{item.side === SideEnum.Buy ? dictionary.DASH_BUY : dictionary.DASH_SELL}</td>
                                             <td className="py-1 text-center">{format(new Date(item.stampOpened), 'dd.MM.yy HH:mm')}</td>
                                             <td className="py-1 text-center">{format(new Date(item.stampClosed), 'dd.MM.yy HH:mm')}</td>
                                             <td className="py-1 text-center">{item.priceOpen.toFixed(2)}</td>

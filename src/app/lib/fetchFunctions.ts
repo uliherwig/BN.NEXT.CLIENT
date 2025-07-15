@@ -11,7 +11,7 @@ export const basicFetch = async<returnType>(endpoint: string): Promise<returnTyp
 
 export const authorizedFetch = async<returnType>(endpoint: string, token: string | undefined): Promise<returnType> => {
 
-    // console.log('authorizedFetch', endpoint, token);
+    //console.log('authorizedFetch', endpoint, token);
 
     if(!token) {
         console.error('No token provided for authorizedFetch'); 

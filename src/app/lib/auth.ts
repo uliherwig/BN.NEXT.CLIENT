@@ -140,20 +140,23 @@ export const authOptions: NextAuthOptions = {
         // console.log('jwt token expires at:', expiresAt);
 
         if (Date.now() < expiresAt) {
-          return token
+          return token;
         }
-        token = await refreshAccessToken(token)
-        return token
+        token = await refreshAccessToken(token);
+        return token;
       }
 
       if (token) {
         const expiresAt: number = token.expiresAt as number;
         if (Date.now() < expiresAt) {
-          return token
+          return token;
         }
-        token = await refreshAccessToken(token)
-        return token
+        token = await refreshAccessToken(token);
+        return token;
       }
+
+      // Always return a token object to satisfy the type
+      return token;
     },
 
     async session({ session, token, user }) {

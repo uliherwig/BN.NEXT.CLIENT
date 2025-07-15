@@ -49,7 +49,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
 
   };
   console.log("UserAccount Page", searchParams);
-  const sessionexpired = searchParams['info'] === 'expired';
+  const sessionexpired = searchParams.get('info') === 'expired';
 
   useEffect(() => {
 
