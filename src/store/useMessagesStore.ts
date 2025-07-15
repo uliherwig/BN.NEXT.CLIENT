@@ -19,7 +19,7 @@ export const useMessagesStore = create<MessagesState>((set) => ({
   removeMessage: (id) =>
     set((state) => ({
       messages: state.messages
-        .filter((m) => m.Id !== id)
+        .filter((m) => m.Id !== Number(id))
         .sort((a, b) => b.Id - a.Id),
     })),
 }));
