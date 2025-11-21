@@ -11,6 +11,9 @@ interface SignalRService {
 let connection: HubConnection | null = null;
 
 const createConnection = (url: string) => {
+
+    console.log("Creating SignalR connection to:", url);
+
     return new HubConnectionBuilder()
         .withUrl(url)
         .configureLogging(LogLevel.Information)

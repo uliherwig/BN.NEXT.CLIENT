@@ -11,7 +11,6 @@ const StrategyListBreakout: React.FC<StrategyListBreakoutProps> = ({ strategy })
     const dictionary = useDictionary();
 
     const breakoutParams = JSON.parse(strategy.strategyParams) as BreakoutSettings;
-
     if (!dictionary) {
         return <div>{"Loading..."}</div>;
     }

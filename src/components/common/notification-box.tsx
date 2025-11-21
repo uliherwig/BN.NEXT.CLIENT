@@ -53,6 +53,7 @@ const NofificationBox: React.FC<NofificationBoxProps> = ({ test }) => {
                 const toPascalCase = (str: string) =>
                     str.charAt(0).toUpperCase() + str.slice(1);
 
+                const test1 = notification.NotificationType;
                 const notificationType = NotificationEnum[toPascalCase(notification.NotificationType.toString()) as keyof typeof NotificationEnum];
                 const id = new Date().getTime().toString();
                 const displayMessage: DisplayMessage = {
@@ -64,18 +65,22 @@ const NofificationBox: React.FC<NofificationBoxProps> = ({ test }) => {
                 console.log("Notification Type:", notificationType);
 
                 switch (notificationType) {
-                    case NotificationEnum.StrategyStart:
+                    case NotificationEnum.BacktestStart:
                         displayMessage.Message = "Backtest Start"
                         addMessage(displayMessage);
-
                         break;
-                    case NotificationEnum.StrategyStop:
-                        displayMessage.Message = "Backtest Stop"
+                    case NotificationEnum.BacktestStop:
+                        displayMessage.Message = "Backtest Done"
                         addMessage(displayMessage);
                         break;
-                    case NotificationEnum.OtimizeStart:
+                    case NotificationEnum.OptimizeStart:
+                        displayMessage.Message = "Optimization Start"
+                        addMessage(displayMessage);
+                        break;
                     case NotificationEnum.OptimizeStop:
-
+                        displayMessage.Message = "Optimization Done"
+                        addMessage(displayMessage);
+                        break;
                     default:
                         break;
                 }

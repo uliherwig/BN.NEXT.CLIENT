@@ -13,8 +13,6 @@ const StrategyListSMA: React.FC<StrategyListSMAProps> = ({ strategy }) => {
 
     const smaParams = JSON.parse(strategy.strategyParams) as SMASettings;
 
-    console.log("StrategyListSMA", smaParams);
-
     if (!dictionary) {
         return <div>Loading...</div>;
     }

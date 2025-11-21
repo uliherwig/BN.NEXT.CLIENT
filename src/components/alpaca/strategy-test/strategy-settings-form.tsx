@@ -39,7 +39,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
 
     const [strategy, setStrategy] = useState<string>('0');
     const [strategyAction, setStrategyAction] = useState<string>('1');
-    
+
     const [stopLossType, setStopLossType] = useState<string>('0');
     const today = new Date()
     const formattedDate = format(today, 'yyyy-MM-dd');
@@ -54,6 +54,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
     }, [formState]);
 
     useEffect(() => {
+        console.log('STATE CHANGED', state);
         if (state.success) {
             setFormState(StrategySettingsFormState.Success);
         }
@@ -104,6 +105,9 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                                 <option value={StrategyEnum.None}>{dictionary.TEST_SELECT_STRATEGY}</option>
                                                 <option value={StrategyEnum.Breakout}>{dictionary.TEST_BREAKOUT}</option>
                                                 <option value={StrategyEnum.SMA}>{dictionary.TEST_SMA}</option>
+                                                <option value={StrategyEnum.EMA}>EMA</option>
+                                                <option value={StrategyEnum.WMA}>WMA</option>
+
                                             </select>
                                         </td>
                                     </tr>
@@ -112,10 +116,10 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                             <tr>
                                                 <td className="pb-1"><label>Action</label></td>
                                                 <td className="pb-1">
-                                                    <select name="strategyAction" className="border border-slate-400 w-full p-1" title="strategyAction"  onChange={(e) => { setStrategyAction(e.target.value) }}  disabled={pending}>
+                                                    <select name="strategyAction" className="border border-slate-400 w-full p-1" title="strategyAction" onChange={(e) => { setStrategyAction(e.target.value) }} disabled={pending}>
                                                         <option value={StrategyActionEnum.Backtest}>Test with my Parameters</option>
                                                         <option value={StrategyActionEnum.Optimization}>Find best Fit</option>
-                                                  
+
                                                     </select>
                                                 </td>
                                             </tr>
@@ -141,7 +145,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                             <tr>
                                                 <td className="pb-1"><label>{dictionary.TEST_START_BACKTEST}</label></td>
                                                 <td className="pb-1">
-                                                    <input type="date" name="startDate" className="border border-slate-400 w-full p-1" defaultValue="2024-01-01" disabled={pending} />
+                                                    <input type="date" name="startDate" className="border border-slate-400 w-full p-1" defaultValue="2025-01-01" disabled={pending} />
                                                     <div className="error-message">{firstOrDefault(state?.errors?.startDate, '')}</div>
                                                 </td>
                                             </tr>
@@ -155,10 +159,10 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                             {strategy === StrategyEnum.Breakout.toString() && (
                                                 <StrategySettingsFormBreakout pending={pending} state={state} />
                                             )}
-                                            {strategy === StrategyEnum.SMA.toString() && (
+                                            {(strategy === StrategyEnum.SMA.toString() || strategy === StrategyEnum.EMA.toString() || strategy === StrategyEnum.WMA.toString()) && (
                                                 <StrategySettingsFormSMA pending={pending} state={state} />
                                             )}
-                                  
+
                                             <tr>
                                                 <td className="pb-1"><label>{dictionary.TEST_ALLOW_OVERNIGHT}</label></td>
                                                 <td className="py-1">
@@ -167,18 +171,15 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                             </tr>
                                             <tr>
                                                 <td colSpan={2}>
-                                                    {pending && (
-                                                        <div className="p-4 w-full flex justify-center">
-                                                            <div className="text-orange-500">{dictionary.TEST_RUNNING_TEST}</div>
-                                                            <p>{dictionary.TEST_RUNNING_TEST_MESSAGE}</p>
-                                                        </div>
-                                                    )}
+
                                                     <p className="mt-4">
+                                                        {pending && (
+                                                            <div className="w-full">
+                                                                <div className="text-orange-500  my-2">{dictionary.TEST_RUNNING_TEST}</div>
+                                                            </div>
+                                                        )}
                                                         {formState !== StrategySettingsFormState.Success && (
-                                                            <>
-                                                                <SubmitButton label={strategyAction === StrategyActionEnum.Backtest.toString() ? dictionary.TEST_RUN_BACKTEST : "Opimize Parameter"} handleFormState={handleSubmit} />
-                                                        
-                                                            </>
+                                                            <SubmitButton label={strategyAction === StrategyActionEnum.Backtest.toString() ? dictionary.TEST_RUN_BACKTEST : "Opimize Parameter"} handleFormState={handleSubmit} />
                                                         )}
                                                     </p>
                                                 </td>
@@ -193,7 +194,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                             <>
                                 <div className="text-green-500 my-2">{dictionary.TEST_TEST_COMPLETED}</div>
                                 <div className="flex flex-row gap-2">
-                                    <WidgetButton type="button" label={dictionary.TEST_UPDATE_TEST_RESULT_LIST} method={updateStrategies} />
+                                    <WidgetButton type="button" label={dictionary.TEST_UPDATE_TEST_RESULT_LIST} method={updateStrategies} /> 
                                     <WidgetButton type="button" label={dictionary.TEST_CREATE_NEW_STRATEGY} method={() => { setFormState(StrategySettingsFormState.None) }} />
                                 </div>
                             </>

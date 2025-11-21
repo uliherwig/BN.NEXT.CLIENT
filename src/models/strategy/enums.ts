@@ -6,6 +6,8 @@ export enum StrategyEnum {
   Reversal,
   TrendFollowing,
   SMA,
+  EMA,
+  WMA
 }
 
 export enum BreakoutPeriodEnum {

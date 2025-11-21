@@ -69,6 +69,7 @@ export async function runStrategy(prevState: any, formData: FormData) {
             errors: { session: ['Session is not available'] },
         };
     }
+  
 
     // console.log('FORM DATA', session);
 
@@ -220,6 +221,8 @@ const GetStrategyParams = (formData: FormData) => {
 
     switch (strategyType) {
         case StrategyEnum.SMA:
+        case StrategyEnum.EMA:
+        case StrategyEnum.WMA:
             strategyParams = JSON.stringify({
                 shortPeriod: parseInt(formData.get('shortPeriod') as string),
                 longPeriod: parseInt(formData.get('longPeriod') as string),

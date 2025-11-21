@@ -1,9 +1,9 @@
 export enum NotificationEnum {
   // Example values
     None,
-    StrategyStart,
-    StrategyStop,
-    OtimizeStart,
+    BacktestStart,
+    BacktestStop,
+    OptimizeStart,
     OptimizeStop,
     AlpacaRateFeed, 
     AccountLoaded,

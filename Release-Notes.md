@@ -4,6 +4,10 @@
 
 - chart with real time data
 
+## Version 2025.08.1
+
+- add indicators : ema, wma, rsi
+
 ## Version 2025.07.1
 
 - refactoring: auth
