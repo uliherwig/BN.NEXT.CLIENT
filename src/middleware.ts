@@ -15,23 +15,21 @@ function getLocale(request: NextRequest) { return match(new Negotiator({ headers
 export async function middleware(request: NextRequest) {
 
   const url = new URL(request.url) 
-  // console.log('MIDDLEWARE  API / ACTION:', url.pathname);  
 
   //  API and action routes  
   if(url.pathname.startsWith('/api') || url.pathname.startsWith('/action')  || url.pathname.endsWith('/service-worker.js')) {  
-
-    // console.log('MIDDLEWARE API / ACTION:', url.pathname);
     return;
   } 
 
-  console.log('MIDDLEWARE PATH:', url.pathname);  
-
-  // set language
+  // check if the pathname already includes a locale
   const pathnameHasLocale = locales.some(
     (locale) => url.pathname.startsWith(`/${locale}/`) || url.pathname === `/${locale}`
   )
 
-  if (pathnameHasLocale) return
+  if (pathnameHasLocale) {
+    const response = NextResponse.next();
+    return response;
+  }
 
   // Redirect if there is no locale
   const locale = getLocale(request)

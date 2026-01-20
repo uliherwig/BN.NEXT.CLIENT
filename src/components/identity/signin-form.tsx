@@ -10,6 +10,11 @@ const SignInForm = ({ language }: { language: string }) => {
 
   const [loginError, setLoginError] = useState('')
 
+  const dictionary = useDictionary();
+  if (!dictionary) {
+    return <div>Loading...</div>;
+  }
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -24,14 +29,38 @@ const SignInForm = ({ language }: { language: string }) => {
       password,
     });
 
+    
+
     if (result?.error) {
-      setLoginError('Login failed. Invalid credentials');
+
+      switch (result.error) {
+        case '1':
+          result.error = dictionary.AUTH_error_1;
+          break;
+        case '2':
+          result.error = dictionary.AUTH_error_2;
+          break;
+        case '3':
+          result.error = dictionary.AUTH_error_3;
+          break;
+        case '4':
+          result.error = dictionary.AUTH_error_4;
+          break;
+        case '5':
+          result.error = dictionary.AUTH_error_5;
+          break;
+        case '6':
+          result.error = dictionary.AUTH_error_6;
+          break;
+        default:
+          result.error = dictionary.AUTH_error_7;
+          break;
+      }   
+
+      setLoginError(dictionary.AUTH_error + " " + result.error || dictionary.AUTH_error);
     } 
   };
-  const dictionary = useDictionary();
-  if (!dictionary) {
-    return <div>Loading...</div>;
-  }
+ 
 
 
   return (

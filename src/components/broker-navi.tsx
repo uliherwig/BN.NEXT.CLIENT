@@ -7,6 +7,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
+// import info icon if needed
+import InfoIcon from '@mui/icons-material/Info';
 import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 import { useDictionary } from "@/provider/dictionary-provider";
@@ -35,7 +37,7 @@ const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
     const linkClasses = 'grid grid-cols-[26px_auto] items-center text-gray-700 hover:text-gray-900';
     const activeLinkClasses = 'grid grid-cols-[26px_auto] items-center text-slate-50  bg-slate-700';
     const hoveredLinkClasses = 'grid grid-cols-[26px_auto] items-center text-slate-900  bg-slate-300';
-    const brokersLink = `/${props.language}/brokers`;
+    const brokersLink = `/${props.language}/strategy`;
 
     const getLinkClasses = (path: string) => {
         const match = pathname.substring(3, pathname.length);
@@ -66,14 +68,17 @@ const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
         <div className="flex flex-col h-full relative w-full pt-2">
             <div className="flex-1 p-1 ">
                 <ul>
+                    <li className="mb-4">
+                        <h2 className="text-lg font-bold text-slate-800">{dictionary.HEADER_Strategy}</h2>
+                    </li>
                     <li>
                         <Link
                             href={brokersLink}
                             className='grid grid-cols-[30px_auto] items-center text-slate-700 hover:text-gray-900'
                             title={dictionary.NAVI_BROKER}
                         >
-                            <HomeIcon fontSize="small" />
-                            <span className="font-medium">{dictionary.NAVI_BROKER}</span>
+                            <InfoIcon fontSize="small" />
+                            <span className="font-medium">Info</span>
                         </Link>
                     </li>
                     <li>
@@ -89,49 +94,49 @@ const BrokerNavi: React.FC<BrokerNaviProps> = (props) => {
                         <ul className="p-1 px-2 border-t border-b border-slate-800" style={{ display: expanded ? 'block' : 'none' }}>
                             <li className="my-2">
                                 <Link
-                                    href={status === 'authenticated' ? `/${props.language}/brokers/alpaca/dashboard` : brokersLink}
-                                    className={getLinkClasses('/brokers/alpaca/dashboard')}
+                                    href={status === 'authenticated' ? `/${props.language}/strategy/alpaca/dashboard` : brokersLink}
+                                    className={getLinkClasses('/strategy/alpaca/dashboard')}
                                     title={dictionary.NAVI_DASHBOARD}
-                                    onMouseOver={() => setHoveredLink('/brokers/alpaca/dashboard')}
+                                    onMouseOver={() => setHoveredLink('/strategy/alpaca/dashboard')}
                                     onMouseOut={() => setHoveredLink(null)}
                                 >
-                                    <DashboardIcon fontSize="small" className={getIconLinkClasses('/brokers/alpaca/dashboard')} />
+                                    <DashboardIcon fontSize="small" className={getIconLinkClasses('/strategy/alpaca/dashboard')} />
                                     {dictionary.NAVI_DASHBOARD}
                                 </Link>
                             </li>
                             <li className="my-2">
                                 <Link
-                                    href={status === 'authenticated' ? `/${props.language}/brokers/alpaca/strategy-test` : brokersLink}
-                                    className={getLinkClasses('/brokers/alpaca/strategy-test')}
+                                    href={status === 'authenticated' ? `/${props.language}/strategy/alpaca/strategy-test` : brokersLink}
+                                    className={getLinkClasses('/strategy/alpaca/strategy-test')}
                                     title={dictionary.NAVI_STRATEGY_TESTS}
-                                    onMouseOver={() => setHoveredLink('/brokers/alpaca/strategy-test')}
+                                    onMouseOver={() => setHoveredLink('/strategy/alpaca/strategy-test')}
                                     onMouseOut={() => setHoveredLink(null)}
                                 >
-                                    <ShowChartIcon fontSize="small" className={getIconLinkClasses('/brokers/alpaca/strategy-test')} />
+                                    <ShowChartIcon fontSize="small" className={getIconLinkClasses('/strategy/alpaca/strategy-test')} />
                                     {dictionary.NAVI_STRATEGY_TESTS}
                                 </Link>
                             </li>
                             <li className="my-2">
                                 <Link
-                                    href={status === 'authenticated' ? `/${props.language}/brokers/alpaca/review` : brokersLink}
-                                    className={getLinkClasses('/brokers/alpaca/review')}
+                                    href={status === 'authenticated' ? `/${props.language}/strategy/alpaca/review` : brokersLink}
+                                    className={getLinkClasses('/strategy/alpaca/review')}
                                     title={dictionary.NAVI_REVIEW}
-                                    onMouseOver={() => setHoveredLink('/brokers/alpaca/review')}
+                                    onMouseOver={() => setHoveredLink('/strategy/alpaca/review')}
                                     onMouseOut={() => setHoveredLink(null)}
                                 >
-                                    <FormatListBulletedIcon fontSize="small" className={getIconLinkClasses('/brokers/alpaca/review')} />
+                                    <FormatListBulletedIcon fontSize="small" className={getIconLinkClasses('/strategy/alpaca/review')} />
                                     {dictionary.NAVI_REVIEW}
                                 </Link>
                             </li>
                             <li className="my-2">
                                 <Link
-                                    href={status === 'authenticated' ? `/${props.language}/brokers/alpaca/execution` : brokersLink}
-                                    className={getLinkClasses('/brokers/alpaca/execution')}
+                                    href={status === 'authenticated' ? `/${props.language}/strategy/alpaca/execution` : brokersLink}
+                                    className={getLinkClasses('/strategy/alpaca/execution')}
                                     title={dictionary.NAVI_EXECUTION}
-                                    onMouseOver={() => setHoveredLink('/brokers/alpaca/execution')}
+                                    onMouseOver={() => setHoveredLink('/strategy/alpaca/execution')}
                                     onMouseOut={() => setHoveredLink(null)}
                                 >
-                                    <SettingsIcon fontSize="small" className={getIconLinkClasses('/brokers/alpaca/execution')} />
+                                    <SettingsIcon fontSize="small" className={getIconLinkClasses('/strategy/alpaca/execution')} />
                                     {dictionary.NAVI_EXECUTION}
                                 </Link>
                             </li>

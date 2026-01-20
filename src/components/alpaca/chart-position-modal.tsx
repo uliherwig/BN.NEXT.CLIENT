@@ -8,12 +8,13 @@ import CircularLoader from '../common/loader';
 import PositionChartBreakout from './history-charts/position-chart-breakout';
 import { format } from 'date-fns';
 import CloseIcon from '@mui/icons-material/Close';
-import { StrategyEnum } from '@/models/strategy/enums';
+import { IndicatorEnum } from '@/models/strategy/enums';
 import PositionChartSMA from './history-charts/position-chart-sma';
 
 interface ChartPositionModalProps {
     isOpen: boolean;
     closeDialog: Function;
+    indicator: IndicatorEnum;
     positions: PositionModel[];
 
 }
@@ -22,19 +23,14 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
 
     const [loading, setLoading] = useState(true);
     const [chartData, setChartData] = useState<any[]>([]);
-    const [strategyType, setStrategyType] = useState<StrategyEnum>(StrategyEnum.None);
+    const [indicator, setIndicator] = useState<IndicatorEnum>(IndicatorEnum.NONE);
 
     useEffect(() => {
         const getChartData = async () => {
             setLoading(true);
             let dateOpened = new Date(params.positions[params.positions.length - 1].stampOpened);
 
-            if (params.positions[0].strategyType === StrategyEnum.Breakout) {
-                var breakoutParams = JSON.parse(params.positions[params.positions.length - 1].strategyParams);
-                const prevLowStamp = new Date(breakoutParams.PrevLowStamp);
-                const prevHighStamp = new Date(breakoutParams.PrevHighStamp);
-                dateOpened = (prevLowStamp > prevHighStamp) ? new Date(prevHighStamp) : new Date(prevLowStamp);
-            }
+      
 
             dateOpened.setDate(dateOpened.getDate() - 2);
             const dateClosed = new Date(params.positions[0].stampClosed);
@@ -45,7 +41,7 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
 
             const result = await basicFetch<any>(`/api/alpaca/bars?symbol=${params.positions[0].symbol}&startDate=${formattedDateOpened}&endDate=${formattedDateClosed}&timeFrame=1Min`);
             setChartData(result);
-            setStrategyType(params.positions[0].strategyType);
+            setIndicator(params.indicator);
             setLoading(false);
         }
         if (params.isOpen) {
@@ -60,6 +56,7 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
         <>
             <Dialog
                 maxWidth='lg'
+                fullWidth={true}
                 open={params.isOpen}
                 onClose={() => params.closeDialog(false)} >
                 <DialogTitle>
@@ -71,10 +68,11 @@ const ChartPositionModal: React.FC<ChartPositionModalProps> = (params) => {
                     </div>
                 </DialogTitle>
                 <DialogContent className='flex justify-center items-center'>
-                    {strategyType === StrategyEnum.Breakout && <>
+                 
+                    {indicator === IndicatorEnum.EMA && <>
                         <div className='w-[900px] h-[600px]'> {loading ? <CircularLoader /> : <PositionChartBreakout data={chartData} positions={params.positions} />}</div>
                     </>}
-                    {strategyType === StrategyEnum.SMA && <>
+                    {indicator === IndicatorEnum.SMA && <>
                         <div className='w-[900px] h-[600px]'> {loading ? <CircularLoader /> : <PositionChartSMA data={chartData} positions={params.positions} />}</div>
                     </>}
 

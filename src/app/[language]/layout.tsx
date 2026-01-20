@@ -23,6 +23,7 @@ export default async function RootLayout({ children, params }: {
 
   const dict = getDictionary(params.language)
   const session = await getServerSession(authOptions);
+
   return (
     <html lang={params.language}>
       <head>
@@ -33,7 +34,7 @@ export default async function RootLayout({ children, params }: {
           <DictionaryProvider dictionary={dict}>
             <SessionProviderWrapper session={session}>
               <header className="bg-bn-dark">
-                <Header dict={dict} language={params.language} />
+                <Header dict={dict} language={params.language}/>
               </header>
               <main className="h-content bg-slate-100">
                 {children}

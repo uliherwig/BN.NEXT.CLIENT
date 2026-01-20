@@ -1,9 +1,10 @@
-import { StrategyEnum } from "./enums";
+import { IndicatorEnum, StrategyEnum } from "./enums";
 
 export interface StrategySettings {
   id: string;
   userId: string;
   strategyType: StrategyEnum;
+  indicatorType: IndicatorEnum;
   broker: string;
   name: string;
   asset: string;
@@ -17,4 +18,8 @@ export interface StrategySettings {
   bookmarked: boolean;
   testStamp: string;
   strategyParams: string;
+  spreadPerTrade: number;
+  overnightFeeRate: number;
+  reverseTrade: boolean;
+
 }

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
 import { StrategySettings } from '@/models/strategy/strategy-settings';
-import { StrategyEnum } from '@/models/strategy/enums';
+import { IndicatorEnum } from '@/models/strategy/enums';
 
 const schemaRegister = z.object({
     keyId: z.string().min(6, { message: "Input required" }),
@@ -117,7 +117,7 @@ export async function runStrategy(prevState: any, formData: FormData) {
         // stopLossPercent: parseFloat(formData.get('stopLossPercent') as string),
         startDate: startDate,
         endDate: endDate,
-        strategy: formData.get('strategy'),
+        indicator: formData.get('indicator'),
         timeFrame: formData.get('timeFrame'),
         allowOvernight: formData.get('allowOvernight') === 'on',
     });
@@ -139,16 +139,20 @@ export async function runStrategy(prevState: any, formData: FormData) {
             "name": formData.get('name') as string,
             "asset": formData.get('symbol') as string,
             "quantity": parseFloat(formData.get('quantity') as string),
-            "takeProfitPercent": parseFloat(formData.get('takeProfitPercent') as string)|| 0.0,
+            "takeProfitPercent": parseFloat(formData.get('takeProfitPercent') as string) || 0.0,
             "stopLossPercent": parseFloat(formData.get('takeProfitPercent') as string) || 0.0,
             "startDate": startDate.toISOString(),
             "endDate": endDate.toISOString(),
-            "strategyType": parseInt(formData.get('strategy') as string),
+            "indicatorType": parseInt(formData.get('indicator') as string),
             "trailingStop": parseFloat(formData.get('trailingStop') as string) || 0.0,
             "allowOvernight": formData.get('allowOvernight') === 'on',
             "bookmarked": false,
             "testStamp": new Date().toISOString(),
             "strategyParams": strategyParams,
+            "strategyType": 0,
+            "spreadPerTrade": 0,
+            "overnightFeeRate": 0,
+            "reverseTrade": false
         };
 
         const strategyAction = formData.get('strategyAction') as string;
@@ -216,28 +220,31 @@ export async function alpacaExecutionAction(prevState: any, formData: FormData) 
 
 
 const GetStrategyParams = (formData: FormData) => {
-    var strategyType = parseInt(formData.get('strategy') as string);
+    var indicatorType = parseInt(formData.get('indicator') as string);
     let strategyParams: string;
 
-    switch (strategyType) {
-        case StrategyEnum.SMA:
-        case StrategyEnum.EMA:
-        case StrategyEnum.WMA:
+    switch (indicatorType) {
+        case IndicatorEnum.SMA:
             strategyParams = JSON.stringify({
-                shortPeriod: parseInt(formData.get('shortPeriod') as string),
-                longPeriod: parseInt(formData.get('longPeriod') as string),
-                stopLossType: parseInt(formData.get('stopLossStrategy') as string),
-                intersectionThreshold: parseFloat(formData.get('intersectionThreshold') as string),
+                SMA_short: parseInt(formData.get('SMA_short') as string),
+                SMA_long: parseInt(formData.get('SMA_long') as string)
             });
             break;
-        case StrategyEnum.Breakout:
+        case IndicatorEnum.EMA:
+        case IndicatorEnum.WMA:
+            strategyParams = JSON.stringify({
+                SMA_short: parseInt(formData.get('SMA_short') as string),
+                SMA_long: parseInt(formData.get('SMA_long') as string)
+            });
+            break;
+        case IndicatorEnum.ROC:
             strategyParams = JSON.stringify({
                 breakoutPeriod: parseInt(formData.get('breakoutPeriod') as string),
                 stopLossType: parseInt(formData.get('stopLossStrategy') as string),
             });
             break;
         default:
-            throw new Error('Unknown strategy type');
+            throw new Error('Unknown indicator type');
     }
 
     return strategyParams;

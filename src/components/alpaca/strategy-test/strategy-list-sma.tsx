@@ -1,5 +1,5 @@
 import { StopLossTypeEnum } from "@/models/strategy/enums";
-import { SMASettings } from "@/models/strategy/sma-settings";
+import { SmaModel } from "@/models/strategy/indicator-models";
 import { StrategySettings } from "@/models/strategy/strategy-settings";
 import { useDictionary } from "@/provider/dictionary-provider";
 import { use, useEffect } from "react";
@@ -11,7 +11,7 @@ interface StrategyListSMAProps {
 const StrategyListSMA: React.FC<StrategyListSMAProps> = ({ strategy }) => {
     const dictionary = useDictionary();
 
-    const smaParams = JSON.parse(strategy.strategyParams) as SMASettings;
+    const smaParams = JSON.parse(strategy.strategyParams) as SmaModel;
 
     if (!dictionary) {
         return <div>Loading...</div>;
@@ -20,17 +20,14 @@ const StrategyListSMA: React.FC<StrategyListSMAProps> = ({ strategy }) => {
     return (
 
         <div className="flex flex-row gap-2 text-center w-full">
-            <div className="flex-1">
-                <div>{dictionary.TEST_STOP_LOSS_TYPE}</div>
-                <div>{smaParams.stopLossType === StopLossTypeEnum.None ? 'TP/SL' : 'SMA Intersection' }</div>
-            </div>
+   
             <div className="flex-1">
                 <div>{dictionary.TEST_SHORT_PERIOD}</div>
-                <div>{smaParams.shortPeriod}</div>
+                <div>{smaParams.SMA_short}</div>
             </div>
             <div className="flex-1">
                 <div>{dictionary.TEST_LONG_PERIOD}</div>
-                <div>{smaParams.longPeriod}</div>
+                <div>{smaParams.SMA_long}</div>
             </div>
             {/* <div className="flex-1">
                 <div>{dictionary.TEST_THRESHOLD}</div>

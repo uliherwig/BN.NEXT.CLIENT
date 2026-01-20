@@ -67,7 +67,7 @@ const ReviewPositions: React.FC<ReviewPositionsProps> = (params) => {
 
     return (
         <>
-            <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} positions={selectedPositions} />
+            <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} positions={selectedPositions} indicator={params.strategySettings.indicatorType} />
             <div className="component-container">
                 <div className="text-component-head mb-2">{dictionary.TEST_POSITIONS} {params.strategySettings.name}</div>
                 {loading && (

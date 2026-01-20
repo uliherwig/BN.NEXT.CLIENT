@@ -28,7 +28,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
   };
 
 
-  let isRegister, isRedirect: boolean = false;
+  let isRegister, isRedirect, sessionexpired: boolean = false;
 
   const queryStr = JSON.parse(JSON.stringify(searchParams));
   if (queryStr && queryStr.register) {
@@ -36,6 +36,10 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
   }
   if (queryStr && queryStr.redirect) {
     isRedirect = queryStr.redirect;
+  }
+  if (queryStr && queryStr.info) {
+    sessionexpired = queryStr.info === 'expired';
+
   }
 
   const handleSignOut = async () => {
@@ -48,8 +52,8 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
     await signOut(options);
 
   };
-  console.log("UserAccount Page", searchParams);
-  const sessionexpired = searchParams.get('info') === 'expired';
+
+  
 
   useEffect(() => {
 
@@ -60,6 +64,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
         const fetchUserAccount = async () => {
 
           var response = await fetch('/api/identity');
+          console.log('fetch user account response:', response);
           if (response.ok) {
             var userAccount = await response.json();
             setUser(userAccount);
@@ -100,10 +105,7 @@ const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchPara
           {status === 'authenticated' && (
             <div>
               <h3>{header}</h3>
-              <div className="grid grid-cols-2 gap-2 my-4">
-
-                <div>UserName:</div>
-                <div className='font-bold'>{user?.username}</div>
+              <div className="grid grid-cols-2 gap-2 my-4">            
 
                 <div>Email:</div>
                 <div>{user?.email}</div>

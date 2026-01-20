@@ -66,15 +66,16 @@ const NofificationBox: React.FC<NofificationBoxProps> = ({ test }) => {
 
                 switch (notificationType) {
                     case NotificationEnum.BacktestStart:
-                        displayMessage.Message = "Backtest Start"
+                        displayMessage.Message = "Backtest Started"
                         addMessage(displayMessage);
                         break;
                     case NotificationEnum.BacktestStop:
                         displayMessage.Message = "Backtest Done"
+
                         addMessage(displayMessage);
                         break;
                     case NotificationEnum.OptimizeStart:
-                        displayMessage.Message = "Optimization Start"
+                        displayMessage.Message = "Optimization Started"
                         addMessage(displayMessage);
                         break;
                     case NotificationEnum.OptimizeStop:

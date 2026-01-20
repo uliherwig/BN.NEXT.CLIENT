@@ -73,17 +73,17 @@ const PositionChartSMA: React.FC<PositionChartProps> = (params) => {
             ]);
 
 
-            if (closeData.length >= smaParams.LongPeriod) {
-                const shorties = closeData.slice(smaParams.ShortPeriod * -1);
-                const shortAvg = shorties.map(item => item[1]).reduce((a, b) => a + b, 0) / smaParams.ShortPeriod;
+            if (closeData.length >= smaParams.SMA_long) {
+                const shorties = closeData.slice(smaParams.SMA_short * -1);
+                const shortAvg = shorties.map(item => item[1]).reduce((a, b) => a + b, 0) / smaParams.SMA_short;
 
                 short.push([
                     ticks,
                     shortAvg
                 ]);
 
-                const longies = closeData.slice(smaParams.LongPeriod * -1);
-                const longAvg = longies.map(item => item[1]).reduce((a, b) => a + b, 0) / smaParams.LongPeriod;
+                const longies = closeData.slice(smaParams.SMA_long * -1);
+                const longAvg = longies.map(item => item[1]).reduce((a, b) => a + b, 0) / smaParams.SMA_long;
 
                 long.push([
                     ticks,

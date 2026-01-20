@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export default function Alpaca() {
-  redirect('/en/brokers/alpaca/dashboard'); 
+  redirect('/en/strategy/alpaca/dashboard'); 
 }

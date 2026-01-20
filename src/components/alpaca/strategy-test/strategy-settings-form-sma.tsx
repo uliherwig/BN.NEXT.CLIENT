@@ -26,24 +26,24 @@ const StrategySettingsFormSMA: React.FC<StrategySettingsFormSMAProps> = ({ pendi
             <tr>
                 <td className="pb-1"><label>Short Period</label></td>
                 <td className="pb-1">
-                    <input type="number" name="shortPeriod" className="border border-slate-400 w-full p-1" defaultValue="20" disabled={pending} />
-                    <div className="error-message">{firstOrDefault(state?.errors?.ShortPeriod, '')}</div>
+                    <input type="number" name="SMA_short" className="border border-slate-400 w-full p-1" defaultValue="20" disabled={pending} />
+                    <div className="error-message">{firstOrDefault(state?.errors?.SMA_short, '')}</div>
                 </td>
             </tr>
             <tr>
                 <td className="pb-1"><label>Long Period</label></td>
                 <td className="pb-1">
-                    <input type="number" name="longPeriod" className="border border-slate-400 w-full p-1" defaultValue="30" disabled={pending} />
-                    <div className="error-message">{firstOrDefault(state?.errors?.LongPeriod, '')}</div>
+                    <input type="number" name="SMA_long" className="border border-slate-400 w-full p-1" defaultValue="30" disabled={pending} />
+                    <div className="error-message">{firstOrDefault(state?.errors?.SMA_long, '')}</div>
                 </td>
             </tr>
-            <tr>
+            {/* <tr>
                 <td className="pb-1"><label>Threshold</label></td>
                 <td className="pb-1">
                     <input type="number" name="intersectionThreshold" className="border border-slate-400 w-full p-1" defaultValue="0.2" step="0.01" disabled={pending} />
-                    <div className="error-message">{firstOrDefault(state?.errors?.LongPeriod, '')}</div>
+                    <div className="error-message">{firstOrDefault(state?.errors?.SMA_long, '')}</div>
                 </td>
-            </tr>
+            </tr> 
             <tr>
                 <td className="pb-1"><label>Stop Loss Strategy</label></td>
                 <td className="pb-1">
@@ -53,7 +53,7 @@ const StrategySettingsFormSMA: React.FC<StrategySettingsFormSMAProps> = ({ pendi
                         <option value={StopLossTypeEnum.None}>Custom limits</option>
                     </select>
                 </td>
-            </tr>
+            </tr> */}
             {stopLossType === StopLossTypeEnum.None.toString() && (
                 <>
                     <tr>

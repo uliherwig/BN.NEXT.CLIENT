@@ -15,6 +15,8 @@ const BnProvider = CredentialsProvider({
 
   async authorize(credentials) {
 
+    console.log('authorize credentials:', process.env.IDENTITY_API_URL, credentials);
+
     const res = await fetch(`${process.env.IDENTITY_API_URL}/Account/sign-in`, {
       method: "POST",
       headers: {
@@ -24,10 +26,19 @@ const BnProvider = CredentialsProvider({
     });
 
     var result = await res.json();
-    const user: User = await result.jwtToken;
+    console.log('authorize result:', result);   
 
-    if (user) {
-      return user;
+    if (result.success) {
+
+      const user: User = await result.jwtToken;
+
+      if (user) {
+        return user;
+      }
+    } else {
+
+
+      throw new Error(result.errorCode);
     }
 
     return null;
@@ -108,11 +119,11 @@ export const authOptions: NextAuthOptions = {
 
     async signIn({ user, account, profile, email, credentials }) {
 
-      // // console.log('signIn:', user);
-      // // console.log('signIn:', account);
-      // // console.log('signIn:', profile);  
-      // // console.log('signIn:', email);
-      // // console.log('signIn:', credentials);
+      console.log('signIn:', user);
+      console.log('signIn:', account);
+      console.log('signIn:', profile);  
+      console.log('signIn:', email);
+      console.log('signIn:', credentials);
 
       if (user) {
         return true
@@ -127,8 +138,8 @@ export const authOptions: NextAuthOptions = {
 
     async jwt({ token, user }) {
       if (user) {
-        // console.log('jwt user:', user);
-        // console.log('token:', token);
+        console.log('jwt user:', user);
+        console.log('token:', token);
 
         token.name = user.name;
         token.accessToken = user.accessToken
@@ -162,7 +173,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token, user }) {
 
       const decoded: any = token.accessToken ? jwtDecode(token.accessToken) : null;
-      // console.log('session decoded:', decoded);
+      console.log('session decoded:', decoded);
 
       if (token.accessToken && session.user) {
 
@@ -170,6 +181,8 @@ export const authOptions: NextAuthOptions = {
         session.user.email = decoded.email;
         session.user.id = decoded.sub;
         session.user.name = decoded.name;
+        session.user.firstName = decoded.given_name;
+        session.user.lastName = decoded.family_name;
         // session.user.role = decoded.role;
         session.accessToken = token.accessToken;
 

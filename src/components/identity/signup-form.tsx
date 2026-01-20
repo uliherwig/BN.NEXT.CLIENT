@@ -15,12 +15,30 @@ function firstOrDefault<T>(array: T[], defaultValue: T): T {
   return array.length > 0 ? array[0] : defaultValue;
 }
 
+
+
 const SignUpForm = ({ language }: { language: string }) => {
   const [state, formAction] = useFormState<any, FormData>(register, { message: '', success: false, errors: {} });
   const dictionary = useDictionary();
   if (!dictionary) {
     return <div>Loading...</div>;
   }
+
+  const createErrorMessage = (code: number) => {
+    switch (code) {
+      case 3:
+        return dictionary.AUTH_error_3;
+      case 2:
+        return dictionary.AUTH_error_2;
+      case 7:
+        return dictionary.AUTH_error_7;
+   
+      default:
+        return dictionary.AUTH_error_8;
+    } 
+  }
+
+
 
   return (
 
@@ -35,11 +53,6 @@ const SignUpForm = ({ language }: { language: string }) => {
 
             {!state.success && (
               <form action={formAction} className='flex flex-col gap-2'>
-                <div>
-                  <label>Username</label>
-                  <input type="text" className="border border-slate-400 w-full p-1" name="username" />
-                  <div className={errorMessageClass}>{firstOrDefault(state?.errors?.username, '')}</div>
-                </div>
                 <div>
                   <label>Email</label>
                   <input type="text" className="border border-slate-400 w-full p-1" name="email" />
@@ -71,8 +84,8 @@ const SignUpForm = ({ language }: { language: string }) => {
                   <div className={errorMessageClass}>{state?.errors?.passwordReEnter}</div></div>
                 <div>
 
-                  {state.errorMessage &&
-                    <div className={errorMessageClass}>Fehler: <span className={errorMessageClass}> {state.errorMessage}</span></div>}
+                  {state.errorCode > 0 &&
+                    <div className={errorMessageClass}>Fehler: <span className={errorMessageClass}> {createErrorMessage(state.errorCode)}</span></div>}
                   <BnButton type="submit" label="Sign Up" />
                 </div>
               </form>

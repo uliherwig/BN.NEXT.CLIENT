@@ -5,10 +5,7 @@ import { getServerSession } from 'next-auth';
 import { z } from 'zod';
 
 const schemaRegister = z.object({
-    username: z.string()
-        .min(3)
-        .max(10)
-        .regex(/^[a-zA-Z0-9]+$/, "Username must contain only alphabetic characters"),
+
     email: z.string().email(),
     password: z.string()
         .min(6, { message: "Password must be at least 6 characters long" })
@@ -17,8 +14,8 @@ const schemaRegister = z.object({
         .regex(/[0-9]/, { message: "Password must contain at least one digit" })
         .regex(/[^a-zA-Z0-9]/, { message: "Password must contain at least one special character" }),
 
-    firstName: z.string().min(3).regex(/^[a-zA-Z]+$/, "Username must contain only alphabetic characters"),
-    lastName: z.string().min(3).regex(/^[a-zA-Z]+$/, "Username must contain only alphabetic characters"),
+    firstName: z.string().min(3).regex(/^[a-zA-Z]+$/, "First name must contain only alphabetic characters"),
+    lastName: z.string().min(3).regex(/^[a-zA-Z]+$/, "Last name must contain only alphabetic characters"),
     passwordReEnter: z.string(),
 
 }).refine(data => data.password === data.passwordReEnter, {
@@ -30,7 +27,7 @@ const schemaRegister = z.object({
 export async function register(prevState: any, formData: FormData) {
 
     const validatedFields = schemaRegister.safeParse({
-        username: formData.get('username'),
+        username: formData.get('email'),
         email: formData.get('email'),
         password: formData.get('password'),
         firstName: formData.get('firstName'),
@@ -46,7 +43,7 @@ export async function register(prevState: any, formData: FormData) {
     } else {
 
         const json = {
-            "username": formData.get('username'),
+            "username": formData.get('email'),
             "password": formData.get('password'),
             "email": formData.get('email'),
             "firstName": formData.get('firstName'),
@@ -63,6 +60,7 @@ export async function register(prevState: any, formData: FormData) {
         });
         console.log(response)
         const result: any = await response.json();
+        console.log('register result:', result);
         if (!result.success && result.errors) {
             const jsonObject = JSON.parse(result.errors);
 

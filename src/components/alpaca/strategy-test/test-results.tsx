@@ -70,7 +70,7 @@ const TestResults: React.FC<TestResultProps> = (params) => {
 
     return (
         <>
-            <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} positions={[selectedPosition]} />
+            <ChartPositionModal isOpen={dialogOpen} closeDialog={closeDialog} positions={[selectedPosition]} indicator={params.strategySettings.indicatorType} />
             <div className="component-container">
                 <div className="text-component-head mb-2">{dictionary.DASH_TEST_RESULT} {params.strategySettings.name}</div>
                 {loading && (

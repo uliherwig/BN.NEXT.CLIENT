@@ -5,7 +5,7 @@ import { firstOrDefault } from "@/utilities";
 import React, { useEffect, useState } from "react";
 import SubmitButton from "@/components/common/buttons/submit-button";
 import { format } from 'date-fns';
-import { BreakoutPeriodEnum, StopLossTypeEnum, StrategyActionEnum, StrategyEnum } from "@/models/strategy/enums";
+import { BreakoutPeriodEnum, IndicatorEnum, StopLossTypeEnum, StrategyActionEnum } from "@/models/strategy/enums";
 import { useDictionary } from "@/provider/dictionary-provider";
 import WidgetButton from "@/components/common/buttons/widget-button";
 import CheckboxSlate from "@/components/common/checkbox/checkbox-slate";
@@ -15,6 +15,8 @@ import CircularLoader from "@/components/common/loader";
 import StrategySettingsFormBreakout from "./strategy-settings-form-breakout";
 import StrategySettingsFormSMA from "./strategy-settings-form-sma";
 import OptimizerModal from "./optimizer-modal";
+import signalRService from '@/service/signalr-service';
+import { NotificationEnum, NotificationMessage } from '@/models/common/notification-message';
 
 enum StrategySettingsFormState {
     None,
@@ -35,10 +37,10 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
 
     const [state, storeAction] = useFormState<any, FormData>(runStrategy, { message: '', success: false, errors: {} });
     const [pending, setPending] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [isTestRunning, setIsTestRunning] = useState<boolean>(false);
 
-    const [strategy, setStrategy] = useState<string>('0');
-    const [strategyAction, setStrategyAction] = useState<string>('1');
+    const [indicator, setIndicator] = useState<string>('0');
+    const [strategyAction, setIndicatorAction] = useState<string>('1');
 
     const [stopLossType, setStopLossType] = useState<string>('0');
     const today = new Date()
@@ -50,8 +52,66 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
     }, []);
 
     useEffect(() => {
-        console.log(formState);
-    }, [formState]);
+        const connectSignalR = async () => {
+
+            const endpoint = process.env.NEXT_PUBLIC_NOTIFICATION_HUB?.toString() || "";
+            await signalRService.startConnection(endpoint);
+
+            const connection = signalRService.getConnection();
+
+            connection.on('ReceiveNotification', (message) => {
+
+                console.log("Received notification:", message);
+
+                const notification: NotificationMessage = JSON.parse(message);
+                const date = new Date(notification.Timestamp);
+                const formatted = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+
+                const toPascalCase = (str: string) =>
+                    str.charAt(0).toUpperCase() + str.slice(1);
+
+                const test1 = notification.NotificationType;
+                const notificationType = NotificationEnum[toPascalCase(notification.NotificationType.toString()) as keyof typeof NotificationEnum];
+                const id = new Date().getTime().toString();
+         
+                console.log("Notification Type:", notificationType);
+
+                switch (notificationType) {
+                    case NotificationEnum.BacktestStart:
+                        setIsTestRunning(true);
+                        break;
+                    case NotificationEnum.BacktestStop:
+                        updateStrategies();
+                        setIsTestRunning(false);
+                        break;
+                    case NotificationEnum.OptimizeStart:
+                        setIsTestRunning(true);
+                        break;
+                    case NotificationEnum.OptimizeStop:
+                        updateStrategies();
+                        setIsTestRunning(false);
+                        break;
+                    default:
+                        break;
+                }
+
+
+
+
+
+
+                
+            });
+        }
+        connectSignalR();
+
+        return () => {
+            // Clean up the effect
+            if (signalRService.getConnection()?.state === 'Connected') {
+                signalRService.getConnection().stop();
+            }
+        };
+    }, []);
 
     useEffect(() => {
         console.log('STATE CHANGED', state);
@@ -101,22 +161,30 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                     <tr>
                                         <td className="pb-1"><label>{dictionary.TEST_STRATEGY_TYPE}</label></td>
                                         <td className="pb-1">
-                                            <select name="strategy" className="border border-slate-400 w-full p-1" title="Strategy" onChange={(e) => { setStrategy(e.target.value) }} disabled={pending}>
-                                                <option value={StrategyEnum.None}>{dictionary.TEST_SELECT_STRATEGY}</option>
-                                                <option value={StrategyEnum.Breakout}>{dictionary.TEST_BREAKOUT}</option>
-                                                <option value={StrategyEnum.SMA}>{dictionary.TEST_SMA}</option>
-                                                <option value={StrategyEnum.EMA}>EMA</option>
-                                                <option value={StrategyEnum.WMA}>WMA</option>
-
+                                            <select
+                                                name="indicator"
+                                                className="border border-slate-400 w-full p-1"
+                                                title="Strategy"
+                                                onChange={(e) => { setIndicator(e.target.value); }}
+                                                disabled={pending}
+                                            >
+                                                <option value={IndicatorEnum.NONE}>{dictionary.INDICATOR_NONE}</option>
+                                                {Object.entries(IndicatorEnum)
+                                                    .filter(([key, value]) => typeof value === "number" && value !== IndicatorEnum.NONE)
+                                                    .map(([key, value]) => (
+                                                        <option key={value} value={value}>
+                                                            {dictionary[`INDICATOR_${key}`] || key}
+                                                        </option>
+                                                    ))}
                                             </select>
                                         </td>
                                     </tr>
-                                    {strategy !== StrategyEnum.None.toString() && (
+                                    {indicator !== IndicatorEnum.NONE.toString() && (
                                         <>
                                             <tr>
                                                 <td className="pb-1"><label>Action</label></td>
                                                 <td className="pb-1">
-                                                    <select name="strategyAction" className="border border-slate-400 w-full p-1" title="strategyAction" onChange={(e) => { setStrategyAction(e.target.value) }} disabled={pending}>
+                                                    <select name="strategyAction" className="border border-slate-400 w-full p-1" title="strategyAction" onChange={(e) => { setIndicatorAction(e.target.value) }} disabled={pending}>
                                                         <option value={StrategyActionEnum.Backtest}>Test with my Parameters</option>
                                                         <option value={StrategyActionEnum.Optimization}>Find best Fit</option>
 
@@ -156,10 +224,8 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                                     <div className="error-message">{firstOrDefault(state?.errors?.endDate, '')}</div>
                                                 </td>
                                             </tr>
-                                            {strategy === StrategyEnum.Breakout.toString() && (
-                                                <StrategySettingsFormBreakout pending={pending} state={state} />
-                                            )}
-                                            {(strategy === StrategyEnum.SMA.toString() || strategy === StrategyEnum.EMA.toString() || strategy === StrategyEnum.WMA.toString()) && (
+                               
+                                            {(indicator === IndicatorEnum.SMA.toString() || indicator === IndicatorEnum.EMA.toString() || indicator === IndicatorEnum.WMA.toString()) && (
                                                 <StrategySettingsFormSMA pending={pending} state={state} />
                                             )}
 
@@ -189,7 +255,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                                 </tbody>
                             </table>
                         </form>
-
+                        <div className="text-green-500 my-2">{isTestRunning ? dictionary.TEST_RUNNING_TEST : ""}</div>
                         {formState === StrategySettingsFormState.Success && (
                             <>
                                 <div className="text-green-500 my-2">{dictionary.TEST_TEST_COMPLETED}</div>

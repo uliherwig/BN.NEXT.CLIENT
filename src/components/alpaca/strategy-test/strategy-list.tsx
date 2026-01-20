@@ -1,6 +1,6 @@
 "use client";
 import { basicFetch } from "@/app/lib/fetchFunctions";
-import { BreakoutPeriodEnum, StrategyEnum } from "@/models/strategy/enums";
+import { BreakoutPeriodEnum, IndicatorEnum, StrategyEnum } from "@/models/strategy/enums";
 import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
 import { IconButton, Tooltip } from "@mui/material";
 import { useEffect, useState } from 'react';
@@ -139,7 +139,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
                                             <tr className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'} ${selectedStrategy.id === item.id ? 'font-bold border border-t-zinc-900' : ''}`} >
                                                 <td className="px-2 py-1 text-left cursor-pointer" onClick={() => displayDetails(item)}>{item.name}</td>
                                                 <td className="ppy-1 text-center">
-                                                    {StrategyEnum[item.strategyType]}
+                                                    {IndicatorEnum[item.indicatorType]}
                                                 </td>
                                                 <td className="py-1 text-center">{item.asset}</td>
                                                 <td className="py-1 text-center">{item.stopLossPercent}</td>
@@ -164,10 +164,8 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
                                             </tr>
                                             <tr className={`border border-b-zinc-900 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}  ${selectedStrategy.id === item.id ? '' : 'hidden'}`} >
                                                 <td colSpan={5} className="px-2 py-1 text-left">
-                                                    {item.strategyType === StrategyEnum.Breakout && (
-                                                        <StrategyListBreakout strategy={item} />
-                                                    )}
-                                                    {item.strategyType === StrategyEnum.SMA && (
+                                               
+                                                    {item.indicatorType === IndicatorEnum.SMA && (
                                                         <StrategyListSMA strategy={item} />
                                                     )}
                                                 </td>

@@ -42,11 +42,11 @@ const AuthenticationMenu: React.FC<AuthMenuProps> = (props) => {
             const result = await basicPost('/api/identity', {});
 
             const options = {
-              callbackUrl: '/auth/account',
-              redirect: false,
+                callbackUrl: '/auth/account',
+                redirect: false,
             };
-      
-           await signOut(options);
+
+            await signOut(options);
         } catch (error) {
             console.error('Error during sign out:', error);
         }
@@ -59,9 +59,9 @@ const AuthenticationMenu: React.FC<AuthMenuProps> = (props) => {
                 const options = {
                     callbackUrl: '/auth/account',
                     redirect: false,
-                  };
-            
-                 await signOut(options);
+                };
+
+                await signOut(options);
             }
         };
         //testAuth();
@@ -77,7 +77,9 @@ const AuthenticationMenu: React.FC<AuthMenuProps> = (props) => {
         <div className="relative mr-2 z-100">
             <IconButton aria-label="account" color="primary" onClick={handleMenuOpen}>
                 <ManageAccountsRoundedIcon className='text-slate-50' />
-                <span className='text-sm text-slate-50 ml-1 min-w-fit'>{session && session.user?.username}</span>
+                {session && session.user?.firstName &&
+                    <span className='text-sm text-slate-50 ml-1 min-w-fit'>Hallo&nbsp;{session && session.user?.firstName}</span>
+                }
             </IconButton>
 
             <Menu

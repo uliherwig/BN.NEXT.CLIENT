@@ -1,4 +1,4 @@
-import { SideEnum, StrategyEnum } from "./enums";
+import { IndicatorEnum, SideEnum } from "./enums";
 
 export interface PositionModel {
   id: string; 
@@ -14,6 +14,6 @@ export interface PositionModel {
   stampOpened: string; 
   stampClosed: string; 
   closeSignal: string;
-  strategyType: StrategyEnum;
+  indicator: IndicatorEnum;
   strategyParams: string;
 }
