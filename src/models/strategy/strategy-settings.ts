@@ -1,4 +1,4 @@
-import { IndicatorEnum, StrategyEnum } from "./enums";
+import { IndicatorEnum, StrategyEnum, TimeFrameEnum } from "./enums";
 
 export interface StrategySettings {
   id: string;
@@ -21,5 +21,6 @@ export interface StrategySettings {
   spreadPerTrade: number;
   overnightFeeRate: number;
   reverseTrade: boolean;
+  timeFrame: TimeFrameEnum;
 
 }

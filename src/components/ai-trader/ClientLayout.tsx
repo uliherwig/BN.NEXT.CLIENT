@@ -1,0 +1,26 @@
+"use client";
+import {
+    Panel,
+    Group,
+    Separator
+} from "react-resizable-panels";
+import NofificationBox from "../common/notification-box";
+import NotificationDisplay from "../notification-display";
+
+export default function ClientLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return (
+        <Group>
+      
+            <Panel defaultSize={85}>{children}</Panel>
+            <Separator />
+            <Panel defaultSize={15} >
+                <NotificationDisplay/>
+
+            </Panel>
+        </Group>
+    );
+}

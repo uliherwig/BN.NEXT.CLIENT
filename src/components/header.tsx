@@ -47,8 +47,8 @@ const Header: React.FC<HeaderProps> = (params) => {
           {dict.HEADER_Strategy}
         </Link>
         <Link
-          href={`/${language}/ai`}
-          className={`${linkClasses} ${pathname.includes(`/${language}/ai`) ? selectedClasses : ""}`}
+          href={`/${language}/ai-trader`}
+          className={`${linkClasses} ${pathname.includes(`/${language}/ai-trader`) ? selectedClasses : ""}`}
           title="AI Models"
         >
           {dict.HEADER_AI}
@@ -59,6 +59,13 @@ const Header: React.FC<HeaderProps> = (params) => {
           title="Blog"
         >
           {dict.HEADER_Blogs}
+        </Link>
+        <Link
+          href={`/${language}/admin`}
+          className={`${linkClasses} ${pathname.includes(`/${language}/admin`) ? selectedClasses : ""}`}
+          title="Admin"
+        >
+          ADMIN
         </Link>
       </div>
       <AuthenticationMenu language={language} />

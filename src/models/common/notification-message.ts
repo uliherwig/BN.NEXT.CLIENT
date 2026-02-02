@@ -1,6 +1,7 @@
 export enum NotificationEnum {
   // Example values
     None,
+    Test,
     BacktestStart,
     BacktestStop,
     OptimizeStart,

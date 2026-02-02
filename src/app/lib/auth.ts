@@ -173,7 +173,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token, user }) {
 
       const decoded: any = token.accessToken ? jwtDecode(token.accessToken) : null;
-      console.log('session decoded:', decoded);
+      // console.log('session decoded:', decoded);
 
       if (token.accessToken && session.user) {
 

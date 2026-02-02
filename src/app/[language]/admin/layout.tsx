@@ -1,7 +1,8 @@
-import BrokerNavi from "@/components/broker-navi";
+import ClientLayout from "@/components/ai-trader/ClientLayout";
+import AITraderNavi from "@/components/ai-trader/navi";
 import { LanguageProps } from "@/models/common/language-props";
 
-export default async function BrokerLayout({
+export default async function AiTraderLayout({
   children,
   params,
 }: {
@@ -11,11 +12,11 @@ export default async function BrokerLayout({
 
   return (
     <div className="flex bg-slate-100 text-slate-800 w-full h-full">
-      <nav className="w-[250px] border-r border-slate-500"> 
-        <BrokerNavi language={params.language} />
+      <nav className="w-[150px] border-r border-slate-500"> 
+       NAVI
       </nav>
       <main className="h-full w-full">       
-        {children}
+        <ClientLayout>{children}</ClientLayout>
       </main>
 
     </div>

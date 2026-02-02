@@ -71,7 +71,8 @@ export async function runStrategy(prevState: any, formData: FormData) {
     }
   
 
-    // console.log('FORM DATA', session);
+    console.log('FORM DATA', session);
+    console.log('FORM DATA', formData);
 
     const isStrategyNameAvailable = async (name: string): Promise<boolean> => {
         const url = `${process.env.STRATEGY_API_URL}/strategy/exists/${name}`;
@@ -149,7 +150,7 @@ export async function runStrategy(prevState: any, formData: FormData) {
             "bookmarked": false,
             "testStamp": new Date().toISOString(),
             "strategyParams": strategyParams,
-            "strategyType": 0,
+            "strategyType": 1,
             "spreadPerTrade": 0,
             "overnightFeeRate": 0,
             "reverseTrade": false

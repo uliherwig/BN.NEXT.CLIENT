@@ -1,13 +1,7 @@
 export enum StrategyEnum {
-  None,
-  Breakout,
-  MeanReversion,
-  Momentum,
-  Reversal,
-  TrendFollowing,
-  SMA,
-  EMA,
-  WMA
+  NONE,
+  IndicatorBased,
+  MachineLearningBased,
 }
 
 export enum IndicatorEnum {
@@ -50,4 +44,10 @@ export enum StrategyActionEnum {
   Optimization,
   Execution,
 }
-
+export enum TimeFrameEnum {
+  Minute = 0,
+  TenMinutes = 1,
+  ThirtyMinutes = 2,
+  Hour = 3,
+  Day = 4
+}

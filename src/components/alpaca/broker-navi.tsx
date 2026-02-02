@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 import { useDictionary } from "@/provider/dictionary-provider";
 import { useSession } from "next-auth/react";
-import NofificationBox from "./common/notification-box";
+import NofificationBox from "../common/notification-box";
 
 interface BrokerNaviProps {
     language: string;

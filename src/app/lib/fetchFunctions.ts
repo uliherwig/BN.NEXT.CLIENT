@@ -25,8 +25,6 @@ export const authorizedFetch = async<returnType>(endpoint: string, token: string
             'Content-Type': 'application/json'
         }
     });
-
-
     // Not needed - is handled by compoonent
     // if (res.status === 401) {
     //     signOut();

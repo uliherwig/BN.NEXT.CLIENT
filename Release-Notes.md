@@ -4,9 +4,13 @@
 
 - chart with real time data
 
-## Version 2025.12.1
+## Version 2026.02.1
 
 - evaluate authentication
+- layout refactored
+- react-forms implemented for generic form creation
+- ai-trader section for testing ai-models via FIN.AI service
+- strategy area refactored - indicator testing via FIN.AI service (using TA-Lib)
 
 ## Version 2025.08.1
 
