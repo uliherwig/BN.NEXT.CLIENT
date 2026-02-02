@@ -27,7 +27,7 @@ const AiModelsList: React.FC<AiModelsListProps> = ({ setModel }) => {
         setModels(models || []);
         
         if(models && models.length > 0){
-            setModel(firstOrDefault(models));
+            setModel(firstOrDefault(models, null));
         }
 
 

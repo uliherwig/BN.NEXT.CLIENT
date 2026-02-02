@@ -4,6 +4,10 @@
 
 - chart with real time data
 
+## Version 2026.02.2
+
+- fix - build errors
+
 ## Version 2026.02.1
 
 - evaluate authentication

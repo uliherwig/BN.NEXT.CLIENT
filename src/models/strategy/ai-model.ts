@@ -12,7 +12,7 @@ export interface AiModel {
 
 export interface AiModelExecutionParams {
     broker: string;
-    time_frame: string;
+    time_frame: number;
     asset: string;
     start_date: string;
     end_date: string;

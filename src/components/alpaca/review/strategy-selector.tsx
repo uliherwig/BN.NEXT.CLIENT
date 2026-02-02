@@ -7,8 +7,6 @@ import { basicFetch } from '@/app/lib/fetchFunctions';
 import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { StrategyInfo } from '@/models/strategy/strategy-info';
 import { StrategyEnum } from '@/models/strategy/enums';
-import { set } from 'date-fns';
-import { start } from 'repl';
 
 interface StrategySelectorProps {
     selectStrategy: any;
@@ -24,7 +22,7 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ selectStrategy }) =
     const dictionary = useDictionary();
 
     const [strategyName, setStrategyName] = useState("None");
-    const [strategyFilter, setStrategyFilter] = useState(StrategyEnum.None);
+    const [strategyFilter, setStrategyFilter] = useState(StrategyEnum.NONE);
     const [strategyInfos, setStrategyInfos] = useState<StrategyInfo[]>([]);
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -86,8 +84,8 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ selectStrategy }) =
                                 label="Select Strategy Type"
                                 onChange={filterStrategy}
                             >
-                                <MenuItem value={StrategyEnum.None}>All</MenuItem>
-                                <MenuItem value={StrategyEnum.Breakout}>Breakout</MenuItem>
+                                <MenuItem value={StrategyEnum.NONE}>All</MenuItem>
+                                <MenuItem value={StrategyEnum.BREAKOUT}>Breakout</MenuItem>
                                 <MenuItem value={StrategyEnum.SMA}>SMA</MenuItem>
                             </Select>
                         </FormControl> */}

@@ -83,12 +83,8 @@ const StrategySettingsView: React.FC<StrategySettingsViewProps> = ({ settings })
                                 <span className="w-2/3">{settings.testStamp && format(new Date(settings.testStamp), 'dd.MM.yy')}</span>
                             </div>
                             <div className='text-sm'>
-                                {settings.strategyType === StrategyEnum.Breakout && (
-                                    <StrategyListBreakout strategy={settings} />
-                                )}
-                                {settings.strategyType === StrategyEnum.SMA && (
-                                    <StrategyListSMA strategy={settings} />
-                                )}
+             
+             
                             </div>
                         </div>
                     </div>

@@ -65,7 +65,11 @@ export default function ConfigurableForm({ config, onSubmit }: ConfigurableFormP
 
         setErrors(newErrors);
         if (isValid) {
-            onSubmit(formData);
+            const submitData = new FormData();
+            for (const key in formData) {
+                submitData.append(key, formData[key]);
+            }
+            onSubmit(submitData);
         }
     };
 

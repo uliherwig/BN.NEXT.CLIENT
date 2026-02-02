@@ -4,15 +4,10 @@ import { z } from 'zod';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
 import { StrategySettings } from '@/models/strategy/strategy-settings';
-import { IndicatorEnum } from '@/models/strategy/enums';
+import { IndicatorEnum, TimeFrameEnum } from '@/models/strategy/enums';
 
 
 export async function runAiTest(prevState: any, formData: FormData) {
-    // Convert formData to a plain object if it's FormData or already an object
-    const form =
-        typeof formData?.entries === "function"
-            ? Object.fromEntries(formData.entries())
-            : formData;
 
     const session = await getServerSession(authOptions)
     if (!session || !session.user) {
@@ -21,10 +16,10 @@ export async function runAiTest(prevState: any, formData: FormData) {
         };
     }
 
+    console.log('FORM DATA', formData);
 
-  
-
-    console.log('FORM DATA', form);
+    const startDate = new Date(Date.parse(formData.get('startDate') as string));
+    const endDate = new Date(Date.parse(formData.get('endDate') as string));
 
     const isStrategyNameAvailable = async (name: string): Promise<boolean> => {
         const url = `${process.env.STRATEGY_API_URL}/strategy/exists/${name}`;
@@ -59,14 +54,10 @@ export async function runAiTest(prevState: any, formData: FormData) {
 
     });
 
-
-    const startDate = new Date(Date.parse(form['startDate']));
-    const endDate = new Date(Date.parse(form['endDate']));
-
     const validatedFields = await backtestSchemaRegister.safeParseAsync({
-        name: form['name'],       
-        takeProfitPercent: parseFloat(form['takeProfitPercent']),
-        stopLossPercent: parseFloat(form['stopLossPercent']),
+        name: formData.get('name'),       
+        takeProfitPercent: parseFloat(formData.get('takeProfitPercent') as string),
+        stopLossPercent: parseFloat(formData.get('stopLossPercent') as string),
         startDate: startDate,
         endDate: endDate
     });
@@ -84,24 +75,24 @@ export async function runAiTest(prevState: any, formData: FormData) {
             "id": "00000000-0000-0000-0000-000000000000",
             "userId": session.user.id!,
             "broker": "Alpaca",
-            "name": form['name'],
-            "asset": form['asset'],
-            "quantity": parseFloat(form['quantity']),
-            "takeProfitPercent": parseFloat(form['takeProfitPercent']) || 0.0,
-            "stopLossPercent": parseFloat(form['stopLossPercent']) || 0.0,
+            "name": formData.get('name') as string,
+            "asset": formData.get('asset') as string,
+            "quantity": parseFloat(formData.get('quantity') as string),
+            "takeProfitPercent": parseFloat(formData.get('takeProfitPercent') as string) || 0.0,
+            "stopLossPercent": parseFloat(formData.get('stopLossPercent') as string) || 0.0,
             "startDate": startDate.toISOString(),
             "endDate": endDate.toISOString(),
             "indicatorType": 0,
-            "trailingStop": parseFloat(form['trailingStop']) || 0.0,
+            "trailingStop": parseFloat(formData.get('trailingStop') as string) || 0.0,
             "allowOvernight": false,
             "bookmarked": false,
             "testStamp": new Date().toISOString(),
-            "strategyParams": `{"id": "${form['modelId']}", "name": ""}`,
+            "strategyParams": `{"id": "${formData.get('modelId')}", "name": ""}`,
             "strategyType": 2,
             "spreadPerTrade": 0,
             "overnightFeeRate": 0,
             "reverseTrade": false,
-            "timeFrame": form['timeFrame'] || 4,
+            "timeFrame": TimeFrameEnum[formData.get('timeFrame') as keyof typeof TimeFrameEnum]
         };
 
         const endpoint = `${process.env.ALPACA_API_URL}/AlpacaTest/run-test` 

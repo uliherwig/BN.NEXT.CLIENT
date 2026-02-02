@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
 import { StrategySettings } from '@/models/strategy/strategy-settings';
-import { IndicatorEnum } from '@/models/strategy/enums';
+import { IndicatorEnum, TimeFrameEnum } from '@/models/strategy/enums';
 
 const schemaRegister = z.object({
     keyId: z.string().min(6, { message: "Input required" }),
@@ -153,7 +153,8 @@ export async function runStrategy(prevState: any, formData: FormData) {
             "strategyType": 1,
             "spreadPerTrade": 0,
             "overnightFeeRate": 0,
-            "reverseTrade": false
+            "reverseTrade": false,
+            "timeFrame": parseInt(formData.get('timeFrame') as string) || TimeFrameEnum.Minute
         };
 
         const strategyAction = formData.get('strategyAction') as string;

@@ -23,7 +23,7 @@ const AlpacaExecStrategy: React.FC<AlpacaExecStrategyProps> = ({ strategy, alpac
     const dictionary = useDictionary();
     const [loading, setLoading] = useState<boolean>(true);
     const [strategyName, setStrategyName] = useState("None");
-    const [strategyFilter, setStrategyFilter] = useState(StrategyEnum.None);
+    const [strategyFilter, setStrategyFilter] = useState(StrategyEnum.NONE);
     const [strategyInfos, setStrategyInfos] = useState<StrategyInfo[]>([]);
 
     const selectStrategyInfo = async (info: StrategyInfo) => {
@@ -37,7 +37,7 @@ const AlpacaExecStrategy: React.FC<AlpacaExecStrategyProps> = ({ strategy, alpac
         setLoading(false);
     }
     useEffect(() => {
-        loadStrategyInfos(0);
+        loadStrategyInfos(StrategyEnum.NONE);
         setLoading(false);
     }, []);
 

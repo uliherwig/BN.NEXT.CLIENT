@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDictionary } from '@/provider/dictionary-provider';
 import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/components/common/loader";
-import { AiModel } from '@/models/strategy/ai-model';
+import { AiModel, AiModelExecutionParams } from '@/models/strategy/ai-model';
 import { TimeFrameEnum } from '@/models/strategy/enums';
 import ConfigurableForm from "@/components/forms/configurable-form";
 import { useFormState } from 'react-dom';
@@ -13,7 +13,7 @@ import { FormConfig } from '@/models/forms/standard';
 
 
 interface AiModelTestProps {
-    model: AiModel | null
+    model: AiModel | null;
 }
 
 const aiTestForm : FormConfig = {
@@ -109,22 +109,22 @@ const AiModelTest: React.FC<AiModelTestProps> = ({ model }) => {
 
 
     const [loading, setLoading] = useState<boolean>(true);
-    const handleSubmit = (data: any) => {
+    const handleSubmit = (formData: FormData) => {  
 
-        console.log('model DATA', model?.id);
-        // if (data instanceof FormData) {
-        //     data.append('modelId', model ? model.id : '');
-        //     data.append('asset', model ? model.execution_params.asset : '');
-        // } else if (typeof data === 'object' && data !== null) {
-        //     data.modelId = model ? model.id : '';
-        //     data.asset = model ? model.execution_params.asset : '';
+        // data.modelId = model ? model.id : '';
+        // data.asset = model ? model.execution_params.asset : '';
+        // data.timeFrame = model ? model.execution_params.time_frame : "";
+
+        formData.append('modelId', model ? model.id : '');
+        formData.append('asset', model ? model.execution_params.asset : '');
+        formData.append('timeFrame', model ? model.execution_params.time_frame.toString() : "");
+
+        // const formData = new FormData();
+        // for (const key in data) {
+        //     formData.append(key, data[key]);
         // }
-
-        data.modelId = model ? model.id : '';
-        data.asset = model ? model.execution_params.asset : '';
-        data.timeFrame = model ? model.execution_params.time_frame : '';
       
-        storeAction(data);
+        storeAction(formData);
         // Optionally, you can set pending or isTestRunning here if needed
         // setPending(true);
         // setIsTestRunning(true);
