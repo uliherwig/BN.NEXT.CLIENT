@@ -1,6 +1,5 @@
 import * as React from 'react';
-import Dashboard from '@/components/alpaca/dashboard/dashboard';
-import SignalRTest from '@/components/admin/signalr_test';
+import SignalRTest from '@/app/components/admin/signalr_test';
 
 export default async function AdminTestPage() {
 

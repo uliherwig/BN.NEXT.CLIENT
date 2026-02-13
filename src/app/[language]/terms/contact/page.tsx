@@ -1,5 +1,5 @@
 "use client";
-import { useDictionary } from '@/provider/dictionary-provider';
+import { useDictionary } from '@/app/provider/dictionary-provider';
 import * as React from 'react';
 
 export default function Contact() {

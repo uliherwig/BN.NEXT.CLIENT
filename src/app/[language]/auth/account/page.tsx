@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { getDictionary } from '@/app/lib/dictionaries/dictionary';
-import { LanguageProps } from '@/models/common/language-props';
-import MyUserAccount from '@/components/identity/my-user-account';
+import { LanguageProps } from '@/app/models/common/language-props';
+import MyUserAccount from '@/app/components/identity/my-user-account';
 
 export default async function UserAccount({ params, searchParams }: { params: LanguageProps["params"], searchParams: URLSearchParams }) {
 

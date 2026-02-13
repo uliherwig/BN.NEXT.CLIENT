@@ -82,6 +82,12 @@ const config: Config = {
         '.bg-bn-dark': {
           '@apply bg-slate-700 h-[40px] text-white p-2': {},
         },
+        '.input-label': {
+          '@apply text-slate-800 text-[14px] w-[40%] p-1 flex-shrink-0': {},
+        },
+        '.input-box': {
+          '@apply text-slate-800 text-[14px] border w-full p-1': {},
+        },
         '.error-message': {
           '@apply text-red-500 text-sm': {},
         },

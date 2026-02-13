@@ -25,15 +25,7 @@ export const authorizedFetch = async<returnType>(endpoint: string, token: string
             'Content-Type': 'application/json'
         }
     });
-    // Not needed - is handled by compoonent
-    // if (res.status === 401) {
-    //     signOut();
-    //     throw new Error('Unauthorized');
-    // }
-    // if (res.status !== 200) {
-    //     signOut();
-    //     throw new Error(`Error fetching data: ${res.statusText}`);
-    // }
+
     return await res.json();
 }
 
@@ -60,4 +52,5 @@ export const basicPost = async<returnType>(
     return result;
 };
 
-const cache: { [key: string]: { data: any; timestamp: number } } = {};
+export const fetcher = (url: string) => fetch(url).then(res => res.json());
+

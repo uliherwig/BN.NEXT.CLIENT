@@ -1,6 +1,5 @@
-import ClientLayout from "@/components/ai-trader/ClientLayout";
-import AITraderNavi from "@/components/ai-trader/navi";
-import { LanguageProps } from "@/models/common/language-props";
+import ClientLayout from "@/app/components/common/client-layout";
+import { LanguageProps } from "@/app/models/common/language-props";
 
 export default async function AiTraderLayout({
   children,

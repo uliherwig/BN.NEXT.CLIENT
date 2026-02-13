@@ -1,4 +1,4 @@
-import AiModelsComponent from '@/components/ai-trader/ai-models-component';
+import AiModelsComponent from '@/app/components/ai-trader/ai-models-component';
 import * as React from 'react';
 
 

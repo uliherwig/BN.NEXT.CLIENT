@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authOptions } from '@/app/lib/auth';
 import { getServerSession } from 'next-auth';
-import { ErrorCode } from '@/models/common/error-code';
+import { ErrorCode } from '@/app/models/common/error-code';
 import { authorizedFetch } from '@/app/lib/fetchFunctions';
-import { AlpacaUserSettings } from '@/models/alpaca/alpaca-user-settings';
+import { AlpacaUserSettings } from '@/app/models/alpaca/alpaca-user-settings';
 
 export async function GET(req: NextRequest) {
      const session = await getServerSession(authOptions);

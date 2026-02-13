@@ -1,7 +1,7 @@
 import { authOptions } from '@/app/lib/auth';
 import { authorizedFetch } from '@/app/lib/fetchFunctions';
-import { AlpacaAssetModel } from '@/models/alpaca/alpaca-asset-model';
-import { ErrorCode } from '@/models/common/error-code';
+import { AlpacaAssetModel } from '@/app/models/alpaca/alpaca-asset-model';
+import { ErrorCode } from '@/app/models/common/error-code';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 

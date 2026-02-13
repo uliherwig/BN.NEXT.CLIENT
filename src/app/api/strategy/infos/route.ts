@@ -1,9 +1,9 @@
 import { authOptions } from "@/app/lib/auth";
 import { getServerSession } from "next-auth";
-import { ErrorCode } from "@/models/common/error-code";
+import { ErrorCode } from "@/app/models/common/error-code";
 import { NextRequest, NextResponse } from "next/server";
 import { authorizedFetch } from "@/app/lib/fetchFunctions";
-import { StrategyInfo } from "@/models/strategy/strategy-info";
+import { StrategyInfo } from "@/app/models/strategy/strategy-info";
 
 // strategy infos
 export async function GET(req: NextRequest) {

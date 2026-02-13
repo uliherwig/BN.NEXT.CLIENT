@@ -1,4 +1,4 @@
-import { LanguageProps } from "@/models/common/language-props";
+import { LanguageProps } from "@/app/models/common/language-props";
 
 export default async function BrokerLayout({
   children,

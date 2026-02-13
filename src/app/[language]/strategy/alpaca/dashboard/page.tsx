@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Dashboard from '@/components/alpaca/dashboard/dashboard';
+import Dashboard from '@/app/components/alpaca/dashboard/dashboard';
 
 export default async function AlpacaDashboardPage() {
 

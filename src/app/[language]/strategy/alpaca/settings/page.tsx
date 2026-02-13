@@ -1,9 +1,9 @@
 import * as React from 'react';
-import KeySecretsForm from '@/components/alpaca/key-secrets-form';
+import KeySecretsForm from '@/app/components/alpaca/key-secrets-form';
 import { getDictionary } from '@/app/lib/dictionaries/dictionary';
-import { LanguageProps } from '@/models/common/language-props';
-import { AlpacaUserSettings } from '@/models/alpaca/alpaca-user-settings';
-import MyAccount from '@/components/alpaca/my-account';
+import { LanguageProps } from '@/app/models/common/language-props';
+import { AlpacaUserSettings } from '@/app/models/alpaca/alpaca-user-settings';
+import MyAccount from '@/app/components/alpaca/my-account';
 
 
 export default async function AlpacaSettingsPage({ params }: LanguageProps) {

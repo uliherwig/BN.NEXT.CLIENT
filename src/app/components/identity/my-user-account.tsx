@@ -1,0 +1,165 @@
+'use client';
+
+import { basicPost } from "@/app/lib/fetchFunctions";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useState, useEffect } from 'react';
+import { useDictionary } from "@/app/provider/dictionary-provider";
+import CircularLoader from "../common/loader";
+import SignInForm from "./signin-form";
+import SignUpForm from "./signup-form";
+import { UserAccount } from "@/app/models/identity/user-account";
+import { format } from 'date-fns';
+import WidgetButton from "../common/buttons/widget-button";
+import DeleteAccountModal from "./delete-account-modal";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+const MyUserAccount = ({ searchParams, language }: { searchParams: URLSearchParams, language: string }) => {
+  const dictionary = useDictionary();
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<UserAccount | null>(null);
+
+  const { data: session, status } = useSession();
+  const [header, setHeader] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
+
+
+  let isRegister, isRedirect, sessionexpired: boolean = false;
+
+  const queryStr = JSON.parse(JSON.stringify(searchParams));
+  if (queryStr && queryStr.register) {
+    isRegister = queryStr.register;
+  }
+  if (queryStr && queryStr.redirect) {
+    isRedirect = queryStr.redirect;
+  }
+  if (queryStr && queryStr.info) {
+    sessionexpired = queryStr.info === 'expired';
+
+  }
+
+  const handleSignOut = async () => {
+
+    const result = await basicPost('/api/identity', {});
+    const options = {
+      callbackUrl: '/auth/account',
+      redirect: false,
+    };
+    await signOut(options);
+
+  };
+
+  
+
+  useEffect(() => {
+
+    switch (status) {
+
+      case 'authenticated':
+        setHeader(`${dictionary?.AUTH_welcome} ${session?.user?.name}`);
+        const fetchUserAccount = async () => {
+
+          var response = await fetch('/api/identity');
+          console.log('fetch user account response:', response);
+          if (response.ok) {
+            var userAccount = await response.json();
+            setUser(userAccount);
+          } else {
+            toast.error('Error fetching user account');
+            await handleSignOut();
+          }
+        };
+
+        fetchUserAccount();
+        setIsLoading(false);
+        break;
+      case 'unauthenticated':
+        setIsLoading(false);
+        break;
+    }
+
+
+  }, [session, status, dictionary]);
+
+
+
+  if (!dictionary) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="h-[90%] max-w-[600px]">
+      <ToastContainer position="bottom-right"
+        autoClose={2500}
+        hideProgressBar={true}
+        closeOnClick
+        theme="colored" />
+      {isLoading ? (
+        <div className="p-10"><CircularLoader /></div>
+      ) : (
+        <div className="flex flex-row gap-4 w-full">
+          {status === 'authenticated' && (
+            <div>
+              <h3>{header}</h3>
+              <div className="grid grid-cols-2 gap-2 my-4">            
+
+                <div>Email:</div>
+                <div>{user?.email}</div>
+
+                <div>First Name:</div>
+                <div>{user?.firstName}</div>
+
+                <div>Last Name:</div>
+                <div>{user?.lastName}</div>
+
+                <div>Created At:</div>
+                <div> {user?.createdAt ? format(user.createdAt, 'dd.MM.yy HH:mm') : ''}</div>
+              </div>
+
+              <WidgetButton type='button' label={dictionary.AUTH_logout} method={handleSignOut} />
+
+              <div className="mt-4 font-light">
+                Klicken Sie <a className="font-normal underline text-red-800" href="#" onClick={() => setDialogOpen(true)}>hier</a> um Ihr Benutzerkonto inklusive aller damit verbundenen Daten zu löschen.
+              </div>
+
+              <DeleteAccountModal isOpen={dialogOpen} closeDialog={closeDialog} />
+            </div>
+
+          )}
+
+          {!isRegister && status === 'unauthenticated' && (
+            <>
+              <div className="w-[80%] overflow-hidden">
+                {sessionexpired && (
+                  <p className="text-red-500 w-[70%]">Session expired..  please login again.</p>
+                )}
+
+                {!sessionexpired && (
+                  <p>{dictionary.AUTH_subhead}</p>
+                )}
+
+                <SignInForm language={language} />
+              </div>
+            </>
+          )}
+          {isRegister && status === 'unauthenticated' && (
+            <>
+              <div className="w-[80%] overflow-hidden">
+                Bitte loggen Sie sich ein oder registrieren Sie sich, um fortzufahren.
+                <SignUpForm language={language} />
+              </div>
+
+            </>
+          )}
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+export default MyUserAccount;

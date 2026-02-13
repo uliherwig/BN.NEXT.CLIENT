@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/lib/auth";
 import { authorizedFetch } from "@/app/lib/fetchFunctions";
-import { ErrorCode } from "@/models/common/error-code";
-import { TestResult } from "@/models/strategy/test-result";
+import { ErrorCode } from "@/app/models/common/error-code";
+import { TestResult } from "@/app/models/strategy/test-result";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 

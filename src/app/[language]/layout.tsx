@@ -2,16 +2,16 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
 const inter = Inter({ subsets: ["latin"] });
-import Header from "@/components/header";
-import { LanguageProps } from "@/models/common/language-props";
+import Header from "@/app/components/header";
+import { LanguageProps } from "@/app/models/common/language-props";
 import { getDictionary } from "../lib/dictionaries/dictionary";
-import SessionProviderWrapper from "@/provider/session-provider-wrapper";
-import { DictionaryProvider } from "@/provider/dictionary-provider";
-import CookieConsent from "@/components/common/cookie-consent";
-import Footer from "@/components/footer";
+import SessionProviderWrapper from "@/app/provider/session-provider-wrapper";
+import { DictionaryProvider } from "@/app/provider/dictionary-provider";
+import CookieConsent from "@/app/components/common/cookie-consent";
+import Footer from "@/app/components/footer";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/auth";
-import { SignalRProvider } from "@/provider/signalr-provider";
+import { SignalRProvider } from "@/app/provider/signalr-provider";
 
 // prerender static pages for each language
 export async function generateStaticParams() {

@@ -1,6 +1,6 @@
 import { authOptions } from '@/app/lib/auth';
 import { getDictionary } from '@/app/lib/dictionaries/dictionary';
-import { LanguageProps } from '@/models/common/language-props';
+import { LanguageProps } from '@/app/models/common/language-props';
 import { redirect } from 'next/navigation';
 import * as React from 'react';
 

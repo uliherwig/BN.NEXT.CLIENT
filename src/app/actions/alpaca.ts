@@ -3,8 +3,8 @@
 import { z } from 'zod';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
-import { StrategySettings } from '@/models/strategy/strategy-settings';
-import { IndicatorEnum, TimeFrameEnum } from '@/models/strategy/enums';
+import { StrategySettings } from '@/app/models/strategy/strategy-settings';
+import { IndicatorEnum, TimeFrameEnum } from '@/app/models/strategy/enums';
 
 const schemaRegister = z.object({
     keyId: z.string().min(6, { message: "Input required" }),
@@ -68,12 +68,8 @@ export async function runStrategy(prevState: any, formData: FormData) {
         return {
             errors: { session: ['Session is not available'] },
         };
-    }
-  
-
-    console.log('FORM DATA', session);
+    } 
     console.log('FORM DATA', formData);
-
     const isStrategyNameAvailable = async (name: string): Promise<boolean> => {
         const url = `${process.env.STRATEGY_API_URL}/strategy/exists/${name}`;
         const res = await fetch(url, {
@@ -98,14 +94,14 @@ export async function runStrategy(prevState: any, formData: FormData) {
             }, {
                 message: "Name already exists",
             }),
-
-        symbol: z.string(),
-        //takeProfitPercent: z.number().min(1).max(25),
-        // stopLossPercent: z.number().min(0.001).max(0.5),
+      
+        takeProfitPercent: z.number().min(0.01).max(2.5),
+        stopLossPercent: z.number().min(0.01).max(1.5),
         startDate: z.date().min(new Date(2024, 0, 0), 'Start date may not be before 2024').max(new Date(), 'Start date may not be after today'),
         endDate: z.date().min(new Date(2024, 0, 0), 'End date may not be before 2024').max(new Date(), 'End date may not be after today'),
 
     });
+   
 
 
     const startDate = new Date(Date.parse(formData.get('startDate') as string));
@@ -113,15 +109,18 @@ export async function runStrategy(prevState: any, formData: FormData) {
 
     const validatedFields = await backtestSchemaRegister.safeParseAsync({
         name: formData.get('name'),
-        symbol: formData.get('symbol'),
-        // takeProfitPercent: parseFloat(formData.get('takeProfitPercent') as string),
-        // stopLossPercent: parseFloat(formData.get('stopLossPercent') as string),
+        asset: formData.get('asset'),
+        takeProfitPercent: parseFloat(formData.get('takeProfitPercent') as string),
+        stopLossPercent: parseFloat(formData.get('stopLossPercent') as string),
         startDate: startDate,
         endDate: endDate,
         indicator: formData.get('indicator'),
         timeFrame: formData.get('timeFrame'),
-        allowOvernight: formData.get('allowOvernight') === 'on',
+        closePositionEod: formData.get('closePositionEod') === 'on',
     });
+
+    console.log('VALIDATION RESULT', validatedFields);
+    console.log('VALIDATION ERRORS', validatedFields.error?.flatten());
 
     if (!validatedFields.success) {
         return {
@@ -134,59 +133,61 @@ export async function runStrategy(prevState: any, formData: FormData) {
         let strategyParams = GetStrategyParams(formData);
 
         const payload: StrategySettings = {
-            "id": "00000000-0000-0000-0000-000000000000",
-            "userId": session.user.id!,
-            "broker": "Alpaca",
-            "name": formData.get('name') as string,
-            "asset": formData.get('symbol') as string,
-            "quantity": parseFloat(formData.get('quantity') as string),
-            "takeProfitPercent": parseFloat(formData.get('takeProfitPercent') as string) || 0.0,
-            "stopLossPercent": parseFloat(formData.get('takeProfitPercent') as string) || 0.0,
-            "startDate": startDate.toISOString(),
-            "endDate": endDate.toISOString(),
-            "indicatorType": parseInt(formData.get('indicator') as string),
-            "trailingStop": parseFloat(formData.get('trailingStop') as string) || 0.0,
-            "allowOvernight": formData.get('allowOvernight') === 'on',
-            "bookmarked": false,
-            "testStamp": new Date().toISOString(),
-            "strategyParams": strategyParams,
-            "strategyType": 1,
-            "spreadPerTrade": 0,
-            "overnightFeeRate": 0,
-            "reverseTrade": false,
-            "timeFrame": parseInt(formData.get('timeFrame') as string) || TimeFrameEnum.Minute
+            id: "00000000-0000-0000-0000-000000000000",
+            userId: session.user.id!,
+            broker: "Alpaca",
+            name: formData.get('name') as string,
+            asset: formData.get('asset') as string,
+            quantity: parseFloat(formData.get('quantity') as string),
+            takeProfitPercent: parseFloat(formData.get('takeProfitPercent') as string) || 0.0,
+            stopLossPercent: parseFloat(formData.get('takeProfitPercent') as string) || 0.0,
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
+            indicatorType: parseInt(formData.get('indicator') as string),
+            trailingStop: parseFloat(formData.get('trailingStop') as string) || 0.0,
+            closePositionEod: formData.get('closePositionEod') === 'on',
+            bookmarked: false,     
+            strategyParams: strategyParams,
+            strategyType: 1,
+            spreadPerTrade: 0,
+            overnightFeeRate: 0,
+            reverseTrade: false,
+            timeFrame: parseInt(formData.get('timeFrame') as string) || TimeFrameEnum.Minute
         };
 
-        const strategyAction = formData.get('strategyAction') as string;
-        console.log('STRATEGY ACTION', strategyAction);
-
-        const endpoint = (strategyAction === '1') ?
+        let strategyAction = formData.get('action') as string;
+   
+        // optimize option currently disabled
+        strategyAction = '0'
+        const endpoint = (strategyAction === '0') ?
             `${process.env.ALPACA_API_URL}/AlpacaTest/run-test` :
             `${process.env.ALPACA_API_URL}/AlpacaTest/optimize`;
 
-        console.log('ENDPOINT', startDate.toISOString());
-        console.log('PAYLOAD', payload);   
-        
-      
+        console.log('ENDPOINT', endpoint);
+        console.log('PAYLOAD', payload);
 
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            body: JSON.stringify(payload),
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session.accessToken}`
-            },
-        });
+  
+   
 
-        let result: any = { message: '', success: false, errors: {} }
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.accessToken}`
+                },
+            });
 
-        console.log('RESPONSE', response);
+            if (!response.ok) {
+                return { success: false, message: "Error", errors: {} };
+            }
 
-        if (response.ok) {
-            result = { message: '', success: true, errors: {} }
-        } 
+            return { success: true, message: "", errors: {} };
 
-        return result;
+        } catch (err) {
+            return { success: false, message: "Exception", errors: {} };
+        }
     }
 
 }
@@ -222,32 +223,16 @@ export async function alpacaExecutionAction(prevState: any, formData: FormData) 
 
 
 const GetStrategyParams = (formData: FormData) => {
-    var indicatorType = parseInt(formData.get('indicator') as string);
-    let strategyParams: string;
 
-    switch (indicatorType) {
-        case IndicatorEnum.SMA:
-            strategyParams = JSON.stringify({
-                SMA_short: parseInt(formData.get('SMA_short') as string),
-                SMA_long: parseInt(formData.get('SMA_long') as string)
-            });
-            break;
-        case IndicatorEnum.EMA:
-        case IndicatorEnum.WMA:
-            strategyParams = JSON.stringify({
-                SMA_short: parseInt(formData.get('SMA_short') as string),
-                SMA_long: parseInt(formData.get('SMA_long') as string)
-            });
-            break;
-        case IndicatorEnum.ROC:
-            strategyParams = JSON.stringify({
-                breakoutPeriod: parseInt(formData.get('breakoutPeriod') as string),
-                stopLossType: parseInt(formData.get('stopLossStrategy') as string),
-            });
-            break;
-        default:
-            throw new Error('Unknown indicator type');
-    }
+    // extract keys with indicatorParams. prefix and create a new object without the prefix
 
-    return strategyParams;
+    const strategyParamsObj: Record<string, any> = {};
+    formData.forEach((value, key) => {
+        if (key.startsWith('indicatorParams.')) {   
+            const newKey = key.replace('indicatorParams.', '');
+            strategyParamsObj[newKey] = value;
+        }
+    });  
+
+    return JSON.stringify(strategyParamsObj);
 }

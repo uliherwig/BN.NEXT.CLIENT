@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { authorizedFetch } from '@/app/lib/fetchFunctions';
 import { authOptions } from '@/app/lib/auth';
 import { getServerSession } from 'next-auth';
-import { ErrorCode } from '@/models/common/error-code';
-import { AlpacaPositionModel } from '@/models/alpaca/alpaca-position-model';
+import { ErrorCode } from '@/app/models/common/error-code';
+import { AlpacaPositionModel } from '@/app/models/alpaca/alpaca-position-model';
 
 export async function GET(req: NextRequest) {
 

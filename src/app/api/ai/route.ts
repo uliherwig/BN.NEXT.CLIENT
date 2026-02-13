@@ -1,12 +1,12 @@
 import { authOptions } from "@/app/lib/auth";
 import { authorizedFetch } from "@/app/lib/fetchFunctions";
 import { getServerSession } from "next-auth";
-import { ErrorCode } from "@/models/common/error-code";
+import { ErrorCode } from "@/app/models/common/error-code";
 import { NextRequest, NextResponse } from "next/server";
-import { AiModel } from "@/models/strategy/ai-model";
-import { parseExecutionParams } from "@/models/strategy/ai-model";
-import { StrategySettings } from "@/models/strategy/strategy-settings";
-import { cacheService } from "@/service/cache-service";
+import { AiModel } from "@/app/models/strategy/ai-model";
+import { parseExecutionParams } from "@/app/models/strategy/ai-model";
+import { StrategySettings } from "@/app/models/strategy/strategy-settings";
+import { cacheService } from "@/app/service/cache-service";
 
 
 // get strategy by id

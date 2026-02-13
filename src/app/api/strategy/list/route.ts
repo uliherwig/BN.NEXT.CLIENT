@@ -1,8 +1,8 @@
 import { authOptions } from "@/app/lib/auth";
 import { authorizedFetch } from "@/app/lib/fetchFunctions";
-import { StrategySettings } from "@/models/strategy/strategy-settings";
+import { StrategySettings } from "@/app/models/strategy/strategy-settings";
 import { getServerSession } from "next-auth";
-import { ErrorCode } from "@/models/common/error-code";
+import { ErrorCode } from "@/app/models/common/error-code";
 import { NextRequest, NextResponse } from "next/server";
 
 // TODO split this to 2 endpoints

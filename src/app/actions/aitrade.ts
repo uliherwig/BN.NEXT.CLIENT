@@ -3,8 +3,8 @@
 import { z } from 'zod';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/lib/auth";
-import { StrategySettings } from '@/models/strategy/strategy-settings';
-import { IndicatorEnum, TimeFrameEnum } from '@/models/strategy/enums';
+import { StrategySettings } from '@/app/models/strategy/strategy-settings';
+import { IndicatorEnum, TimeFrameEnum } from '@/app/models/strategy/enums';
 
 
 export async function runAiTest(prevState: any, formData: FormData) {

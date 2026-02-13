@@ -1,6 +1,6 @@
 import { authOptions } from '@/app/lib/auth';
 import { getDictionary } from '@/app/lib/dictionaries/dictionary';
-import { LanguageProps } from '@/models/common/language-props';
+import { LanguageProps } from '@/app/models/common/language-props';
 import * as React from 'react';
 
 export default async function Broker({ params }: LanguageProps) {

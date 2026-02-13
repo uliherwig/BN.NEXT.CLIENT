@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authOptions } from '@/app/lib/auth';
 import { getServerSession } from 'next-auth';
-import { cacheService } from '@/service/cache-service';
+import { cacheService } from '@/app/service/cache-service';
 
 export async function GET(req: NextRequest) {
 

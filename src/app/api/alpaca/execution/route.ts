@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { authOptions } from '@/app/lib/auth';
 import { getServerSession } from 'next-auth';
 import { authorizedFetch } from '@/app/lib/fetchFunctions';
-import { ErrorCode } from '@/models/common/error-code';
+import { ErrorCode } from '@/app/models/common/error-code';
 
 // get active execution
 export async function GET(req: NextRequest) {

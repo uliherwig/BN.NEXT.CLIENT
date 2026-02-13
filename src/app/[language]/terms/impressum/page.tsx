@@ -1,5 +1,5 @@
 
-import { LanguageProps } from '@/models/common/language-props';
+import { LanguageProps } from '@/app/models/common/language-props';
 import { getDictionary } from "@/app/lib/dictionaries/dictionary";
 import * as React from 'react';
 

@@ -4,6 +4,10 @@
 
 - chart with real time data
 
+## Version 2026.02.3
+
+- configurable forms with RHF
+
 ## Version 2026.02.2
 
 - fix - build errors

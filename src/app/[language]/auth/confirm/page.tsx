@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { getDictionary } from '@/app/lib/dictionaries/dictionary';
-import { LanguageProps } from '@/models/common/language-props';
-import ConfirmSignUp from '@/components/identity/confirm-signup';
+import { LanguageProps } from '@/app/models/common/language-props';
+import ConfirmSignUp from '@/app/components/identity/confirm-signup';
 
 export default async function ConfirmRegistration({ params,  searchParams }: { params: LanguageProps["params"], searchParams: URLSearchParams }) {
 
