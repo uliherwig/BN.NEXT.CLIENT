@@ -98,7 +98,7 @@ const AlpacaExecStrategy: React.FC<AlpacaExecStrategyProps> = ({ strategy, alpac
                             <div>{strategy.trailingStop}</div>
 
                             <div>Overnight:</div>
-                            <div>{strategy.allowOvernight ? 'Yes' : 'No'}</div>
+                            <div>{strategy.closePositionEod ? 'Yes' : 'No'}</div>
                         </div>
                     </>
                 )}

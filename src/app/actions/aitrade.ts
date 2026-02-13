@@ -84,9 +84,9 @@ export async function runAiTest(prevState: any, formData: FormData) {
             "endDate": endDate.toISOString(),
             "indicatorType": 0,
             "trailingStop": parseFloat(formData.get('trailingStop') as string) || 0.0,
-            "allowOvernight": false,
+            "closePositionEod": false,
             "bookmarked": false,
-            "testStamp": new Date().toISOString(),
+
             "strategyParams": `{"id": "${formData.get('modelId')}", "name": ""}`,
             "strategyType": 2,
             "spreadPerTrade": 0,

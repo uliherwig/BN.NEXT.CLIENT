@@ -192,7 +192,7 @@ const AiModelTest: React.FC<AiModelTestProps> = ({ model }) => {
 
 
                         <div className="mt-4">
-                            <ConfigurableForm config={aiTestForm} onSubmit={handleSubmit} />
+                            <ConfigurableForm config={aiTestForm} action={runAiTest}   />
                         </div>
 
 

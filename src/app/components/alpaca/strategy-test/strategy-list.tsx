@@ -146,7 +146,7 @@ const StrategyList: React.FC<StrategyListProps> = ({ showResult, hasUpdate, show
 
                                                 <td className="py-1 text-center">{item.takeProfitPercent}</td>
                                                 <td className="py-1 text-center">{item.trailingStop === 0 ? dictionary.DASH_NO : item.trailingStop}</td>
-                                                <td className="py-1 text-center">{item.allowOvernight ? dictionary.COMMON_YES : dictionary.COMMON_NO}</td>
+                                                <td className="py-1 text-center">{item.closePositionEod ? dictionary.COMMON_YES : dictionary.COMMON_NO}</td>
 
                                                 <td className="text-right w-[70px]">
                                                     <Tooltip title={dictionary.DASH_BOOKMARK_STRATEGY}>

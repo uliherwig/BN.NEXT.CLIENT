@@ -76,12 +76,9 @@ const StrategySettingsView: React.FC<StrategySettingsViewProps> = ({ settings })
                             </div>
                             <div className="m-0 p-0 flex">
                                 <span className="w-1/3 text-sm">{dictionary.TEST_ALLOW_OVERNIGHT}:</span>
-                                <span className="w-2/3">{settings.allowOvernight ? dictionary.COMMON_YES : dictionary.COMMON_NO}</span>
+                                <span className="w-2/3">{settings.closePositionEod ? dictionary.COMMON_YES : dictionary.COMMON_NO}</span>
                             </div>
-                            <div className="m-0 p-0 flex">
-                                <span className="w-1/3 text-sm">{dictionary.TEST_TEST_STAMP}:</span>
-                                <span className="w-2/3">{settings.testStamp && format(new Date(settings.testStamp), 'dd.MM.yy')}</span>
-                            </div>
+           
                             <div className='text-sm'>
              
              
