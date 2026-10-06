@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { ErrorOption, useForm, useWatch } from "react-hook-form";
 import { FormConfig, FormField } from "@/app/models/forms/standard";
 
 
@@ -26,7 +26,7 @@ export default function ConfigurableForm({
             acc[field.name] = field.defaultValue ?? "";
             return acc;
         }, {} as Record<string, any>);
-        console.log("Base Defaults:", baseDefaults);
+        //console.log("Base Defaults:", baseDefaults);
         return baseDefaults;
     }, [config.fields, indicatorMap]);
 
@@ -42,31 +42,10 @@ export default function ConfigurableForm({
         formState: { errors, isSubmitting },
     } = useForm({
         defaultValues,
-    });  
+    });
 
-    console.log("Form Errors:", errors);
-    console.log("Is Submitting:", isSubmitting);
-
-    /* -------------------------------------------------- */
-    /* Sync Server Errors -> RHF                          */
-    /* -------------------------------------------------- */
-
-    // useEffect(() => {
-    //     if (state?.errors) {
-    //         Object.entries(state.errors).forEach(([field, message]) => {
-    //             setError(field, {
-    //                 type: "server",
-    //                 message,
-    //             });
-    //         });
-    //     }
-    // }, [state, setError]);
-
-    // useEffect(() => {
-
-    //     console.log("Form State Updated:", state);
-    
-    // }, [state]);
+    //console.log("Form Errors:", errors);
+    //console.log("Is Submitting:", isSubmitting);
 
     /* -------------------------------------------------- */
     /* Watch Values                                       */
@@ -158,7 +137,16 @@ export default function ConfigurableForm({
                         className="mt-2"
                     />
                 );
-
+            case "number":
+                return (
+                    <input
+                        type="number"
+                        placeholder={field.placeholder}
+                        step={field.increment}
+                        {...register(field.name, validationRules)}
+                        className="input-box"
+                    />  
+                );
             default:
                 return (
                     <input
@@ -190,8 +178,26 @@ export default function ConfigurableForm({
 
         });
         const result = await action(null, formData);
+
+        if(result?.success) {
+            // Optionally reset the form or show a success message
+        } else {
+            // Handle errors returned from the server
+            if (result?.errors) {
+                Object.entries(result.errors).forEach(([field, message]) => {
+                    console.log(`Setting error for ${field}: ${message}`);
+                    const err: ErrorOption = {
+                        type: "server",
+                        message: Array.isArray(message) ? message.join(", ") : String(message),
+                    };
+                    setError(field, err);
+                });
+            }
+        }
+
         console.log("Action Result:", result);
     };
+ 
 
     /* -------------------------------------------------- */
     /* Render                                             */
@@ -204,7 +210,7 @@ export default function ConfigurableForm({
 
     config.submit = indicatorFields.length > 0
 
-  
+
 
     return (
         <form
@@ -213,7 +219,7 @@ export default function ConfigurableForm({
         >
             <h2>{config.title}</h2>
             {/* Global Server Message */}
- 
+
             {/* Base Fields */}
             {config.fields
                 .filter(shouldShowField)

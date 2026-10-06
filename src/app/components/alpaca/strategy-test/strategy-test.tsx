@@ -2,31 +2,43 @@
 import { useState } from "react";
 import TestPositions from "./test-results";
 import StrategySettingsForm from "./strategy-settings-form";
-import StrategyList from "./strategy-list";
+import { useStrategy } from "@/app/provider/indicator-tests-provider";
 import { StrategySettings } from "@/app/models/strategy/strategy-settings";
 import { Group, Panel } from "react-resizable-panels";
+import IndicatorTestList from "../indicator-test-list";
+import { basicFetch } from "@/app/lib/fetchFunctions";
+import { firstOrDefault } from "@/app/lib/utilities";
+import { StrategyTypeEnum } from "@/app/models/strategy/enums";
 
 const StrategyTest = () => {
-    const [backtest, setBacktest] = useState<StrategySettings>({} as StrategySettings);
-    const [hasUpdate, setHasUpdate] = useState<boolean>(false);
+    const [backtest, setBacktest] = useState<StrategySettings>({} as StrategySettings); 
+    const { collection, updateCollection } = useStrategy();
+
+    const updateStrategies = async () => {
+        const strats = await basicFetch<StrategySettings[]>(`/api/strategy/list?strategyType=${StrategyTypeEnum.IndicatorBased}&showBookmarked=${false}`);
+        updateCollection({
+            items: strats
+        });
+    };
 
     const showResult = (e: StrategySettings) => {
         console.log("showResult", e);
         setBacktest(e)
     }
-    const updateStrategies = (e: boolean) => {
-        console.log("updateStrategies", e);
-        setHasUpdate(!hasUpdate);
-    }
+
+   
+
+
+
 
     return (
         <Group>
             <Panel defaultSize={33}>
-                <StrategySettingsForm updateStrategies={updateStrategies}  />
+                <StrategySettingsForm updateStrategies={updateStrategies} />
             </Panel>
             <div className="w-px h-full bg-slate-400" />
             <Panel defaultSize={33}>
-                <StrategyList showResult={showResult} hasUpdate={hasUpdate} showBookmarked={false} />
+                <IndicatorTestList strategies={collection.items} updateStrategies={updateStrategies} showResult={showResult} />
             </Panel>
             <div className="w-px h-full bg-slate-400" />
             <Panel defaultSize={33}>

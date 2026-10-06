@@ -4,6 +4,10 @@
 
 - chart with real time data
 
+## Version 2026.10.1
+
+- alpaca execution
+
 ## Version 2026.02.4
 
 - adjustments

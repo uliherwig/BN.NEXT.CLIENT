@@ -3,34 +3,37 @@ import { useEffect, useState } from 'react';
 import { useDictionary } from '@/app/provider/dictionary-provider';
 import { Group, Panel } from 'react-resizable-panels';
 import AiModelsList from './ai-models-list';
-import { AiModel } from '@/app/models/strategy/ai-model';
+import { StrategySettingsDto } from '@/app/models/strategy/strategy-settings-dto';
 import AiModelTest from './ai-model-test';
+import AiModelExecutor from './ai-model-executor';
 
 
 
-const AiModelsComponent: React.FC = () => {
+const AiExecutionComponent: React.FC = () => {
     const dictionary = useDictionary();
 
-    const [selectedModel, setSelectedModel] = useState<AiModel | null>(null);
+    const [selectedModel, setSelectedModel] = useState<StrategySettingsDto | null>(null);
 
     useEffect(() => {
 
     }, []);
 
     return (
+       
         <Group>
-            <Panel defaultSize={20}>
-                {/* <AiModelsList setModel={(model) => { setSelectedModel(model) }} /> */}
+            <Panel defaultSize={30}>
+                <AiModelsList setModel={(model) => { setSelectedModel(model) }} />
             </Panel>
             <div className="w-px h-full bg-slate-400" />
             <Panel defaultSize={40}>
-                {/* <AiModelTest model={selectedModel} /> */}
+                <AiModelExecutor selectedModel={selectedModel} />
             </Panel>
             <div className="w-px h-full bg-slate-400" />
-            <Panel defaultSize={40}></Panel>
+            <Panel defaultSize={30}>123</Panel>
         </Group>
+      
     );
 
 }
 
-export default AiModelsComponent;
+export default AiExecutionComponent;

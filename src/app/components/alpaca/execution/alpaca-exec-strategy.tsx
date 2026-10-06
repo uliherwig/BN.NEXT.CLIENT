@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/app/components/common/loader";
 import { StrategySettings } from '@/app/models/strategy/strategy-settings';
 import { ExecutionModel } from '@/app/models/strategy/execution-model';
-import { StrategyEnum } from '@/app/models/strategy/enums';
+import { StrategyTypeEnum } from '@/app/models/strategy/enums';
 import { Autocomplete, TextField } from '@mui/material';
 import { StrategyInfo } from '@/app/models/strategy/strategy-info';
 import { basicFetch } from '@/app/lib/fetchFunctions';
@@ -22,7 +22,7 @@ const AlpacaExecStrategy: React.FC<AlpacaExecStrategyProps> = ({ strategy, alpac
     const dictionary = useDictionary();
     const [loading, setLoading] = useState<boolean>(true);
     const [strategyName, setStrategyName] = useState("None");
-    const [strategyFilter, setStrategyFilter] = useState(StrategyEnum.NONE);
+    const [strategyFilter, setStrategyFilter] = useState(StrategyTypeEnum.NONE);
     const [strategyInfos, setStrategyInfos] = useState<StrategyInfo[]>([]);
 
     const selectStrategyInfo = async (info: StrategyInfo) => {
@@ -36,7 +36,7 @@ const AlpacaExecStrategy: React.FC<AlpacaExecStrategyProps> = ({ strategy, alpac
         setLoading(false);
     }
     useEffect(() => {
-        loadStrategyInfos(StrategyEnum.NONE);
+        loadStrategyInfos(StrategyTypeEnum.NONE);
         setLoading(false);
     }, []);
 
@@ -80,7 +80,7 @@ const AlpacaExecStrategy: React.FC<AlpacaExecStrategyProps> = ({ strategy, alpac
                             <div>{strategy.broker}</div>
 
                             <div>Strategy Type:</div>
-                            <div>{StrategyEnum[strategy.strategyType]}</div>
+                            <div>{StrategyTypeEnum[strategy.strategyType]}</div>
 
                             <div>Asset:</div>
                             <div>{strategy.asset}</div>

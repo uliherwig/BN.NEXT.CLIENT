@@ -237,6 +237,23 @@ export const IndicatorFormConfig: FormConfig = {
             ]
         },
         {
+            name: "timeframe",
+            label: "Timeframe",
+            type: "select",
+            required: true,
+            defaultValue: "4",
+            options: [
+                { value: "0", label: "Minute" },
+                { value: "1", label: "Ten Minutes" },
+                { value: "2", label: "Thirty Minutes" },
+                { value: "3", label: "Hour" },
+                { value: "4", label: "Day" }
+            ],
+            showWhen: [
+                { field: "indicator", notEquals: "0" }
+            ]
+        },
+        {
             name: "quantity",
             label: "Quantity",
             type: "number",
@@ -273,6 +290,7 @@ export const IndicatorFormConfig: FormConfig = {
             type: "number",
             required: true,
             defaultValue: 1.0,
+            increment: 0.1,
             showWhen: [
                 { field: "indicator", notEquals: "0" }
             ]
@@ -283,6 +301,7 @@ export const IndicatorFormConfig: FormConfig = {
             type: "number",
             required: true,
             defaultValue: 1.0,
+            increment: 0.1,
             showWhen: [
                 { field: "indicator", notEquals: "0" }
             ]
@@ -293,6 +312,28 @@ export const IndicatorFormConfig: FormConfig = {
             type: "checkbox",
             required: false,
             defaultValue: false,
+            showWhen: [
+                { field: "indicator", notEquals: "0" }
+            ]
+        },
+        {
+            name: "spread",
+            label: "Spread per Trade",
+            type: "number",
+            required: true,
+            defaultValue: 0.005,
+            increment: 0.001,
+            showWhen: [
+                { field: "indicator", notEquals: "0" }
+            ]
+        },
+        {
+            name: "overnightFee",
+            label: "Overnight Fee",
+            type: "number",
+            required: true,
+            defaultValue: 0.00005,
+            increment: 0.00001,
             showWhen: [
                 { field: "indicator", notEquals: "0" }
             ]

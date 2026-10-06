@@ -10,4 +10,6 @@ export interface TestResult {
   totalProfitLoss: number; // decimal in C# maps to number in TypeScript
   buyProfitLoss: number; // decimal in C# maps to number in TypeScript
   sellProfitLoss: number; // decimal in C# maps to number in TypeScript
+  averageProfitLossPerPosition: number; // decimal in C# maps to number in TypeScript
+  sharpeRatio: number; // decimal in C# maps to number in TypeScript
 }

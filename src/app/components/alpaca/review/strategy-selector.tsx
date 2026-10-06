@@ -6,14 +6,14 @@ import CircularLoader from "@/app/components/common/loader";
 import { basicFetch } from '@/app/lib/fetchFunctions';
 import { Autocomplete, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { StrategyInfo } from '@/app/models/strategy/strategy-info';
-import { StrategyEnum } from '@/app/models/strategy/enums';
+import { StrategyTypeEnum } from '@/app/models/strategy/enums';
 
 interface StrategySelectorProps {
     selectStrategy: any;
 }
 
 interface StrategyFilter {
-    id: StrategyEnum;
+    id: StrategyTypeEnum;
     label: string;
 }
 
@@ -22,7 +22,7 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ selectStrategy }) =
     const dictionary = useDictionary();
 
     const [strategyName, setStrategyName] = useState("None");
-    const [strategyFilter, setStrategyFilter] = useState(StrategyEnum.NONE);
+    const [strategyFilter, setStrategyFilter] = useState(StrategyTypeEnum.NONE);
     const [strategyInfos, setStrategyInfos] = useState<StrategyInfo[]>([]);
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -84,9 +84,9 @@ const StrategySelector: React.FC<StrategySelectorProps> = ({ selectStrategy }) =
                                 label="Select Strategy Type"
                                 onChange={filterStrategy}
                             >
-                                <MenuItem value={StrategyEnum.NONE}>All</MenuItem>
-                                <MenuItem value={StrategyEnum.BREAKOUT}>Breakout</MenuItem>
-                                <MenuItem value={StrategyEnum.SMA}>SMA</MenuItem>
+                                <MenuItem value={StrategyTypeEnum.NONE}>All</MenuItem>
+                                <MenuItem value={StrategyTypeEnum.BREAKOUT}>Breakout</MenuItem>
+                                <MenuItem value={StrategyTypeEnum.SMA}>SMA</MenuItem>
                             </Select>
                         </FormControl> */}
                     </div>

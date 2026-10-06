@@ -123,7 +123,7 @@
   "DASH_DELETE_SUCCESS": "Strategie erfolgreich gelöscht!",
   "DASH_DELETE_FAILURE": "Strategie konnte nicht gelöscht werden.",
   "DASH_LOADING": "Laden...",
-  "DASH_TYPE": "Typ",
+  "DASH_TYPE": "Indikator",
   "DASH_ASSET": "Asset",
   "DASH_TP_PERCENT": "TP(%)",
   "DASH_TRAILING_STOP_PERCENT": "Trail. Stop(%)",

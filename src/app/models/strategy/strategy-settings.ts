@@ -1,9 +1,9 @@
-import { IndicatorEnum, StrategyEnum, TimeFrameEnum } from "./enums";
+import { IndicatorEnum, StrategyTypeEnum, TimeFrameEnum } from "./enums";
 
 export interface StrategySettings {
   id: string;
   userId: string;
-  strategyType: StrategyEnum;
+  strategyType: StrategyTypeEnum;
   indicatorType: IndicatorEnum;
   broker: string;
   name: string;

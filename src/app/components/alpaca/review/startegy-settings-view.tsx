@@ -4,7 +4,7 @@ import { useDictionary } from '@/app/provider/dictionary-provider';
 import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/app/components/common/loader";
 import { StrategySettings } from '@/app/models/strategy/strategy-settings';
-import { StrategyEnum } from '@/app/models/strategy/enums';
+import { StrategyTypeEnum } from '@/app/models/strategy/enums';
 import { format } from 'date-fns';
 import StrategyListBreakout from '../strategy-test/strategy-list-breakout';
 import StrategyListSMA from '../strategy-test/strategy-list-sma';
@@ -38,7 +38,7 @@ const StrategySettingsView: React.FC<StrategySettingsViewProps> = ({ settings })
                         <div className="px-2 py-2">
                             <div className="m-0 p-0 flex">
                                 <span className="w-1/3 text-sm">{dictionary.TEST_STRATEGY_TYPE}:</span>
-                                <span className="w-2/3">{StrategyEnum[settings.strategyType]}</span>
+                                <span className="w-2/3">{StrategyTypeEnum[settings.strategyType]}</span>
                             </div>
                             <div className="m-0 p-0 flex">
                                 <span className="w-1/3 text-sm">{dictionary.TEST_BROKER}:</span>

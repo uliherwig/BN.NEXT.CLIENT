@@ -14,7 +14,6 @@ import CircularLoader from "@/app/components/common/loader";
 import AlpacaPositions from "./alpaca-positions";
 import AlpacaOrders from "./alpaca-orders";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import AlpacaRates from "./alpaca-rates";
 import { EmptyGuid } from "@/app/lib/utilities";
 

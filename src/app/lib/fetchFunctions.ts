@@ -6,6 +6,8 @@ export const basicFetch = async<returnType>(endpoint: string): Promise<returnTyp
             'Content-Type': 'application/json'
         }
     });  
+    console.log('basicFetch', endpoint);
+    console.log('basicFetch response', await res);
     return await res.json();
 }
 

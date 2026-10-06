@@ -2,6 +2,7 @@ import ClientLayout from "@/app/components/common/client-layout";
 import Navigation from "@/app/components/common/navigation";
 import { LanguageProps } from "@/app/models/common/language-props";
 import { NaviModel } from "@/app/models/common/navi-model";
+import { StrategyProvider } from "@/app/provider/indicator-tests-provider";
 
 export default async function StrategyLayout({
   children,
@@ -27,13 +28,15 @@ export default async function StrategyLayout({
   ];
 
   return (
-    <div className="flex bg-slate-100 text-slate-800 w-full h-full">
-      <nav className="w-[150px] border-r border-slate-500"> 
-        <Navigation language={params.language} header="Strategy" Items={navigationItems} />        
-      </nav>
-      <main className="h-full w-full">       
-        <ClientLayout>{children}</ClientLayout>
-      </main>
-    </div>
+    <StrategyProvider>
+      <div className="flex bg-slate-100 text-slate-800 w-full h-full">
+        <nav className="w-[150px] border-r border-slate-500">
+          <Navigation language={params.language} header="Strategy" Items={navigationItems} />
+        </nav>
+        <main className="h-full w-full">
+          <ClientLayout>{children}</ClientLayout>
+        </main>
+      </div>
+    </StrategyProvider>
   );
 }

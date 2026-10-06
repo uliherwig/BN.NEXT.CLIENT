@@ -1,7 +1,9 @@
-export enum StrategyEnum {
+export enum StrategyTypeEnum {
   NONE,
   IndicatorBased,
   MachineLearningBased,
+  LocalTest,
+  PaperTrading
 }
 
 export enum IndicatorEnum {

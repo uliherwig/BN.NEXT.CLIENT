@@ -3,22 +3,21 @@ import React, { useState } from 'react';
 interface CheckboxSlateProps {
     name: string;
     label : string;
+    onChangeFct: Function;
 }
 
-const CheckboxSlate: React.FC<CheckboxSlateProps> = ({name, label}) => {
+const CheckboxSlate: React.FC<CheckboxSlateProps> = ({ name, label, onChangeFct }) => {
     const [isChecked, setIsChecked] = useState(false);
-
-    const handleCheckboxChange = () => {
-        setIsChecked(!isChecked);
-    };
-
     return (
         <label className="flex items-center cursor-pointer">
             <input 
                 type="checkbox"
                 name={name} 
                 checked={isChecked} 
-                onChange={handleCheckboxChange} 
+                onChange={(e) => {
+                    setIsChecked(e.target.checked);
+                    onChangeFct(e.target.checked);
+                }} 
                 className="hidden peer" 
             />
             <span className={`w-5 h-5 border border-slate-400 flex items-center justify-center transition-colors duration-200 ${isChecked ? 'bg-[#990033] border-transparent' : ''}`}>

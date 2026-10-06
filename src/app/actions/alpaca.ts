@@ -60,7 +60,6 @@ export async function addOrUpdateKeyAndSecret(prevState: any, formData: FormData
     }
 }
 
-
 export async function runStrategy(prevState: any, formData: FormData) {
 
     const session = await getServerSession(authOptions)
@@ -107,6 +106,10 @@ export async function runStrategy(prevState: any, formData: FormData) {
     const startDate = new Date(Date.parse(formData.get('startDate') as string));
     const endDate = new Date(Date.parse(formData.get('endDate') as string));
 
+    const eod = formData.get('closePositionEod') === 'true' || formData.get('closePositionEod') === 'on';
+
+    console.log('EOD', eod);
+
     const validatedFields = await backtestSchemaRegister.safeParseAsync({
         name: formData.get('name'),
         asset: formData.get('asset'),
@@ -116,7 +119,7 @@ export async function runStrategy(prevState: any, formData: FormData) {
         endDate: endDate,
         indicator: formData.get('indicator'),
         timeFrame: formData.get('timeFrame'),
-        closePositionEod: formData.get('closePositionEod') === 'on',
+        closePositionEod: eod,
     });
 
     console.log('VALIDATION RESULT', validatedFields);
@@ -139,18 +142,18 @@ export async function runStrategy(prevState: any, formData: FormData) {
             name: formData.get('name') as string,
             asset: formData.get('asset') as string,
             quantity: parseFloat(formData.get('quantity') as string),
-            takeProfitPercent: parseFloat(formData.get('takeProfitPercent') as string) || 0.0,
-            stopLossPercent: parseFloat(formData.get('takeProfitPercent') as string) || 0.0,
+            takeProfitPercent: parseFloat(formData.get('takeProfitPercent') as string) / 100 || 0.0,
+            stopLossPercent: parseFloat(formData.get('stopLossPercent') as string) / 100 || 0.0,
             startDate: startDate.toISOString(),
             endDate: endDate.toISOString(),
             indicatorType: parseInt(formData.get('indicator') as string),
             trailingStop: parseFloat(formData.get('trailingStop') as string) || 0.0,
-            closePositionEod: formData.get('closePositionEod') === 'on',
+            closePositionEod: eod,
             bookmarked: false,     
             strategyParams: strategyParams,
             strategyType: 1,
-            spreadPerTrade: 0,
-            overnightFeeRate: 0,
+            spreadPerTrade: parseFloat(formData.get('spread') as string) || 0.0,
+            overnightFeeRate: parseFloat(formData.get('overnightFee') as string) || 0.0,
             reverseTrade: false,
             timeFrame: parseInt(formData.get('timeFrame') as string) || TimeFrameEnum.Minute
         };
@@ -167,7 +170,7 @@ export async function runStrategy(prevState: any, formData: FormData) {
         console.log('PAYLOAD', payload);
 
   
-   
+        
 
         try {
             const response = await fetch(endpoint, {
@@ -219,8 +222,6 @@ export async function alpacaExecutionAction(prevState: any, formData: FormData) 
     return response.ok;
 
 }
-
-
 
 const GetStrategyParams = (formData: FormData) => {
 

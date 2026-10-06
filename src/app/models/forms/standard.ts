@@ -1,3 +1,5 @@
+import { Inclusive_Sans } from "next/font/google";
+
 export type FormFieldType = "text" | "email" | "number" | "checkbox" | "select" | "password" | "date";
 
 export interface FormFieldValidation {
@@ -18,6 +20,7 @@ export interface FormField {
     name: string;
     label: string;
     type: FormFieldType;
+    increment?: number; // For number fields, defines the step increment
     placeholder?: string;
     required: boolean;
     validation?: FormFieldValidation;

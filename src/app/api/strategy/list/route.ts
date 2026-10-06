@@ -9,13 +9,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
 
-    const bookmarked = req.nextUrl.searchParams.get('bookmarked') as string;
+    const showBookmarked = req.nextUrl.searchParams.get('showBookmarked') as string;
+    const strategyType = req.nextUrl.searchParams.get('strategyType') as string;
     const session = await getServerSession(authOptions);
     if (!session) {
         return NextResponse.json({ error: ErrorCode.Unauthorized });
     }
 
-    const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings?bookmarked=${bookmarked}`;
+    const endpoint = `${process.env.STRATEGY_API_URL}/strategy/settings?strategyType=${strategyType}&showBookmarked=${showBookmarked}`;
+    console.log('Fetching strategies with endpoint:', endpoint);
     var dats = await authorizedFetch<StrategySettings[]>(endpoint, session.accessToken);
     return NextResponse.json(dats);
 }

@@ -1,36 +1,28 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { useDictionary } from '@/app/provider/dictionary-provider';
-import 'react-toastify/dist/ReactToastify.css';
 import CircularLoader from "@/app/components/common/loader";
 import { basicFetch } from '@/app/lib/fetchFunctions';
-import { AiModel } from '@/app/models/strategy/ai-model';
-import { firstOrDefault } from '@/app/lib/utilities';
-import { TimeFrameEnum } from '@/app/models/strategy/enums';
+import { StrategySettingsDto } from '@/app/models/strategy/strategy-settings-dto';
 
 interface AiModelsListProps {    
-    setModel: (model: AiModel | null) => void
+    setModel: (model: StrategySettingsDto | null) => void
 }
 
 const AiModelsList: React.FC<AiModelsListProps> = ({ setModel }) => {
     const dictionary = useDictionary();
 
     const [loading, setLoading] = useState<boolean>(true);
-    const [models, setModels] = useState<AiModel[]>([]);
+    const [models, setModels] = useState<StrategySettingsDto[]>([]);
 
-    const handleRowClick = (model: AiModel) => {
+    const handleRowClick = (model: StrategySettingsDto) => {
         setModel(model);
     }
 
     const loadModels = async () => {
-        const models = await basicFetch<AiModel[]>(`/api/ai/`);
-        setModels(models || []);
-        
-        if(models && models.length > 0){
-            setModel(firstOrDefault(models, null));
-        }
 
-
+        const dtos = await basicFetch<StrategySettingsDto[]>(`/api/ai/`);    
+        setModels(dtos);
         setLoading(false);
     }
 
@@ -38,7 +30,7 @@ const AiModelsList: React.FC<AiModelsListProps> = ({ setModel }) => {
         loadModels();        
     }, []);
 
-    const TABLE_HEAD = ['Name', 'TimeFrame', 'Return',   ''];
+    const TABLE_HEAD = ['Strategy', 'Broker', 'Asset', ''];
 
     if (!dictionary) {
         return <div>Loading...</div>;
@@ -68,12 +60,12 @@ const AiModelsList: React.FC<AiModelsListProps> = ({ setModel }) => {
                                 {models.map((item, index) => (
                                     <tr key={index} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} >
                                         <td className="px-2 py-1">{item.name}</td>
-                                        <td className=" py-1 text-center">{TimeFrameEnum[item.execution_params.time_frame]}</td>
+                                        <td className=" py-1 text-center">{item.broker}</td>
                                         <td className="py-1 text-center">
-                                            {item.total_return_percentage.toFixed(2)}%
+                                            {item.asset}
                                         </td> 
                                         <td className=" py-1 text-center">
-                                            <button className="text-blue-600 hover:underline" onClick={() => handleRowClick(item)}>Test</button>
+                                            <button className="text-blue-600 hover:underline" onClick={() => handleRowClick(item)}>Select</button>
                                         </td>
                                       
                                     </tr>
