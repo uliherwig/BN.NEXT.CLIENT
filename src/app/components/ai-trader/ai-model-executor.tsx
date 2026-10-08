@@ -9,12 +9,14 @@ import { StrategySettingsDto } from '@/app/models/strategy/strategy-settings-dto
 import WidgetButton from '../common/buttons/widget-button';
 import { exec } from 'child_process';
 import CheckboxSlate from '../common/checkbox/checkbox-slate';
+import { AlpacaStrategyTracking } from '@/app/models/alpaca/alpaca-strategy-tracking';
 
 interface AiModelExecutorProps {
     selectedModel: StrategySettingsDto | null;
+    runningStrategies: AlpacaStrategyTracking[];
 }
 
-const AiModelExecutor: React.FC<AiModelExecutorProps> = ({ selectedModel }) => {
+const AiModelExecutor: React.FC<AiModelExecutorProps> = ({ selectedModel, runningStrategies }) => {
     // TODO get execution status from server
 
 
@@ -91,7 +93,11 @@ const AiModelExecutor: React.FC<AiModelExecutorProps> = ({ selectedModel }) => {
 
     useEffect(() => {
 
-        setSettings(selectedModel);
+        if(selectedModel != null) {
+            selectedModel.strategyType = StrategyTypeEnum.PaperTrading;
+            setSettings(selectedModel); 
+        }
+  
 
     }, [selectedModel]);
 

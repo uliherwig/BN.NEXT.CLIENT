@@ -4,6 +4,10 @@
 
 - chart with real time data
 
+## Version 2026.10.2
+
+- strategy-tracking added
+
 ## Version 2026.10.1
 
 - alpaca execution

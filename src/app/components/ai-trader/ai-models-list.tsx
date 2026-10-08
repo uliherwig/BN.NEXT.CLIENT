@@ -4,18 +4,21 @@ import { useDictionary } from '@/app/provider/dictionary-provider';
 import CircularLoader from "@/app/components/common/loader";
 import { basicFetch } from '@/app/lib/fetchFunctions';
 import { StrategySettingsDto } from '@/app/models/strategy/strategy-settings-dto';
+import { AlpacaStrategyTracking } from '@/app/models/alpaca/alpaca-strategy-tracking';
 
 interface AiModelsListProps {    
     setModel: (model: StrategySettingsDto | null) => void
+    setRunningStrategies: (strategies: AlpacaStrategyTracking[]) => void
 }
 
-const AiModelsList: React.FC<AiModelsListProps> = ({ setModel }) => {
+const AiModelsList: React.FC<AiModelsListProps> = ({ setModel, setRunningStrategies }) => {
     const dictionary = useDictionary();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [models, setModels] = useState<StrategySettingsDto[]>([]);
 
     const handleRowClick = (model: StrategySettingsDto) => {
+
         setModel(model);
     }
 
@@ -23,6 +26,26 @@ const AiModelsList: React.FC<AiModelsListProps> = ({ setModel }) => {
 
         const dtos = await basicFetch<StrategySettingsDto[]>(`/api/ai/`);    
         setModels(dtos);
+
+        const running_strategies = await basicFetch<AlpacaStrategyTracking[]>(`/api/ai/strategy-tracking`); 
+
+        console.log(running_strategies);
+
+        if(running_strategies.length > 0) {
+            console.log("There are running strategies");
+            const firstRunningStrategy = dtos.find(x => x.name == running_strategies[0].name);
+            if(!firstRunningStrategy) {
+                console.log("First running strategy not found in the list of models");
+                return;
+            }
+            setModel(firstRunningStrategy);
+        }
+        setRunningStrategies(running_strategies);
+
+
+
+
+
         setLoading(false);
     }
 

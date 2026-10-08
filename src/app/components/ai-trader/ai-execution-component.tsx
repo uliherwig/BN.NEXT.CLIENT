@@ -6,6 +6,7 @@ import AiModelsList from './ai-models-list';
 import { StrategySettingsDto } from '@/app/models/strategy/strategy-settings-dto';
 import AiModelTest from './ai-model-test';
 import AiModelExecutor from './ai-model-executor';
+import { AlpacaStrategyTracking } from '@/app/models/alpaca/alpaca-strategy-tracking';  
 
 
 
@@ -13,6 +14,7 @@ const AiExecutionComponent: React.FC = () => {
     const dictionary = useDictionary();
 
     const [selectedModel, setSelectedModel] = useState<StrategySettingsDto | null>(null);
+    const [runningStrategies, setRunningStrategies] = useState<AlpacaStrategyTracking[]>([]);
 
     useEffect(() => {
 
@@ -22,11 +24,11 @@ const AiExecutionComponent: React.FC = () => {
        
         <Group>
             <Panel defaultSize={30}>
-                <AiModelsList setModel={(model) => { setSelectedModel(model) }} />
+                <AiModelsList setModel={(model) => { setSelectedModel(model) }} setRunningStrategies={(strategies) => { setRunningStrategies(strategies) }} />
             </Panel>
             <div className="w-px h-full bg-slate-400" />
             <Panel defaultSize={40}>
-                <AiModelExecutor selectedModel={selectedModel} />
+                <AiModelExecutor selectedModel={selectedModel} runningStrategies={runningStrategies} />
             </Panel>
             <div className="w-px h-full bg-slate-400" />
             <Panel defaultSize={30}>123</Panel>
