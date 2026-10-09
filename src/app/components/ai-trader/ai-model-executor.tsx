@@ -96,6 +96,8 @@ const AiModelExecutor: React.FC<AiModelExecutorProps> = ({ selectedModel, runnin
         if(selectedModel != null) {
             selectedModel.strategyType = StrategyTypeEnum.PaperTrading;
             setSettings(selectedModel); 
+            setExecutionRuns(true);
+
         }
   
 

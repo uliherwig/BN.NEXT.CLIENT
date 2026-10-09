@@ -4,6 +4,10 @@
 
 - chart with real time data
 
+## Version 2026.10.3
+
+- fix
+
 ## Version 2026.10.2
 
 - strategy-tracking added
