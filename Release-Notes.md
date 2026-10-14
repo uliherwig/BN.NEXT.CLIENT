@@ -4,6 +4,11 @@
 
 - chart with real time data
 
+## Version 2026.10.4
+
+- AI Model Executor in admin area 
+- strategy selection and test results added
+
 ## Version 2026.10.3
 
 - fix

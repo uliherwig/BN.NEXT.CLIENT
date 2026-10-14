@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
             return NextResponse.json(cachedData);
         }
         // Get all
-        endpoint = `${process.env.ALPACA_API_URL}/AlpacaTest/ai-strategies`;
+        endpoint = `${process.env.ALPACA_API_URL}/AlpacaTest/ai-models`;
 
         const data = await authorizedFetch<AiModel[]>(endpoint, session.accessToken);
         const parsedData = data.map(item => ({

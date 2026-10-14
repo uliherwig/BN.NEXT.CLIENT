@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { useDictionary } from '@/app/provider/dictionary-provider';
-import 'react-toastify/dist/ReactToastify.css';
+
 import CircularLoader from "@/app/components/common/loader";
 import WidgetButton from '@/app/components/common/buttons/widget-button';
 import { authorizedFetch, basicFetch } from '@/app/lib/fetchFunctions';

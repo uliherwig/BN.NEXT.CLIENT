@@ -106,9 +106,11 @@ const AiModelExecutor: React.FC<AiModelExecutorProps> = ({ selectedModel, runnin
 
     useEffect(() => {
 
-        console.log('Settings changed:', settings);
+       if (runningStrategies.length > 0) {
+           console.log('Running strategies changed:', runningStrategies);
+       }
 
-    }, [settings]);
+    }, [runningStrategies]);
 
 
     useEffect(() => {

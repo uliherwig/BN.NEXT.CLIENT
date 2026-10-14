@@ -9,13 +9,16 @@ import { AlpacaStrategyTracking } from '@/app/models/alpaca/alpaca-strategy-trac
 interface AiModelsListProps {    
     setModel: (model: StrategySettingsDto | null) => void
     setRunningStrategies: (strategies: AlpacaStrategyTracking[]) => void
+    setExecutionRuns: (running: boolean) => void
 }
 
-const AiModelsList: React.FC<AiModelsListProps> = ({ setModel, setRunningStrategies }) => {
+const AiModelsList: React.FC<AiModelsListProps> = ({ setModel, setRunningStrategies, setExecutionRuns }) => {
     const dictionary = useDictionary();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [models, setModels] = useState<StrategySettingsDto[]>([]);
+    const [executionRuns, setExecutionRunsState] = useState<boolean>(false);
+
 
     const handleRowClick = (model: StrategySettingsDto) => {
 
@@ -39,13 +42,10 @@ const AiModelsList: React.FC<AiModelsListProps> = ({ setModel, setRunningStrateg
                 return;
             }
             setModel(firstRunningStrategy);
+            setExecutionRunsState(true); 
+            setExecutionRuns(true);
         }
         setRunningStrategies(running_strategies);
-
-
-
-
-
         setLoading(false);
     }
 
@@ -88,7 +88,7 @@ const AiModelsList: React.FC<AiModelsListProps> = ({ setModel, setRunningStrateg
                                             {item.asset}
                                         </td> 
                                         <td className=" py-1 text-center">
-                                            <button className="text-blue-600 hover:underline" onClick={() => handleRowClick(item)}>Select</button>
+                                            <button className="text-blue-600 hover:underline" onClick={() => handleRowClick(item)} disabled={executionRuns}>Select</button>
                                         </td>
                                       
                                     </tr>
