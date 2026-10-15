@@ -30,7 +30,7 @@ const AlpacaModels: React.FC<AiModelsListProps> = ({ setModel, setStrategyTracki
 
         let _strats = await basicFetch<AlpacaStrategyTracking[]>(`/api/admin/alpaca?method=strategy-trackings`); 
         setStrategyTrackings(_strats)
-        const running_strat = _strats.find(x => x.stoppedAtUtc != null) 
+        const running_strat = _strats.find(x => x.stoppedAtUtc == null) 
 
         console.log(running_strat);
 

@@ -13,10 +13,10 @@ import CheckboxSlate from '../../common/checkbox/checkbox-slate';
 
 interface AlpacaExecutorProps {
     selectedModel: StrategySettingsDto | null;
-    runningStrategies: AlpacaStrategyTracking[];
+    strategyTrackings: AlpacaStrategyTracking[] | null;
 }
 
-const AlpacaExecutor: React.FC<AlpacaExecutorProps> = ({ selectedModel, runningStrategies }) => {
+const AlpacaExecutor: React.FC<AlpacaExecutorProps> = ({ selectedModel, strategyTrackings }) => {
     // TODO get execution status from server
 
 
@@ -31,8 +31,6 @@ const AlpacaExecutor: React.FC<AlpacaExecutorProps> = ({ selectedModel, runningS
     const startAlpacaExecution = async () => {
         if (executionRuns) return;
         setLoading(true);
-
-
         setExecutionRuns(true);
 
 
@@ -90,36 +88,22 @@ const AlpacaExecutor: React.FC<AlpacaExecutorProps> = ({ selectedModel, runningS
         setSettings(prev => prev ? { ...prev, strategyType } : null);
     }
 
-
     useEffect(() => {
-
-        if(selectedModel != null) {
-            selectedModel.strategyType = StrategyTypeEnum.PaperTrading;
-            setSettings(selectedModel); 
-          
-
-        }
-  
+        setSettings(selectedModel)
+        setLoading(false)
 
     }, [selectedModel]);
 
-
     useEffect(() => {
 
-       if (runningStrategies.length > 0) {
-           console.log('Running strategies changed:', runningStrategies);
-           setExecutionRuns(true);
+        if (strategyTrackings != null && strategyTrackings.length > 0) {
+            const running_strat = strategyTrackings.find(x => x.stoppedAtUtc == null)
+           if (running_strat) {               
+               setExecutionRuns(true)
+           }
        }
-
-    }, [runningStrategies]);
-
-
-    useEffect(() => {
-
-        setLoading(false);
-
-    }, []);
-
+       setLoading(false)
+    }, [strategyTrackings]);
 
     if (!dictionary) {
         return <div>Loading...</div>;
@@ -137,14 +121,14 @@ const AlpacaExecutor: React.FC<AlpacaExecutorProps> = ({ selectedModel, runningS
 
 
 
-            {selectedModel == null && (
+            {settings == null && (
                 <>
                     <div>No model selected</div>
                     <div className="text-component-subhead mb-4">Please select a model to execute.</div>
                 </>
             )}
-            {selectedModel != null && (
-                <div className="text-component-subhead mb-4">Selected Model: {selectedModel?.name} | Asset: {selectedModel?.asset}</div>
+            {settings != null && (
+                <div className="text-component-subhead mb-4">Selected Model: {settings?.name} | Asset: {settings?.asset}</div>
             )}
             <div className="mb-4">
                 <CheckboxSlate name="testExecution" label="Enable Test Execution" onChangeFct={setTestExecution} />

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDictionary } from '@/app/provider/dictionary-provider';
 import CircularLoader from "@/app/components/common/loader";
 import { AlpacaStrategyTracking } from '@/app/models/alpaca/alpaca-strategy-tracking';
+import { StrategyTypeEnum } from '@/app/models/strategy/enums';
 
 interface AlpacaStrategiesProps {
     strategyTrackings: AlpacaStrategyTracking[] | null
@@ -26,10 +27,10 @@ const AlpacaStrategies: React.FC<AlpacaStrategiesProps> = ({ strategyTrackings, 
 
         console.log(strategyTrackings)
         setLoading(false);
-    
+
     }, [strategyTrackings]);
 
-    const TABLE_HEAD = ['Name', 'Asset', 'StartedAt', 'StoppedAt', ''];
+    const TABLE_HEAD = ['Name', 'Asset', 'Mode', 'StartedAt', 'StoppedAt', ''];
 
     if (!dictionary) {
         return <div>Loading...</div>;
@@ -60,13 +61,15 @@ const AlpacaStrategies: React.FC<AlpacaStrategiesProps> = ({ strategyTrackings, 
                                     <tr key={index} className={`hover:bg-zinc-200 ${index % 2 === 1 ? 'bg-gray-100' : 'bg-white'}`} >
                                         <td className="px-2 py-1">{item.name}</td>
                                         <td className=" py-1 text-center">{item.asset}</td>
+                                        <td className=" py-1 text-center">{StrategyTypeEnum[item.strategyType]}</td>
+
                                         <td className="py-1 text-center">
-                                            {new Date(item.startedAtUtc).toISOString().substring(5, 10).replace('-', '.')}
+                                            {(() => { const d = new Date(item.startedAtUtc).toISOString(); return d.substring(8, 10) + '.' + d.substring(5, 7) + ' ' + d.substring(11, 16); })()}
                                         </td>
                                         <td className="py-1 text-center">
 
                                             {item.stoppedAtUtc != null &&
-                                            new Date(item.stoppedAtUtc).toISOString().substring(5, 10).replace('-', '.')
+                                                (() => { const d = new Date(item.stoppedAtUtc).toISOString(); return d.substring(8, 10) + '.' + d.substring(5, 7) + ' ' + d.substring(11, 16); })()
                                             }
 
                                         </td>

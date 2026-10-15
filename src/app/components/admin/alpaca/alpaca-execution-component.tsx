@@ -30,7 +30,7 @@ const AlpacaExecutionComponent: React.FC = () => {
     return (
 
         <Group>
-            <Panel defaultSize={25}>
+            <Panel defaultSize={20}>
 
                 <div className=" w-full flex flex-col h-full  gap-0.5">
                     <div className="h-25">
@@ -40,13 +40,13 @@ const AlpacaExecutionComponent: React.FC = () => {
                         <AlpacaModels setModel={setSelectedModel} setStrategyTrackings={setStrategyTrackings} />
                     </div>
                     <div className="h-2/3 w-full">
-                        <AlpacaExecutor selectedModel={selectedModel} runningStrategies={[]} />
+                        <AlpacaExecutor selectedModel={selectedModel} strategyTrackings={strategyTrackings} />
                     </div>
                 </div>
 
             </Panel>
             <div className="w-px h-full bg-slate-400" />
-            <Panel defaultSize={25}>
+            <Panel defaultSize={30}>
                 <AlpacaStrategies strategyTrackings={strategyTrackings} setSelectedStrategy={setSelectedStrategy} />
             </Panel>
             <div className="w-px h-full bg-slate-400" />
