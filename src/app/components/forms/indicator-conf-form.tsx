@@ -11,7 +11,7 @@ interface ConfigurableFormProps {
     action: (state: any, payload: FormData) => any; // server action
 }
 
-export default function ConfigurableForm({
+export default function IndicatorConfForm({
     config,
     indicatorMap = {} as Record<string, FormField[]>,
     action,
@@ -276,9 +276,10 @@ export default function ConfigurableForm({
                     ))}
                 </>
             )}
+  
 
             {/* Submit */}
-            {config.submit !== false && (
+            {config.submit == true && (
                 <button
                     type="submit"
                     disabled={isSubmitting}

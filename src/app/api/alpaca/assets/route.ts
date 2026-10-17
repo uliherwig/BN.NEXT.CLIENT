@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
    if (!session) {
       return NextResponse.json({ error: ErrorCode.Unauthorized }, { status: 401 });
     }
-    const endpoint = `${process.env.ALPACA_API_URL}/AlpacaTrading/assets`;
+    const endpoint = `${process.env.ALPACA_API_URL}/AlpacaData/assets`;
     var dats = await authorizedFetch<AlpacaAssetModel[]>(endpoint, session.accessToken);
     return NextResponse.json(dats);
 

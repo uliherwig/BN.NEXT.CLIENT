@@ -39,13 +39,13 @@ const AlpacaPositions: React.FC<AlpacaPositionsProps> = ({selectedStrategy}) => 
     }, [selectedStrategy]);
 
     const updateResult = async (id: string) => {
-        const res = await basicFetch<any>(`/api/admin/alpaca/tests?method=results&id=${id}`);
+        const res = await basicFetch<any>(`/api/admin/alpaca/results?method=results&id=${id}`);
 
         setResult(res);
     }
 
     const updatePositions = async (id: string) => {
-        const res = await basicFetch<any>(`/api/admin/alpaca/tests?method=positions&id=${id}`);
+        const res = await basicFetch<any>(`/api/admin/alpaca/results?method=positions&id=${id}`);
 
         const sortedPositions = res.sort((a: PositionModel, b: PositionModel) => new Date(b.stampClosed).getTime() - new Date(a.stampClosed).getTime());
         setPositions(sortedPositions);

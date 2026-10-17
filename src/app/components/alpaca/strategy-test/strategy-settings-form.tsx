@@ -7,7 +7,7 @@ import { fetcher } from "@/app/lib/fetchFunctions";
 import OptimizerModal from "./optimizer-modal";
 import { IndicatorFormConfig, rsiFields, smaFields, wmaFields, emaFields, temaFields, macdFields, donchianFields, atrFields, rocFields, bbandsFields, breakoutFields, volaFields } from "@/app/lib/form-configs/indicator-form";
 import { FormField } from "@/app/models/forms/standard";
-import ConfigurableForm from "@/app/components/forms/configurable-form";
+import IndicatorConfForm from "@/app/components/forms/indicator-conf-form";
 
 const indicatorSubForms: Record<string, FormField[]> = {
     "0": [],
@@ -75,7 +75,7 @@ const StrategySettingsForm: React.FC<StrategySettingsFormProps> = ({ updateStrat
                 <div className="text-component-head">{dictionary.TEST_CREATE_NEW_STRATEGY}</div>
 
                 <div className="w-full h-full overflow-y-auto pb-10">
-                    <ConfigurableForm
+                    <IndicatorConfForm
                         config={formConfig}
                         indicatorMap={indicatorSubForms}
                         action={runStrategy}

@@ -4,6 +4,12 @@
 
 - chart with real time data
 
+## Version 2026.10.6
+
+- Alpaca Test Area
+- Get latest trade widget
+- Create order widget
+
 ## Version 2026.10.5
 
 - Improvments, Refactoring Alpaca AI trading

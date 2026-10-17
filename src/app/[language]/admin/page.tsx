@@ -1,3 +1,4 @@
+import SignalRTest from '@/app/components/admin/signalr_test';
 import { getDictionary } from '@/app/lib/dictionaries/dictionary';
 import { LanguageProps } from '@/app/models/common/language-props';
 import * as React from 'react';
@@ -16,7 +17,13 @@ export default async function AdminPage({ params }: LanguageProps) {
           <div></div>
           
               
-        
+          <div className="bg-slate-100 p-4 overflow-x-auto mb-4 w-[70%]">
+
+            <div></div>
+
+            <SignalRTest />
+
+          </div>
         </div>
        
       </div>

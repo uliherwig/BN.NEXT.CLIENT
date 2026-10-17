@@ -4,7 +4,7 @@ import { useDictionary } from '@/app/provider/dictionary-provider';
 import CircularLoader from "@/app/components/common/loader";
 import { AiModel, AiModelExecutionParams } from '@/app/models/strategy/ai-model';
 import { TimeFrameEnum } from '@/app/models/strategy/enums';
-import ConfigurableForm from "@/app/components/forms/configurable-form";
+import IndicatorConfForm from "@/app/components/forms/indicator-conf-form";
 import { useFormState } from 'react-dom';
 import { runAiTest } from '@/app/actions/aitrade';
 import { useSignalR } from '@/app/provider/signalr-provider';
@@ -191,7 +191,7 @@ const AiModelTest: React.FC<AiModelTestProps> = ({ model }) => {
 
 
                         <div className="mt-4">
-                            <ConfigurableForm config={aiTestForm} action={runAiTest}   />
+                            <IndicatorConfForm config={aiTestForm} action={runAiTest}   />
                         </div>
 
 

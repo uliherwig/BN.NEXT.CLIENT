@@ -67,7 +67,7 @@ export async function runStrategy(prevState: any, formData: FormData) {
         return {
             errors: { session: ['Session is not available'] },
         };
-    } 
+    }
     console.log('FORM DATA', formData);
     const isStrategyNameAvailable = async (name: string): Promise<boolean> => {
         const url = `${process.env.STRATEGY_API_URL}/strategy/exists/${name}`;
@@ -93,14 +93,14 @@ export async function runStrategy(prevState: any, formData: FormData) {
             }, {
                 message: "Name already exists",
             }),
-      
+
         takeProfitPercent: z.number().min(0.01).max(2.5),
         stopLossPercent: z.number().min(0.01).max(1.5),
         startDate: z.date().min(new Date(2024, 0, 0), 'Start date may not be before 2024').max(new Date(), 'Start date may not be after today'),
         endDate: z.date().min(new Date(2024, 0, 0), 'End date may not be before 2024').max(new Date(), 'End date may not be after today'),
 
     });
-   
+
 
 
     const startDate = new Date(Date.parse(formData.get('startDate') as string));
@@ -149,7 +149,7 @@ export async function runStrategy(prevState: any, formData: FormData) {
             indicatorType: parseInt(formData.get('indicator') as string),
             trailingStop: parseFloat(formData.get('trailingStop') as string) || 0.0,
             closePositionEod: eod,
-            bookmarked: false,     
+            bookmarked: false,
             strategyParams: strategyParams,
             strategyType: 1,
             spreadPerTrade: parseFloat(formData.get('spread') as string) || 0.0,
@@ -159,7 +159,7 @@ export async function runStrategy(prevState: any, formData: FormData) {
         };
 
         let strategyAction = formData.get('action') as string;
-   
+
         // optimize option currently disabled
         strategyAction = '0'
         const endpoint = (strategyAction === '0') ?
@@ -169,8 +169,8 @@ export async function runStrategy(prevState: any, formData: FormData) {
         console.log('ENDPOINT', endpoint);
         console.log('PAYLOAD', payload);
 
-  
-        
+
+
 
         try {
             const response = await fetch(endpoint, {
@@ -229,11 +229,58 @@ const GetStrategyParams = (formData: FormData) => {
 
     const strategyParamsObj: Record<string, any> = {};
     formData.forEach((value, key) => {
-        if (key.startsWith('indicatorParams.')) {   
+        if (key.startsWith('indicatorParams.')) {
             const newKey = key.replace('indicatorParams.', '');
             strategyParamsObj[newKey] = value;
         }
-    });  
+    });
 
     return JSON.stringify(strategyParamsObj);
+}
+
+export async function createOrder(prevState: any, formData: FormData) {
+
+    console.log("createOrder")
+    console.log(formData)
+
+    const session = await getServerSession(authOptions)
+    if (!session || !session.user) {
+        return {
+            errors: { session: ['Session is not available'] },
+        };
+    }
+
+    var asset = formData.get('asset');
+    var quantity = parseFloat(formData.get('quantity') as string);
+    var side = formData.get('side') === 'Buy' ? 0 : 1
+
+
+
+    var endpoint = `${process.env.ALPACA_API_URL}/AlpacaTrading/order`
+
+    console.log(endpoint)
+
+
+    var payload = {
+        asset: asset,
+        price: 0,
+        quantity: quantity,
+        side: side,
+        stampUtc: "2000-01-01T00:00:00.000Z"
+
+
+    }
+    console.log(payload)
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.accessToken}`,
+        },
+
+    });
+
+    return response.ok;
+
 }
